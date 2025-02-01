@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/robot_selection_list"
@@ -16,4 +16,5 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="-158dp"
         tools:listitem="@layout/item_robot_selection" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

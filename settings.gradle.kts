@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "LIRSRobotControl"
 include(":app")
+include(":robot-selection-feature")
