@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/robotSelectionFragment"
-        android:name="com.garif.robot_selection_feature.RobotSelectionFragment"
+        android:name="com.garif.robot_selection_feature.presentation.RobotSelectionFragment"
         android:label="RobotSelectionFragment" />
 </navigation>

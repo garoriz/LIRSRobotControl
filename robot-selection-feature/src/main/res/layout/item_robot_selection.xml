@@ -32,37 +32,4 @@
         android:includeFontPadding="false"
         android:textColor="@android:color/black"
         android:textSize="15sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_configuration_delete"
-        android:layout_width="48dp"
-        android:layout_height="56dp"
-        android:layout_gravity="end|bottom"
-        android:padding="0dp"
-        app:backgroundTint="@color/grey"
-        app:cornerRadius="5dp"
-        app:icon="@drawable/ic_delete"
-        app:iconGravity="textTop"
-        app:iconPadding="0dp"
-        app:iconSize="32dp"
-        app:iconTint="@android:color/black"
-        app:strokeColor="@android:color/black"
-        app:strokeWidth="1dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_configuration_edit"
-        android:layout_width="48dp"
-        android:layout_height="56dp"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="56dp"
-        android:padding="0dp"
-        app:backgroundTint="@color/grey"
-        app:cornerRadius="5dp"
-        app:icon="@drawable/ic_edit"
-        app:iconGravity="textTop"
-        app:iconPadding="0dp"
-        app:iconSize="32dp"
-        app:iconTint="@android:color/black"
-        app:strokeColor="@android:color/black"
-        app:strokeWidth="1dp" />
 </com.google.android.material.card.MaterialCardView>
