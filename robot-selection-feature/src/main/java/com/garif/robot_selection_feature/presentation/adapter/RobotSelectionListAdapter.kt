@@ -5,11 +5,11 @@ import androidx.recyclerview.widget.ListAdapter
 import com.garif.robot_selection_feature.domain.RobotSelection
 import com.garif.robot_selection_feature.presentation.diffutil.RobotSelectionDiffItemCallback
 
-class RobotSelectionListAdapter :
+class RobotSelectionListAdapter(private val action: (Int) -> Unit,) :
     ListAdapter<RobotSelection, RobotSelectionHolder>(RobotSelectionDiffItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RobotSelectionHolder {
-        return RobotSelectionHolder.create(parent)
+        return RobotSelectionHolder.create(parent, action)
     }
 
     override fun onBindViewHolder(holder: RobotSelectionHolder, position: Int) {

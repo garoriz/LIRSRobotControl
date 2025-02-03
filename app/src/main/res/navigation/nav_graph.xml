@@ -7,5 +7,13 @@
     <fragment
         android:id="@+id/robotSelectionFragment"
         android:name="com.garif.robot_selection_feature.presentation.RobotSelectionFragment"
-        android:label="RobotSelectionFragment" />
+        android:label="RobotSelectionFragment" >
+        <action
+            android:id="@+id/action_robotSelectionFragment_to_engineerMobileControlActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.garif.engineer_mobile_control.ui.activities.EngineerMobileControlActivity"
+        android:label="MainActivity" />
 </navigation>

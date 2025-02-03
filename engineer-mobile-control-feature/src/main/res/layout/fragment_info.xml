@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_info_title"
+            style="@style/app_tv_style"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/tv_info_title"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_robot"
+            android:layout_width="325dp"
+            android:layout_height="217dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/img_robot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_info_title" />
+
+        <TextView
+            style="@style/app_tv_style"
+            android:layout_width="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/tv_info_article_first"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/iv_robot"
+            app:layout_constraintStart_toStartOf="@+id/iv_robot"
+            app:layout_constraintTop_toBottomOf="@+id/iv_robot" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -6,4 +6,5 @@ data class RobotSelection(
     val name: String,
     @DrawableRes
     val drawableRes: Int,
+    val navigationId: Int,
 )

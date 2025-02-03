@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="@string/title_movement">
+        <menu>
+            <item
+                android:id="@+id/item_drawer_nav_movement"
+                android:title="@string/title_move"
+                app:actionLayout="@layout/nav_drawer_item" />
+            <item
+                android:id="@+id/item_drawer_nav_rotation"
+                android:title="@string/title_rotate"
+                app:actionLayout="@layout/nav_drawer_item" />
+        </menu>
+    </item>
+
+    <item android:title="@string/title_joints">
+        <menu>
+            <item
+                android:id="@+id/item_drawer_nav_neck"
+                android:title="@string/title_neck"
+                app:actionLayout="@layout/nav_drawer_item" />
+            <item
+                android:id="@+id/item_drawer_nav_shoulder"
+                android:title="@string/title_shoulder"
+                app:actionLayout="@layout/nav_drawer_item" />
+            <item
+                android:id="@+id/item_drawer_nav_elbow"
+                android:title="@string/title_elbow"
+                app:actionLayout="@layout/nav_drawer_item" />
+            <item
+                android:id="@+id/item_drawer_nav_waist"
+                android:title="@string/title_waist"
+                app:actionLayout="@layout/nav_drawer_item" />
+        </menu>
+    </item>
+</menu>

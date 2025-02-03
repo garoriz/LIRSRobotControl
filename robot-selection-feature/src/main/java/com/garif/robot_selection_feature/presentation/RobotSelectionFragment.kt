@@ -3,6 +3,7 @@ package com.garif.robot_selection_feature.presentation
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.garif.robot_contreol_feature.R
 import com.garif.robot_contreol_feature.databinding.FragmentRobotSelectionBinding
 import com.garif.robot_selection_feature.domain.RobotSelection
@@ -18,15 +19,21 @@ class RobotSelectionFragment : Fragment(R.layout.fragment_robot_selection) {
 
         binding = FragmentRobotSelectionBinding.bind(view)
 
-        robotSelectionListAdapter = RobotSelectionListAdapter()
+        robotSelectionListAdapter = RobotSelectionListAdapter {
+            view.findNavController().navigate(it)
+        }
 
         binding?.robotSelectionList?.run {
             adapter = robotSelectionListAdapter
         }
 
         val robotSelectionList = mutableListOf(
-            RobotSelection("Servosila Engineer", R.drawable.img_config_engineer),
-            RobotSelection("TIAGo Base PMB2", R.drawable.img_config_pmb2),
+            RobotSelection(
+                "Servosila Engineer",
+                R.drawable.img_config_engineer,
+                R.id.action_robotSelectionFragment_to_engineerMobileControlActivity
+            ),
+            RobotSelection("TIAGo Base PMB2", R.drawable.img_config_pmb2, 0),
         )
         robotSelectionListAdapter?.submitList(robotSelectionList)
     }

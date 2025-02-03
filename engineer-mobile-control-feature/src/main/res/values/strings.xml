@@ -1,0 +1,30 @@
+<resources>
+    <string name="tv_dialog_connect">Connect to \"servosila-engineer\" Wi-Fi</string>
+    <string name="tv_info_title">Information about robot \"Servosila Engineer\"</string>
+    <string name="tv_info_article_first">Mobile robot \"Servosila Engineer\" is designed for search and rescue operations in natural and man-made disasters in conditions where you need to remotely receive video from inside the dangerous premises. Special solutions embedded in the design of the chassis of the robot, allow the robot to penetrate dangerous objects and climb stairs inside industrial and residential buildings. Thanks to the \"Engineer\", the rescue operation headquarters receives a \"live picture\" from the site of an industrial disaster, which makes it possible to make an informed decision to eliminate it. The robot is also equipped with a powerful arm-manipulator, which allows the robot to take samples of dangerous objects from the disaster area for detailed analysis or immediately perform a dangerous engineering operation on site remotely to eliminate or prevent further development of man-made disaster.</string>
+
+    <string name="title_waist">Waist</string>
+    <string name="title_shoulder">Shoulder</string>
+    <string name="title_elbow">Elbow</string>
+    <string name="title_neck">Neck</string>
+    <string name="title_close">Close</string>
+    <string name="title_gripper">Gripper</string>
+    <string name="title_open">Open</string>
+    <string name="title_flippers">Flippers</string>
+    <string name="title_torch">Torch</string>
+    <string name="title_movement">Movement</string>
+    <string name="title_joints">Joints</string>
+    <string name="title_info">Info</string>
+    <string name="title_move">Move</string>
+    <string name="title_rotate">Rotate</string>
+    <string name="title_connect">Connect</string>
+
+    <string name="nav_header_title">Speeds</string>
+
+    <string name="item_value_def">2</string>
+    <string name="item_value_min">0</string>
+    <string name="item_value_max">12</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:gravity="center"
+        android:fontFamily="@font/century_gothic_regular"
+        android:includeFontPadding="false"
+        android:text="@string/tv_dialog_connect"
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/btn_connect"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/shape_button_connection"
+        android:src="@drawable/ic_wifi_connection" />
+
+</LinearLayout>

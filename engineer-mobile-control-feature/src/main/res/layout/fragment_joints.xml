@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layout_waist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_outside_margin"
+        app:layout_constraintBottom_toTopOf="@+id/layout_elbow"
+        app:layout_constraintEnd_toStartOf="@+id/layout_gripper"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ToggleButton
+            android:id="@+id/toggle_waist_left"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginEnd="@dimen/layout_inside_margin"
+            android:rotation="-180" />
+
+        <ToggleButton
+            android:id="@+id/toggle_waist"
+            style="@style/btn_toggle_outside.joints"
+            android:textOff="@string/title_waist"
+            android:textOn="@string/title_waist" />
+
+        <ToggleButton
+            android:id="@+id/toggle_waist_right"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginStart="@dimen/layout_inside_margin" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_shoulder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/layout_elbow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/layout_elbow">
+
+        <ToggleButton
+            android:id="@+id/toggle_shoulder_up"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginBottom="@dimen/layout_inside_margin"
+            android:rotation="-90" />
+
+        <ToggleButton
+            android:id="@+id/toggle_shoulder"
+            style="@style/btn_toggle_outside.joints"
+            android:textOff="@string/title_shoulder"
+            android:textOn="@string/title_shoulder" />
+
+        <ToggleButton
+            android:id="@+id/toggle_shoulder_down"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginTop="@dimen/layout_inside_margin"
+            android:rotation="90" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_elbow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_outside_margin"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/layout_neck"
+        app:layout_constraintStart_toEndOf="@+id/layout_shoulder">
+
+        <ToggleButton
+            android:id="@+id/toggle_elbow_up"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginBottom="@dimen/layout_inside_margin"
+            android:rotation="-90" />
+
+        <ToggleButton
+            android:id="@+id/toggle_elbow"
+            style="@style/btn_toggle_outside.joints"
+            android:textOff="@string/title_elbow"
+            android:textOn="@string/title_elbow" />
+
+        <ToggleButton
+            android:id="@+id/toggle_elbow_down"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginTop="@dimen/layout_inside_margin"
+            android:rotation="90" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_neck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/btn_stop"
+        app:layout_constraintStart_toEndOf="@+id/layout_elbow"
+        app:layout_constraintTop_toTopOf="@+id/layout_elbow">
+
+        <ToggleButton
+            android:id="@+id/toggle_neck_up"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginBottom="@dimen/layout_inside_margin"
+            android:rotation="-90" />
+
+        <ToggleButton
+            android:id="@+id/toggle_neck"
+            style="@style/btn_toggle_outside.joints"
+            android:textOff="@string/title_neck"
+            android:textOn="@string/title_neck" />
+
+        <ToggleButton
+            android:id="@+id/toggle_neck_down"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginTop="@dimen/layout_inside_margin"
+            android:rotation="90" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_gripper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_waist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/layout_waist">
+
+        <ToggleButton
+            android:id="@+id/toggle_gripper_grab"
+            style="@style/btn_toggle_inside_common.joints.gripper"
+            android:layout_marginEnd="@dimen/layout_inside_margin"
+            android:background="@drawable/shape_btn_oval"
+            android:textOff="@string/title_close"
+            android:textOn="@string/title_close" />
+
+        <ToggleButton
+            android:id="@+id/toggle_gripper"
+            style="@style/btn_toggle_outside.joints"
+            android:textOff="@string/title_gripper"
+            android:textOn="@string/title_gripper" />
+
+        <ToggleButton
+            android:id="@+id/toggle_gripper_free"
+            style="@style/btn_toggle_inside_common.joints.gripper"
+            android:layout_marginStart="@dimen/layout_inside_margin"
+            android:background="@drawable/shape_btn_oval"
+            android:textOff="@string/title_open"
+            android:textOn="@string/title_open" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_stop"
+        style="@style/btn_stop"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_neck"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/layout_neck"
+        app:layout_constraintTop_toTopOf="@+id/layout_neck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

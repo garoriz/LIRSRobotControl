@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.EngineerMobileControlActivity">
+
+    <FrameLayout
+        android:id="@+id/layout_movement"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/layout_outside_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/layout_flippers"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ToggleButton
+            android:id="@+id/toggle_move_up"
+            style="@style/btn_toggle_inside_common.movement"
+            android:layout_gravity="center|top"
+            android:rotation="-90" />
+
+        <ToggleButton
+            android:id="@+id/toggle_move_down"
+            style="@style/btn_toggle_inside_common.movement"
+            android:layout_gravity="center|bottom"
+            android:rotation="90" />
+
+        <ToggleButton
+            android:id="@+id/toggle_move_left"
+            style="@style/btn_toggle_inside_common.movement"
+            android:layout_gravity="center|start"
+            android:rotation="-180" />
+
+        <ToggleButton
+            android:id="@+id/toggle_move_right"
+            style="@style/btn_toggle_inside_common.movement"
+            android:layout_gravity="center|end" />
+
+        <ImageButton
+            android:id="@+id/btn_stop"
+            style="@style/btn_stop"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_flippers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/layout_movement"
+        app:layout_constraintTop_toTopOf="@+id/layout_movement">
+
+        <ToggleButton
+            android:id="@+id/toggle_flippers_up"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginBottom="@dimen/layout_inside_margin"
+            android:rotation="-90" />
+
+        <ToggleButton
+            android:id="@+id/toggle_flippers"
+            style="@style/btn_toggle_outside.movement"
+            android:textOff="@string/title_flippers"
+            android:textOn="@string/title_flippers" />
+
+        <ToggleButton
+            android:id="@+id/toggle_flippers_down"
+            style="@style/btn_toggle_inside_common.joints"
+            android:layout_marginTop="@dimen/layout_inside_margin"
+            android:rotation="90" />
+
+    </LinearLayout>
+
+    <ToggleButton
+        android:id="@+id/toggle_torch"
+        style="@style/btn_toggle_outside.movement"
+        android:textOff="@string/title_torch"
+        android:textOn="@string/title_torch"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_movement"
+        app:layout_constraintEnd_toEndOf="@+id/layout_flippers" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

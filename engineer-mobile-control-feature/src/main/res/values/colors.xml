@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="button_default_gradient_top">#4141E9</color>
+    <color name="button_default_gradient_bottom">#B64FB6</color>
+
+    <color name="button_passive_gradient_top">#02ADE1</color>
+    <color name="button_passive_gradient_bottom">#EC6FCF</color>
+
+    <color name="button_active_gradient_top">#FFC06C</color>
+    <color name="button_active_gradient_bottom">#FA46A0</color>
+
+    <color name="color_toggle_button_active">#F5D222</color>
+    <color name="color_toggle_button_passive">#65B3AD</color>
+
+    <color name="color_black_translucent">#66FFFFFF</color>
+</resources>

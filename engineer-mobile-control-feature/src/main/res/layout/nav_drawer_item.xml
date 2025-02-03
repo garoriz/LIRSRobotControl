@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="45dp">
+
+    <TextView
+        android:id="@+id/tv_value_current"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/item_value_def" />
+
+    <Button
+        android:id="@+id/btn_value_min"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tv_value_current"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_btn_oval"
+        android:text="@string/item_value_min" />
+
+    <Button
+        android:id="@+id/btn_value_max"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tv_value_current"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_btn_oval"
+        android:text="@string/item_value_max" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tv_value_current"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btn_value_max"
+        android:layout_toEndOf="@+id/btn_value_min"
+        android:max="12"
+        android:progress="2" />
+
+</RelativeLayout>
