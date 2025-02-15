@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="250dp">
+
+    <ImageView
+        android:id="@+id/iv_joystick"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/img_joystick"/>
+
+    <io.github.controlwear.virtual.joystick.android.JoystickView
+        android:id="@+id/layout_joystick_left"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignLeft="@+id/iv_joystick"
+        android:layout_alignStart="@+id/iv_joystick"
+        android:layout_alignBottom="@+id/iv_joystick"
+        android:layout_marginLeft="70dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginBottom="50dp"
+        app:JV_backgroundColor="@android:color/transparent"
+        app:JV_buttonImage="@drawable/img_button"
+        app:JV_backgroundSizeRatio="52%"
+        app:JV_buttonSizeRatio="50%" />
+
+    <io.github.controlwear.virtual.joystick.android.JoystickView
+        android:id="@+id/layout_joystick_right"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignRight="@+id/iv_joystick"
+        android:layout_alignEnd="@+id/iv_joystick"
+        android:layout_alignBottom="@+id/iv_joystick"
+        android:layout_marginRight="70dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="50dp"
+        app:JV_backgroundColor="@android:color/transparent"
+        app:JV_buttonImage="@drawable/img_button"
+        app:JV_backgroundSizeRatio="52%"
+        app:JV_buttonSizeRatio="50%" />
+
+</RelativeLayout>

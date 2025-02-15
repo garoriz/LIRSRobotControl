@@ -11,9 +11,16 @@
         <action
             android:id="@+id/action_robotSelectionFragment_to_engineerMobileControlActivity"
             app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_robotSelectionFragment_to_pmb2ControlActivity"
+            app:destination="@id/pmb2ControlActivity" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.garif.engineer_mobile_control.ui.activities.EngineerMobileControlActivity"
         android:label="MainActivity" />
+    <activity
+        android:id="@+id/pmb2ControlActivity"
+        android:name="com.garif.pmb2_control_feature.ui.activities.Pmb2ControlActivity"
+        android:label="Pmb2ControlActivity" />
 </navigation>

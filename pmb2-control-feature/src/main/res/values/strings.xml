@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Default Values-->
+    <string name="app_name">PMB2Mobile</string>
+    <string name="default_app">tiago_base_mobile</string>
+    <string name="default_robot">PMB2</string>
+
+    <!--Frames-->
+    <string name="map_frame">map</string>
+    <string name="robot_frame">base_footprint</string>
+
+    <!--Topics-->
+    <string name="camera_topic">/compressed_image</string>
+    <string name="costmap_topic">/move_base/local_costmap/costmap</string>
+    <string name="global_plan_topic">/move_base/NavfnROS/plan</string>
+    <string name="initial_pose_topic">/initial_pose</string>
+    <string name="joystick_topic">/mobile_base_controller/cmd_vel</string>
+    <string name="map_topic">/map</string>
+    <string name="move_base_goal_topic">/move_base/goal</string>
+    <string name="scan_topic">/scan</string>
+    <string name="simple_goal_topic">/move_base_simple/goal</string>
+
+    <!--Servers-->
+    <string name="list_maps_srv">/list_maps</string>
+    <string name="publish_map_srv">/publish_map</string>
+</resources>

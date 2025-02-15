@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.garif.robot_contreol_feature.R
-import com.garif.robot_contreol_feature.databinding.FragmentRobotSelectionBinding
+import com.garif.robot_selection_feature.R
+import com.garif.robot_selection_feature.databinding.FragmentRobotSelectionBinding
 import com.garif.robot_selection_feature.domain.RobotSelection
 import com.garif.robot_selection_feature.presentation.adapter.RobotSelectionListAdapter
 
@@ -33,7 +33,11 @@ class RobotSelectionFragment : Fragment(R.layout.fragment_robot_selection) {
                 R.drawable.img_config_engineer,
                 R.id.action_robotSelectionFragment_to_engineerMobileControlActivity
             ),
-            RobotSelection("TIAGo Base PMB2", R.drawable.img_config_pmb2, 0),
+            RobotSelection(
+                "TIAGo Base PMB2",
+                R.drawable.img_config_pmb2,
+                R.id.action_robotSelectionFragment_to_pmb2ControlActivity
+            ),
         )
         robotSelectionListAdapter?.submitList(robotSelectionList)
     }

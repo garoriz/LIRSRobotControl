@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ddd"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/view_top"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#909090"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_show_map"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_show_map" />
+
+        <ImageButton
+            android:id="@+id/btn_allow_position"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:onClick="setGoalClicked"
+            android:scaleType="center"
+            android:src="@drawable/ic_pos_set_allow" />
+
+        <ImageButton
+            android:id="@+id/btn_forbid_position"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:onClick="setPoseClicked"
+            android:scaleType="center"
+            android:src="@drawable/ic_pos_set_forbid" />
+
+        <LinearLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="end"
+            android:orientation="horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <org.ros.android.view.RosImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight=".25"
+            android:scaleType="center"
+            android:src="@drawable/ic_video_camera" />
+
+        <LinearLayout
+            android:id="@+id/side_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight=".75"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <org.ros.android.view.visualization.VisualizationView
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".25" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_controls"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="horizontal"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray">
+
+        <ImageButton
+            android:id="@+id/btn_joystick_single"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.33"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            android:src="@drawable/selector_joystick_single"/>
+
+        <ImageButton
+            android:id="@+id/btn_joystick_double"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.33"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            android:src="@drawable/selector_joystick_double"/>
+
+        <ImageButton
+            android:id="@+id/btn_control_buttons"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.33"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            android:src="@drawable/selector_control_buttons"/>
+
+    </LinearLayout>
+
+</LinearLayout>

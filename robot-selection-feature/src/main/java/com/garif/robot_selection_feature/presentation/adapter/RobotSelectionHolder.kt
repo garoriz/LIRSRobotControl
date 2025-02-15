@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.garif.robot_contreol_feature.databinding.ItemRobotSelectionBinding
+import com.garif.robot_selection_feature.databinding.ItemRobotSelectionBinding
 import com.garif.robot_selection_feature.domain.RobotSelection
 
 class RobotSelectionHolder(

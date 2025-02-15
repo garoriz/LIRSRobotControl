@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="btn_toggle_inside_common">
-        <item name="android:background">@drawable/layer_list_toggle_move_bg</item>
+        <item name="android:background">@drawable/layer_list_toggle_move_bg_for_engineer</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:textOn">""</item>
         <item name="android:textOff">""</item>
