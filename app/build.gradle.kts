@@ -43,10 +43,9 @@ dependencies {
     implementation(Dependencies.constraintlayout)
     implementation(Dependencies.navigationFragmentKtx)
     implementation(Dependencies.navigationUIKtx)
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    testImplementation(Dependencies.junit)
+    androidTestImplementation(Dependencies.androidJunit)
+    androidTestImplementation(Dependencies.espressoCore)
     implementation(project(":robot-selection-feature"))
     implementation(project(":engineer-mobile-control-feature"))
     implementation(project(":pmb2-control-feature"))
@@ -54,35 +53,30 @@ dependencies {
 
 configurations.all {
     resolutionStrategy.eachDependency {
-        if (requested.group == "org.apache.commons" &&
-            requested.name.contains("com.springsource.org.apache.commons.logging")
-        ) {
-            useTarget("commons-logging:commons-logging:1.2")
-        }
-        if (requested.group == "org.apache.commons" &&
-            requested.name.contains("com.springsource.org.apache.commons.net")
-        ) {
-            useTarget("commons-net:commons-net:3.9.0")
-        }
-        if (requested.group == "org.apache.commons" &&
-            requested.name.contains("com.springsource.org.apache.commons.codec")
-        ) {
-            useTarget("commons-codec:commons-codec:1.15")
-        }
-        if (requested.group == "org.apache.commons" &&
-            requested.name.contains("com.springsource.org.apache.commons.io")
-        ) {
-            useTarget("commons-io:commons-io:2.8.0")
-        }
-        if (requested.group == "org.apache.commons" &&
-            requested.name.contains("com.springsource.org.apache.commons.lang")
-        ) {
-            useTarget("commons-lang:commons-lang:2.6")
-        }
-        if (requested.group == "org.apache.commons" &&
-            requested.name.contains("com.springsource.org.apache.commons.httpclient")
-        ) {
-            useTarget("commons-httpclient:commons-httpclient:3.1")
+        if (requested.group == Dependencies.apacheCommonsGroup) {
+            if (requested.name.contains(Dependencies.apacheCommonsLogging)) {
+                useTarget(Dependencies.commonsLogging)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsNet)) {
+                useTarget(Dependencies.commonsNet)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsCodec)) {
+                useTarget(Dependencies.commonsCodec)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsIO)) {
+                useTarget(Dependencies.commonsIO)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsLang)) {
+                useTarget(Dependencies.commonsLang)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsHttpClient)) {
+                useTarget(Dependencies.commonsHttpclient)
+            }
         }
     }
 }

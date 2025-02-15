@@ -7,4 +7,5 @@ object ConfigData {
     const val PROGUARD_ANDROID_OPTIMIZE_TXT = "proguard-android-optimize.txt"
     const val PROGUARD_RULES_PRO = "proguard-rules.pro"
     const val JITPACK_IO_URL = "https://jitpack.io"
+    const val CONSUMER_RULES_PRO = "consumer-rules.pro"
 }
