@@ -7,8 +7,7 @@ public class Constants {
     public static final double COS30 = Math.cos(toRadians(30.0d));
     public static final double COS60 = Math.cos(toRadians(60.0d));
     public static final double PERCENTAGE = 100.0d;
-    public static final String URI = "http://10.68.0.1:11311";
-    public static final String TOPIC_JOY_TELEOP = "/mobile_base_controller/cmd_vel";
+    public static final String TOPIC_JOY_TELEOP = "/pmb2/mobile_base_controller/cmd_vel";
     public enum Tags {
         EVENTS("AppEvents");
         private final String value;

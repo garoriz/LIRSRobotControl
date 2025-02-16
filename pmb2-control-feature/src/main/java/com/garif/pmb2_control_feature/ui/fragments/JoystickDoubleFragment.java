@@ -18,9 +18,11 @@ import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 public class JoystickDoubleFragment extends Fragment implements Movable {
 
-    private double mvStrength, mvAngle, mvSign,
-            rtStrength, rtAngle, rtSign,
-            movementSpeed, rotationSpeed;
+    private double mvStrength;
+    private double mvAngle;
+    private double rtStrength;
+    private double rtAngle;
+    private double rotationSpeed;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,9 +32,9 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //JoystickView rtJoystick = view.findViewById(R.id.layout_joystick_left);
-        //JoystickView mvJoystick = view.findViewById(R.id.layout_joystick_right);
-        /*mvJoystick.setOnMoveListener((mvAngle, mvStrength) -> {
+        JoystickView rtJoystick = view.findViewById(R.id.layout_joystick_left);
+        JoystickView mvJoystick = view.findViewById(R.id.layout_joystick_right);
+        mvJoystick.setOnMoveListener((mvAngle, mvStrength) -> {
             Log.d(Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's strength is: " + mvStrength);
             Log.d(Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's angle is: " + mvAngle);
             this.mvStrength = mvStrength;
@@ -43,7 +45,7 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
             Log.d(Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's angle is: " + rtAngle);
             this.rtStrength = rtStrength;
             this.rtAngle = rtAngle;
-        });*/
+        });
     }
 
     @Override
@@ -58,7 +60,8 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
 
     private double defineMovementValue() {
         if (mvStrength == 0) return 0;
-        movementSpeed = mvStrength / Constants.PERCENTAGE;
+        double movementSpeed = mvStrength / Constants.PERCENTAGE;
+        double mvSign;
         if (Math.sin(Constants.toRadians(mvAngle)) < 0) mvSign = -1;
         else mvSign = 1;
         movementSpeed = mvSign * movementSpeed;
@@ -70,6 +73,7 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
     private double defineRotationValue() {
         if (rtStrength == 0) return 0;
         rotationSpeed = rtStrength * Constants.ROTATION_RATIO;
+        double rtSign;
         if (Math.cos(Constants.toRadians(rtAngle)) > 0) rtSign = -1;
         else rtSign = 1;
         rotationSpeed = rtSign * rotationSpeed;
