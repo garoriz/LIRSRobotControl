@@ -23,28 +23,6 @@
             android:scaleType="center"
             android:src="@drawable/ic_show_map" />
 
-        <ImageButton
-            android:id="@+id/btn_allow_position"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="@null"
-            android:onClick="setGoalClicked"
-            android:scaleType="center"
-            android:src="@drawable/ic_pos_set_allow" />
-
-        <ImageButton
-            android:id="@+id/btn_forbid_position"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="@null"
-            android:onClick="setPoseClicked"
-            android:scaleType="center"
-            android:src="@drawable/ic_pos_set_forbid" />
-
         <LinearLayout
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
