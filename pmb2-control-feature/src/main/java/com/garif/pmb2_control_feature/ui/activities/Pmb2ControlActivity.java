@@ -15,7 +15,6 @@ import com.garif.pmb2_control_feature.layers.MapPosePublisherLayer;
 import com.garif.pmb2_control_feature.layers.ViewControlLayer;
 import com.garif.pmb2_control_feature.nodes.NodeTeleop;
 import com.garif.pmb2_control_feature.ui.fragments.ControlButtonsFragment;
-import com.garif.pmb2_control_feature.ui.fragments.JoystickDoubleFragment;
 import com.garif.pmb2_control_feature.ui.fragments.JoystickSingleFragment;
 import com.garif.pmb2_control_feature.utils.Constants;
 import com.garif.pmb2_control_feature.utils.MapManager;
@@ -56,8 +55,7 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
 
     private NodeTeleop nodeTeleop;
     private ViewControlLayer viewControlLayer;
-    private ViewGroup mainLayout, sideLayout;
-    private Movable frJoystickSingle, frJoystickDouble, frControlButtons;
+    private Movable frJoystickSingle, frControlButtons;
     private RosImageView<CompressedImage> cameraView;
     private VisualizationView mapView;
     private MapPosePublisherLayer mapPosePublisherLayer;
@@ -65,14 +63,14 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
     private AlertDialog chooseMapDialog;
     private NodeMainExecutor nodeMainExecutor;
     private NodeConfiguration nodeConfiguration;
-    private ImageButton disabled, btnShowMap, btnJoystickSingle,
-            btnJoystickDouble, btnControlButtons;
+    private ImageButton disabled;
+    private ImageButton btnJoystickSingle;
+    private ImageButton btnControlButtons;
 
     public Pmb2ControlActivity() {
         super("PMB2Mobile", "PMB2Mobile");
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -88,14 +86,12 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         cameraView.setMessageType(sensor_msgs.CompressedImage._TYPE);
         cameraView.setMessageToBitmapCallable(new BitmapFromCompressedImage());
 
-        btnShowMap = findViewById(R.id.btn_show_map);
+        ImageButton btnShowMap = findViewById(R.id.btn_show_map);
         btnShowMap.setOnClickListener(view -> showMap());
 
         btnJoystickSingle = findViewById(R.id.btn_joystick_single);
         btnJoystickSingle.setOnClickListener(this);
 
-        btnJoystickDouble = findViewById(R.id.btn_joystick_double);
-        btnJoystickDouble.setOnClickListener(this);
 
         btnControlButtons = findViewById(R.id.btn_control_buttons);
         btnControlButtons.setOnClickListener(this);
@@ -103,11 +99,10 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(Lists.newArrayList());
 
-        mainLayout = findViewById(R.id.main_layout);
-        sideLayout = findViewById(R.id.side_layout);
+        ViewGroup mainLayout = findViewById(R.id.main_layout);
+        ViewGroup sideLayout = findViewById(R.id.side_layout);
 
         frJoystickSingle = new JoystickSingleFragment();
-        frJoystickDouble = new JoystickDoubleFragment();
         frControlButtons = new ControlButtonsFragment();
 
         viewControlLayer = new ViewControlLayer(
@@ -167,16 +162,20 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         mapView.init(nodeMainExecutor);
         viewControlLayer.addListener(new CameraControlListener() {
             @Override
-            public void onZoom(float focusX, float focusY, float factor) {}
+            public void onZoom(float focusX, float focusY, float factor) {
+            }
 
             @Override
-            public void onDoubleTap(float x, float y) {}
+            public void onDoubleTap(float x, float y) {
+            }
 
             @Override
-            public void onTranslate(float distanceX, float distanceY) {}
+            public void onTranslate(float distanceX, float distanceY) {
+            }
 
             @Override
-            public void onRotate(float focusX, float focusY, double deltaAngle) {}
+            public void onRotate(float focusX, float focusY, double deltaAngle) {
+            }
         });
 
         TimeProvider timeProvider;
@@ -256,7 +255,7 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
             Date creationDate = new Date(list.get(i).getDate() * 1000);
             String dateTime = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
                     DateFormat.SHORT).format(creationDate);
-            if (name != null && !name.equals("")) {
+            if (name != null && !name.isEmpty()) {
                 displayString = name + " " + dateTime;
             } else {
                 displayString = dateTime;
@@ -353,8 +352,6 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         int id = view.getId();
         if (id == R.id.btn_joystick_single) {
             setControls(btnJoystickSingle, frJoystickSingle);
-        } else if (id == R.id.btn_joystick_double) {
-            setControls(btnJoystickDouble, frJoystickDouble);
         } else if (id == R.id.btn_control_buttons) {
             setControls(btnControlButtons, frControlButtons);
         }
