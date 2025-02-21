@@ -14,7 +14,6 @@ import com.garif.pmb2_control_feature.layers.InitialPoseSubscriberLayer;
 import com.garif.pmb2_control_feature.layers.MapPosePublisherLayer;
 import com.garif.pmb2_control_feature.layers.ViewControlLayer;
 import com.garif.pmb2_control_feature.nodes.NodeTeleop;
-import com.garif.pmb2_control_feature.ui.fragments.ControlButtonsFragment;
 import com.garif.pmb2_control_feature.ui.fragments.JoystickSingleFragment;
 import com.garif.pmb2_control_feature.utils.Constants;
 import com.garif.pmb2_control_feature.utils.MapManager;
@@ -55,7 +54,6 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
 
     private NodeTeleop nodeTeleop;
     private ViewControlLayer viewControlLayer;
-    private Movable frJoystickSingle, frControlButtons;
     private RosImageView<CompressedImage> cameraView;
     private VisualizationView mapView;
     private MapPosePublisherLayer mapPosePublisherLayer;
@@ -63,9 +61,6 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
     private AlertDialog chooseMapDialog;
     private NodeMainExecutor nodeMainExecutor;
     private NodeConfiguration nodeConfiguration;
-    private ImageButton disabled;
-    private ImageButton btnJoystickSingle;
-    private ImageButton btnControlButtons;
 
     public Pmb2ControlActivity() {
         super("PMB2Mobile", "PMB2Mobile");
@@ -89,27 +84,19 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         ImageButton btnShowMap = findViewById(R.id.btn_show_map);
         btnShowMap.setOnClickListener(view -> showMap());
 
-        btnJoystickSingle = findViewById(R.id.btn_joystick_single);
-        btnJoystickSingle.setOnClickListener(this);
-
-
-        btnControlButtons = findViewById(R.id.btn_control_buttons);
-        btnControlButtons.setOnClickListener(this);
-
         mapView = findViewById(R.id.map_view);
         mapView.onCreate(Lists.newArrayList());
 
         ViewGroup mainLayout = findViewById(R.id.main_layout);
         ViewGroup sideLayout = findViewById(R.id.side_layout);
 
-        frJoystickSingle = new JoystickSingleFragment();
-        frControlButtons = new ControlButtonsFragment();
+        Movable frJoystickSingle = new JoystickSingleFragment();
 
         viewControlLayer = new ViewControlLayer(
                 this, cameraView, mapView, mainLayout, sideLayout, params);
 
         nodeTeleop = new NodeTeleop(Constants.TOPIC_JOY_TELEOP);
-        setControls(btnJoystickSingle, frJoystickSingle);
+        loadFragment(frJoystickSingle);
     }
 
     @Override
@@ -348,18 +335,5 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        disabled.setEnabled(true);
-        int id = view.getId();
-        if (id == R.id.btn_joystick_single) {
-            setControls(btnJoystickSingle, frJoystickSingle);
-        } else if (id == R.id.btn_control_buttons) {
-            setControls(btnControlButtons, frControlButtons);
-        }
-    }
-
-    private void setControls(ImageButton imageButton, Movable movable) {
-        imageButton.setEnabled(false);
-        loadFragment(movable);
-        disabled = imageButton;
     }
 }
