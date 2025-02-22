@@ -69,7 +69,7 @@ class EngineerMobileControlActivity : AppCompatActivity(), MediaPlayer.MediaPlay
         appBarMainBinding = AppBarMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_engineer_mobile_control)
         setViews()
-        setSupportActionBar(appBarMainBinding?.toolbar)
+        setSupportActionBar(toolbar)
         init()
 
         if (checkConnection()) bind()
