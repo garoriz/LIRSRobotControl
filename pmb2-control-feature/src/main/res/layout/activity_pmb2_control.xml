@@ -72,4 +72,31 @@
         android:gravity="center"
         android:orientation="horizontal" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray">
+
+        <ImageButton
+            android:id="@+id/btn_joystick_single"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.33"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            android:src="@drawable/selector_joystick_single"/>
+
+        <ImageButton
+            android:id="@+id/btn_joystick_double"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="0.33"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:padding="2dp"
+            android:src="@drawable/selector_joystick_double"/>
+
+    </LinearLayout>
+
 </LinearLayout>
