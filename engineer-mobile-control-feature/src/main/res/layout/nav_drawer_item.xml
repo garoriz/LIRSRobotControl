@@ -18,8 +18,9 @@
         android:layout_below="@+id/tv_value_current"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_btn_oval"
+        android:outlineProvider="none"
         android:padding="0dp"
-        android:text="@string/item_value_min" />
+        android:text="@string/minus" />
 
     <Button
         android:id="@+id/btn_value_max"
@@ -29,8 +30,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_btn_oval"
+        android:outlineProvider="none"
         android:padding="0dp"
-        android:text="@string/item_value_max" />
+        android:text="@string/plus" />
 
     <SeekBar
         android:id="@+id/seekBar"

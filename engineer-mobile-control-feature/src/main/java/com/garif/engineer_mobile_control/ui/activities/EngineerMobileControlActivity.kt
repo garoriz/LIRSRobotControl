@@ -42,7 +42,8 @@ import veg.mediaplayer.sdk.MediaPlayerConfig
 import java.net.InetAddress
 import java.nio.ByteBuffer
 
-class EngineerMobileControlActivity : AppCompatActivity(), MediaPlayer.MediaPlayerCallback, PermissionCallback {
+class EngineerMobileControlActivity : AppCompatActivity(), MediaPlayer.MediaPlayerCallback,
+    PermissionCallback {
 
     private lateinit var serviceIntent: Intent
     private lateinit var fragmentInfo: Fragment
@@ -65,9 +66,10 @@ class EngineerMobileControlActivity : AppCompatActivity(), MediaPlayer.MediaPlay
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityMainBinding = ActivityEngineerMobileControlBinding.inflate(layoutInflater)
+        activityMainBinding = ActivityEngineerMobileControlBinding.inflate(layoutInflater).also {
+            setContentView(it.root)
+        }
         appBarMainBinding = AppBarMainBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_engineer_mobile_control)
         setViews()
         setSupportActionBar(toolbar)
         init()

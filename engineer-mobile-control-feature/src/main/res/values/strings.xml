@@ -22,8 +22,8 @@
     <string name="nav_header_title">Speeds</string>
 
     <string name="item_value_def">2</string>
-    <string name="item_value_min">0</string>
-    <string name="item_value_max">12</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
