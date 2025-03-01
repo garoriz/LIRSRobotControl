@@ -3,6 +3,7 @@
 
     <item
         android:id="@+id/item_bottom_nav_movement"
+        android:icon="@drawable/baseline_gamepad_24"
         android:title="@string/title_movement" />
 
     <item
