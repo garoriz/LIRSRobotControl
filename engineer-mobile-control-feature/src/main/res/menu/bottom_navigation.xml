@@ -8,6 +8,7 @@
 
     <item
         android:id="@+id/item_bottom_nav_joints"
+        android:icon="@drawable/joints"
         android:title="@string/title_joints" />
 
     <item
