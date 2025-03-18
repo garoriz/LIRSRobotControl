@@ -5,32 +5,57 @@
     android:layout_height="250dp"
     android:orientation="horizontal">
 
-    <io.github.controlwear.virtual.joystick.android.JoystickView
-        android:id="@+id/layout_joystick_left"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="0dp"
         android:layout_marginEnd="20dp"
-        app:JV_backgroundColor="@android:color/darker_gray"
-        app:JV_backgroundSizeRatio="65%"
-        app:JV_buttonImage="@drawable/img_button"
-        app:JV_buttonSizeRatio="30%"
-        app:layout_constraintEnd_toStartOf="@+id/layout_joystick_right" />
-
-    <io.github.controlwear.virtual.joystick.android.JoystickView
-        android:id="@+id/layout_joystick_right"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="0dp"
-        app:JV_backgroundColor="@android:color/darker_gray"
-        app:JV_backgroundSizeRatio="65%"
-        app:JV_buttonImage="@drawable/img_button"
-        app:JV_buttonSizeRatio="30%"
-        app:layout_constraintStart_toEndOf="@id/layout_joystick_left" />
+        android:orientation="vertical">
 
+        <io.github.controlwear.virtual.joystick.android.JoystickView
+            android:id="@+id/layout_joystick_left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            app:JV_backgroundColor="@android:color/darker_gray"
+            app:JV_backgroundSizeRatio="65%"
+            app:JV_buttonImage="@drawable/img_button"
+            app:JV_buttonSizeRatio="30%"
+            app:layout_constraintEnd_toStartOf="@+id/layout_joystick_right" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/turning"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <io.github.controlwear.virtual.joystick.android.JoystickView
+            android:id="@+id/layout_joystick_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            app:JV_backgroundColor="@android:color/darker_gray"
+            app:JV_backgroundSizeRatio="65%"
+            app:JV_buttonImage="@drawable/img_button"
+            app:JV_buttonSizeRatio="30%"
+            app:layout_constraintStart_toEndOf="@id/layout_joystick_left" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/movement"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
+    </LinearLayout>
 </LinearLayout>

@@ -23,4 +23,6 @@
     <!--Servers-->
     <string name="list_maps_srv">/list_maps</string>
     <string name="publish_map_srv">/publish_map</string>
+    <string name="turning">Turning</string>
+    <string name="movement">Movement</string>
 </resources>
