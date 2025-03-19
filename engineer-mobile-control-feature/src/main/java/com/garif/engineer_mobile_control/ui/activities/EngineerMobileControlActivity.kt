@@ -13,6 +13,7 @@ import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.DialogFragment
@@ -70,6 +71,7 @@ class EngineerMobileControlActivity : AppCompatActivity(), MediaPlayer.MediaPlay
             setContentView(it.root)
         }
         appBarMainBinding = AppBarMainBinding.inflate(layoutInflater)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
         setViews()
         setSupportActionBar(toolbar)
         init()

@@ -11,18 +11,19 @@
         android:includeFontPadding="false"
         android:text="@string/item_value_def" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_value_min"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_below="@+id/tv_value_current"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_btn_oval"
+        android:gravity="center"
         android:outlineProvider="none"
         android:padding="0dp"
         android:text="@string/minus" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_value_max"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -30,6 +31,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_btn_oval"
+        android:gravity="center"
         android:outlineProvider="none"
         android:padding="0dp"
         android:text="@string/plus" />

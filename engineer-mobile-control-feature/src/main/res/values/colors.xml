@@ -13,4 +13,10 @@
     <color name="color_toggle_button_passive">#65B3AD</color>
 
     <color name="color_black_translucent">#66FFFFFF</color>
+
+    <color name="white">#FFFFFF</color>
+
+    <color name="color_bottom_navigation_button_active">#65B3AD</color>
+
+    <color name="gray">#808080</color>
 </resources>
