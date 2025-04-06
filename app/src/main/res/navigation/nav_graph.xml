@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_robotSelectionFragment_to_pmb2ControlActivity"
             app:destination="@id/pmb2ControlActivity" />
+        <action
+            android:id="@+id/action_robotSelectionFragment_to_artBulControlActivity"
+            app:destination="@id/artBulControlActivity" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -23,4 +26,8 @@
         android:id="@+id/pmb2ControlActivity"
         android:name="com.garif.pmb2_control_feature.ui.activities.Pmb2ControlActivity"
         android:label="Pmb2ControlActivity" />
+    <activity
+        android:id="@+id/artBulControlActivity"
+        android:name="com.garif.artbul_control_feature.presentation.ArtBulControlActivity"
+        android:label="ArtBulControlActivity" />
 </navigation>

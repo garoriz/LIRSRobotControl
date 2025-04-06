@@ -1,20 +1,18 @@
 plugins {
-    id(Plugins.androidApplication)
+    id(Plugins.androidLibrary)
     id(Plugins.kotlinAndroid)
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.garif.lirsrobotcontrol"
+    namespace = "com.garif.artbul_control_feature"
     compileSdk = ConfigData.COMPILE_SDK
 
     defaultConfig {
-        applicationId = "com.garif.lirsrobotcontrol"
         minSdk = ConfigData.MIN_SDK
-        targetSdk = ConfigData.TARGET_SDK
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = ConfigData.TEST_INSTRUMENTATION_RUNNER
+        consumerProguardFiles(ConfigData.CONSUMER_RULES_PRO)
     }
 
     buildTypes {
@@ -40,16 +38,9 @@ dependencies {
     implementation(Dependencies.appcompat)
     implementation(Dependencies.material)
     implementation(Dependencies.activity)
-    implementation(Dependencies.constraintlayout)
-    implementation(Dependencies.navigationFragmentKtx)
-    implementation(Dependencies.navigationUIKtx)
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidJunit)
     androidTestImplementation(Dependencies.espressoCore)
-    implementation(project(":robot-selection-feature"))
-    implementation(project(":engineer-mobile-control-feature"))
-    implementation(project(":pmb2-control-feature"))
-    implementation(project(":artbul-control-feature"))
 }
 
 configurations.all {

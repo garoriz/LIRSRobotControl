@@ -41,7 +41,7 @@ class RobotSelectionFragment : Fragment(R.layout.fragment_robot_selection) {
             RobotSelection(
                 "ArtBul",
                 R.drawable.question,
-                R.id.action_robotSelectionFragment_to_pmb2ControlActivity
+                R.id.action_robotSelectionFragment_to_artBulControlActivity
             ),
         )
         robotSelectionListAdapter?.submitList(robotSelectionList)

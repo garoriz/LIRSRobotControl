@@ -2,4 +2,5 @@
 <resources>
     <item name="action_robotSelectionFragment_to_engineerMobileControlActivity" type="id" />
     <item name="action_robotSelectionFragment_to_pmb2ControlActivity" type="id" />
+    <item name="action_robotSelectionFragment_to_artBulControlActivity" type="id" />
 </resources>
