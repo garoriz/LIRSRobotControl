@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ROS 2 + roslibjs + Joystick Example</title>
+  <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.8.0/dist/nipplejs.js"></script>
+  <style>
+    #status {
+      font-size: 20px;
+    }
+    #joystick {
+      width: 300px;
+      height: 300px;
+      position: absolute;
+      bottom: 50px;
+      left: 50px;
+    }
+  </style>
+</head>
+<body>
+  <h1>ROS 2 WebSocket Client + Joystick</h1>
+  <div id="status">Connecting...</div>
+  <div id="joystick"></div>
+
+  <script>
+    const ros = new ROSLIB.Ros({
+      url: 'ws://localhost:9090'
+    });
+
+    ros.on('connection', () => {
+      document.getElementById('status').innerText = '✅ Connected to rosbridge_websocket';
+    });
+
+    ros.on('error', (error) => {
+      document.getElementById('status').innerText = '❌ Connection error: ' + error;
+    });
+
+    ros.on('close', () => {
+      document.getElementById('status').innerText = '🔌 Connection closed';
+    });
+
+    // Create a publisher for cmd_vel
+    const cmdVelPub = new ROSLIB.Topic({
+      ros: ros,
+      name: '/artbul/mobile_base_controller/cmd_vel',
+      messageType: 'geometry_msgs/msg/TwistStamped'
+    });
+
+    // Create a joystick using nipplejs
+    const joystick = nipplejs.create({
+      zone: document.getElementById('joystick'),
+      mode: 'static',
+      position: { left: '50%', top: '50%' },
+      color: 'blue'
+    });
+
+    joystick.on('move', (evt, data) => {
+      if (data && data.angle && typeof data.angle.radian === 'number') {
+        console.log('Data:', data);
+        const angle = data.angle.radian;
+        const distance = data.distance || 0;
+
+        const maxSpeed = 1; // максимальная скорость (можно подстроить)
+        const linearX = Math.sin(angle) * distance * 0.01 * maxSpeed;
+        const angularZ = -Math.cos(angle) * distance * 0.1 * maxSpeed;
+
+        const now = Date.now();
+        const sec = Math.floor(now / 1000);
+        const nanosec = (now % 1000) * 1e6;
+
+        const twistStamped = new ROSLIB.Message({
+          header: {
+            stamp: { sec: sec, nanosec: nanosec },
+            frame_id: 'base_link'
+          },
+          twist: {
+            linear:  { x: linearX, y: 0.0, z: 0.0 },
+            angular: { x: 0.0, y: 0.0, z: angularZ }
+          }
+        });
+
+        cmdVelPub.publish(twistStamped);
+        console.log('🕹 Published with angle:', angle.toFixed(2), 'distance:', distance, '=>', twistStamped);
+      } else {
+        console.warn('❗️ No valid angle data from joystick event:', data);
+      }
+    });
+
+    joystick.on('end', () => {
+      const twistStamped = new ROSLIB.Message({
+        header: {
+          stamp: { sec: 0, nanosec: 0 },
+          frame_id: 'base_link'
+        },
+        twist: {
+          linear: { x: 0.0, y: 0.0, z: 0.0 },
+          angular: { x: 0.0, y: 0.0, z: 0.0 }
+        }
+      });
+
+      cmdVelPub.publish(twistStamped);
+      console.log('🛑 Joystick released. Stopping robot.');
+    });
+  </script>
+</body>
+</html>
