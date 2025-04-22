@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ROS 2 Mobile Control</title>
+  <title>ArtBul Control</title>
   <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.8.0/dist/nipplejs.js"></script>
   <style>
@@ -78,7 +78,7 @@
 <h1>ArtBul Joystick</h1>
 
 <div id="connect-section">
-  <input type="text" id="ipInput" placeholder="Введите IP ROS-машины" />
+  <input type="text" id="ipInput" placeholder="Введите IP робота" />
   <button onclick="connectToRos()">Подключиться</button>
   <div id="status">❌ Не подключено</div>
 </div>
@@ -92,7 +92,7 @@
   function connectToRos() {
     const ip = document.getElementById("ipInput").value.trim();
     if (!ip) {
-      alert("Введите IP адрес ROS-машины!");
+      alert("Введите IP адрес робота!");
       return;
     }
 
