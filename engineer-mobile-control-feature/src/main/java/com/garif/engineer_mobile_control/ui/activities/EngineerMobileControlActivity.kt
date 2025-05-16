@@ -284,14 +284,12 @@ class EngineerMobileControlActivity : AppCompatActivity(), MediaPlayer.MediaPlay
         wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         if (wifiManager.isWifiEnabled) {
             wifiInfo = wifiManager.connectionInfo
-            if (wifiInfo.networkId != -1) {
-                val inetConverter = InetAddressConverter()
-                val ipString = inetConverter.fromIntToString(wifiInfo.ipAddress)
-                ADDRESS_CLIENT_DHCP = InetAddress.getByName(ipString)
-                Log.d("Logs", wifiInfo.ssid)
-                Log.d("Logs", ipString)
-                return true
-            }
+            val inetConverter = InetAddressConverter()
+            val ipString = inetConverter.fromIntToString(wifiInfo.ipAddress)
+            ADDRESS_CLIENT_DHCP = InetAddress.getByName(ipString)
+            Log.d("Logs", wifiInfo.ssid)
+            Log.d("Logs", ipString)
+            return true
         }
         return false
     }
