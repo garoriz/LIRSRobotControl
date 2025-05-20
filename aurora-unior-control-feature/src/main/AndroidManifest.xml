@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.garif.artbul_control_feature">
+<manifest package="com.garif.artbul_control_feature"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-   <!-- <application>
+  <application>
         <activity
-            android:name=".presentation.ArtBulControlActivity"
+            android:name="com.garif.aurora_unior_control_feature.presentation.AuroraUniorControlActivity"
             android:exported="false" />
-    </application>-->
+    </application>
 
 </manifest>

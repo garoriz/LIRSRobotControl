@@ -1,4 +1,4 @@
-package com.garif.artbul_control_feature.presentation
+package com.garif.aurora_unior_control_feature.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
