@@ -9,13 +9,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.garif.aurora_unior_control_feature.R
 
-class AuroraUniorControlActivity : AppCompatActivity() {
+class AvroraUniorControlActivity : AppCompatActivity() {
     private var webView: WebView? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_aurora_unior_control)
+        setContentView(R.layout.activity_avrora_unior_control)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -28,6 +28,6 @@ class AuroraUniorControlActivity : AppCompatActivity() {
         webSettings?.javaScriptEnabled = true
         webSettings?.domStorageEnabled = true
 
-        webView?.loadUrl("file:///android_asset/aurora_unior_control_feature.html")
+        webView?.loadUrl("file:///android_asset/avrora_unior_control_feature.html")
     }
 }
