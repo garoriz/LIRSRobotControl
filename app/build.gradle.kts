@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":engineer-mobile-control-feature"))
     implementation(project(":pmb2-control-feature"))
     implementation(project(":artbul-control-feature"))
+    implementation(project(":avrora-unior-control-feature"))
 }
 
 configurations.all {

@@ -46,7 +46,7 @@ class RobotSelectionFragment : Fragment(R.layout.fragment_robot_selection) {
             RobotSelection(
                 "Avrora Unior",
                 R.drawable.img_config_avrora_unior,
-                R.id.action_robotSelectionFragment_to_artBulControlActivity
+                R.id.action_robotSelectionFragment_to_avroraUniorControlActivity
             ),
         )
         robotSelectionListAdapter?.submitList(robotSelectionList)
