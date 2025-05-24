@@ -14,30 +14,60 @@
       padding: 0;
       background-color: #f0f0f0;
     }
+
     h1 {
       margin: 20px;
+      font-size: 24px;
     }
+
     #status {
       font-weight: bold;
-      margin-bottom: 10px;
+      margin-top: 10px;
+      font-size: 18px;
     }
+
     #connect-block {
-      margin-bottom: 20px;
+      margin: 20px;
     }
+
+    #ipInput {
+      font-size: 20px;
+      padding: 14px 12px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    #connect-block button {
+      font-size: 20px;
+      padding: 14px 24px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #connect-block button:hover {
+      background-color: #0056b3;
+    }
+
     #joystick {
       width: 300px;
       height: 300px;
-      margin: auto;
+      margin: 40px auto;
       touch-action: none;
     }
   </style>
 </head>
 <body>
 
-<h1>🚗 Управление Аврора Юниор</h1>
+<h1>🚗 Управление Avrora Unior</h1>
 
 <div id="connect-block">
-  <input type="text" id="ipInput" placeholder="IP ROS">
+  <input type="text" id="ipInput" placeholder="IP машины">
+  <br>
   <button onclick="connect()">🔌 Подключиться</button>
   <div id="status">⛔ Отключено</div>
 </div>
@@ -53,7 +83,7 @@
 
   function connect() {
     const ip = document.getElementById("ipInput").value.trim();
-    if (!ip) return alert("Введите IP машины");
+    if (!ip) return alert("Введите IP ROS-машины");
 
     ros = new ROSLIB.Ros({ url: `ws://${ip}:9090` });
 
@@ -126,7 +156,6 @@
     });
 
     publisher.publish(msg);
-    // console.log("Send:", msg);
   }
 </script>
 
