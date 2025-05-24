@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_robotSelectionFragment_to_artBulControlActivity"
             app:destination="@id/artBulControlActivity" />
+        <action
+            android:id="@+id/action_robotSelectionFragment_to_avroraUniorControlActivity"
+            app:destination="@id/avroraUniorControlActivity" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -30,4 +33,8 @@
         android:id="@+id/artBulControlActivity"
         android:name="com.garif.artbul_control_feature.presentation.ArtBulControlActivity"
         android:label="ArtBulControlActivity" />
+    <activity
+        android:id="@+id/avroraUniorControlActivity"
+        android:name="com.garif.aurora_unior_control_feature.presentation.AvroraUniorControlActivity"
+        android:label="AvroraUniorControlActivity" />
 </navigation>
