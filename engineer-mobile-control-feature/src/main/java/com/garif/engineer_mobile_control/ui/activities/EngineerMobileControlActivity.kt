@@ -190,7 +190,7 @@ class EngineerMobileControlActivity : AppCompatActivity(), MediaPlayer.MediaPlay
 
     private fun initMediaPlayer() {
         mediaConfig = MediaPlayerConfig()
-        mediaConfig.connectionUrl = "rtsp://10.42.0.1:8554/zoom"
+        mediaConfig.connectionUrl = "rtsp://10.42.0.1:8554/right"
         mediaConfig.decodingType = 0
     }
 

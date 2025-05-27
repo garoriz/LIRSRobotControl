@@ -23,6 +23,8 @@ class Client : Runnable {
         try {
             while (true) {
                 SOCKET_CLIENT.send(PACKET_CLIENT)
+                PackageManager.resetTorchPackage()
+                Log.d("Rizvan", PACKET_CLIENT.data[34].toString())
                 Log.d("Logs", "Thread is running")
                 Thread.sleep(200)
             }

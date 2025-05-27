@@ -27,10 +27,7 @@ class MovementFragment : Fragment(R.layout.fragment_movement) {
         binding?.toggleFlippersUp?.setOnCheckedChangeListener(actionListener)
         binding?.toggleFlippersDown?.setOnCheckedChangeListener(actionListener)
         binding?.toggleTorch?.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked)
-                PackageManager.turnOnTorch()
-            else
-                PackageManager.turnOffTorch()
+            PackageManager.turnTorch()
         }
     }
 }
