@@ -125,7 +125,7 @@
     const angle = data.angle.radian;
     const distance = data.distance || 0;
 
-    speed = Math.sin(angle) * distance * 0.02;
+    speed = Math.sin(angle) * distance * 0.04;
     steering = -Math.cos(angle) * distance * 0.01;
 
     sendDriveCommand();
