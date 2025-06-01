@@ -15,12 +15,19 @@ class Client : Runnable {
                 PackageRemoteControl.packet,
                 PackageRemoteControl.packet.size,
                 Constants.ADDRESS_SERVER,
-                Constants.PORT_SERVER.toInt()
+                Constants.PORT_SERVER.toInt())
+        val socketClient = DatagramSocket(null).apply {
+            reuseAddress = true
+            bind(
+                java.net.InetSocketAddress(
+                    Constants.ADDRESS_CLIENT_DHCP,
+                    Constants.PORT_CLIENT.toInt()
+                )
             )
-        bindSocket()
+        }
         try {
             while (true) {
-                socketClient?.send(packetClient)
+                socketClient.send(packetClient)
                 PackageManager.resetTorchPackage()
                 Log.d("Logs", "Thread is running")
                 Thread.sleep(200)
@@ -30,15 +37,5 @@ class Client : Runnable {
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-    }
-
-    private fun bindSocket() {
-        if (socketClient?.isBound != true)
-            socketClient =
-                DatagramSocket(Constants.PORT_CLIENT.toInt(), Constants.ADDRESS_CLIENT_DHCP)
-    }
-
-    companion object {
-        var socketClient: DatagramSocket? = null
     }
 }
