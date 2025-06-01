@@ -10,21 +10,18 @@ import java.net.DatagramSocket
 class Client : Runnable {
 
     override fun run() {
-        val PACKET_CLIENT =
+        val packetClient =
             DatagramPacket(
                 PackageRemoteControl.packet,
                 PackageRemoteControl.packet.size,
                 Constants.ADDRESS_SERVER,
-                Constants.PORT_SERVER.toInt())
-        val SOCKET_CLIENT =
-            DatagramSocket(
-                Constants.PORT_CLIENT.toInt(),
-                Constants.ADDRESS_CLIENT_DHCP)
+                Constants.PORT_SERVER.toInt()
+            )
+        bindSocket()
         try {
             while (true) {
-                SOCKET_CLIENT.send(PACKET_CLIENT)
+                socketClient?.send(packetClient)
                 PackageManager.resetTorchPackage()
-                Log.d("Rizvan", PACKET_CLIENT.data[34].toString())
                 Log.d("Logs", "Thread is running")
                 Thread.sleep(200)
             }
@@ -33,5 +30,15 @@ class Client : Runnable {
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
+    }
+
+    private fun bindSocket() {
+        if (socketClient?.isBound != true)
+            socketClient =
+                DatagramSocket(Constants.PORT_CLIENT.toInt(), Constants.ADDRESS_CLIENT_DHCP)
+    }
+
+    companion object {
+        var socketClient: DatagramSocket? = null
     }
 }
