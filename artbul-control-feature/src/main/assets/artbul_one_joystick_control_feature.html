@@ -69,12 +69,14 @@
       padding: 6px 10px;
       border-radius: 6px;
       border: 1px solid #ccc;
-      cursor: pointer;
+      cursor:
+      pointer;
     }
+
     #joystick-single, #joystick-move, #joystick-rotate {
-      width: 45vw;
+      width: 60vw;
       max-width: 300px;
-      height: 45vw;
+      height: 60vw;
       max-height: 300px;
       background-color: #fff;
       border-radius: 16px;
@@ -83,17 +85,31 @@
       touch-action: none;
       margin: 10px auto;
     }
+
+    #joystick-move, #joystick-rotate {
+      width: 40vw;
+      max-width: 300px;
+      height: 40vw;
+      max-height: 300px;
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      position: relative;
+      touch-action: none;
+      margin: 5px auto;
+    }
     #joystick-dual {
       display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 10 px;
+      box-sizing: border-box;
     }
   </style>
 </head>
 <body>
 
-<h1>ArtBul — Управление Джойстиками</h1>
+<h1>ArtBul</h1>
 
 <div id="connect-section">
   <input type="text" id="ipInput" placeholder="Введите IP робота (например, 192.168.1.42)" />
@@ -217,7 +233,7 @@
       mode: 'static',
       position: { left: '50%', top: '50%' },
       color: 'blue',
-      size: 200
+      size: 125
     });
 
     rotateJoystickInstance = nipplejs.create({
@@ -225,7 +241,7 @@
       mode: 'static',
       position: { left: '50%', top: '50%' },
       color: 'green',
-      size: 200
+      size: 125
     });
 
     moveJoystickInstance.on('move', (evt, data) => {
@@ -243,8 +259,11 @@
     });
 
     rotateJoystickInstance.on('move', (evt, data) => {
-      if (data && data.vector) {
-        angularZ = -data.vector.y * 0.05;
+      if (data && data.angle) {
+        const angle = data.angle.radian;
+        const distance = data.distance || 0;
+
+        angularZ = -Math.cos(angle) * distance * 0.1;
       }
     });
 
