@@ -28,6 +28,6 @@ class ArtBulControlActivity : AppCompatActivity() {
         webSettings?.javaScriptEnabled = true
         webSettings?.domStorageEnabled = true
 
-        webView?.loadUrl("file:///android_asset/artbul_one_joystick_control_feature.html")
+        webView?.loadUrl("file:///android_asset/artbul_control_feature.html")
     }
 }
