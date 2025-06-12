@@ -1,162 +1,275 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Аврора Юниор — Джойстик</title>
-  <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.8.0/dist/nipplejs.min.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      background-color: #f0f0f0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аврора Юниор</title>
+    <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.8.0/dist/nipplejs.min.js"></script>
+    <style>
+        body {
+          font-family: sans-serif;
+          text-align: center;
+          margin: 0;
+          padding: 0;
+          background-color: #f0f0f0;
+        }
 
-    h1 {
-      margin: 20px;
-      font-size: 24px;
-    }
+        h1 {
+          margin: 20px;
+          font-size: 24px;
+        }
 
-    #status {
-      font-weight: bold;
-      margin-top: 10px;
-      font-size: 18px;
-    }
+        #status {
+          font-weight: bold;
+          margin-top: 10px;
+          font-size: 18px;
+        }
 
-    #connect-block {
-      margin: 20px;
-    }
+        #connect-block {
+          margin: 20px;
+        }
 
-    #ipInput {
-      font-size: 20px;
-      padding: 14px 12px;
-      width: 250px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      margin-bottom: 12px;
-    }
+        #ipInput {
+          font-size: 20px;
+          padding: 14px 12px;
+          width: 250px;
+          border: 1px solid #ccc;
+          border-radius: 10px;
+          margin-bottom: 12px;
+        }
 
-    #connect-block button {
-      font-size: 20px;
-      padding: 14px 24px;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-    }
+        #connect-block button {
+          font-size: 20px;
+          padding: 14px 24px;
+          border: none;
+          background-color: #007bff;
+          color: white;
+          border-radius: 10px;
+          cursor: pointer;
+        }
 
-    #connect-block button:hover {
-      background-color: #0056b3;
-    }
+        #connect-block button:hover {
+          background-color: #0056b3;
+        }
 
-    #joystick {
-      width: 300px;
-      height: 300px;
-      margin: 40px auto;
-      touch-action: none;
-    }
-  </style>
+        #joystick {
+          width: 300px;
+          height: 300px;
+          margin: 200px auto 40px auto;
+          touch-action: none;
+        }
+
+        #button-controls button {
+          font-size: 20px;
+          padding: 12px 20px;
+          margin: 5px;
+          border: none;
+          border-radius: 10px;
+          background-color: #444;
+          color: white;
+          cursor: pointer;
+          min-width: 100px;
+        }
+        #button-controls button:hover {
+          background-color: #000;
+        }
+
+        .control-grid {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .control-grid .row {
+          display: flex;
+          gap: 12px;
+        }
+
+        .control-grid .row.center {
+          justify-content: center;
+        }
+
+        .control-grid button {
+          font-size: 20px;
+          padding: 14px 20px;
+          min-width: 110px;
+          border: none;
+          border-radius: 10px;
+          background-color: #444;
+          color: white;
+          cursor: pointer;
+          text-align: center;
+        }
+
+        .control-grid button:hover {
+          background-color: #000;
+        }
+    </style>
 </head>
 <body>
 
 <h1>🚗 Управление Avrora Unior</h1>
 
 <div id="connect-block">
-  <input type="text" id="ipInput" placeholder="IP машины">
-  <br>
-  <button onclick="connect()">🔌 Подключиться</button>
-  <div id="status">⛔ Отключено</div>
+    <input type="text" id="ipInput" placeholder="IP машины">
+    <br>
+    <button onclick="connect()">🔌 Подключиться</button>
+    <div id="status">⛔ Отключено</div>
+</div>
+
+<div style="margin: 16px;">
+    <label for="modeSelect"><b>Режим управления:</b></label>
+    <select id="modeSelect" onchange="changeMode()" style="font-size: 18px; padding: 6px;">
+        <option value="joystick">Джойстик</option>
+        <option value="buttons">Кнопки</option>
+    </select>
 </div>
 
 <div id="joystick"></div>
 
+<div id="button-controls" style="display: none; margin-top: 20px;">
+    <div class="control-grid">
+        <div class="row center">
+            <button onclick="drive('forward')">⬆ Вперёд</button>
+        </div>
+        <div class="row">
+            <button onclick="drive('left')">⬅ Влево</button>
+            <button onclick="drive('stop')">⏹ Стоп</button>
+            <button onclick="drive('right')">➡ Вправо</button>
+        </div>
+        <div class="row center">
+            <button onclick="drive('backward')">⬇ Назад</button>
+        </div>
+    </div>
+</div>
+
 <script>
-  let ros = null;
-  let publisher = null;
+    let ros = null;
+    let publisher = null;
 
-  let steering = 0.0;
-  let speed = 0.0;
+    let steering = 0.0;
+    let speed = 0.0;
 
-  function connect() {
-    const ip = document.getElementById("ipInput").value.trim();
-    if (!ip) return alert("Введите IP ROS-машины");
+    function connect() {
+      const ip = document.getElementById("ipInput").value.trim();
+      if (!ip) return alert("Введите IP ROS-машины");
 
-    ros = new ROSLIB.Ros({ url: `ws://${ip}:9090` });
+      ros = new ROSLIB.Ros({ url: `ws://${ip}:9090` });
 
-    ros.on('connection', () => {
-      document.getElementById('status').textContent = '✅ Подключено';
-      document.getElementById('status').style.color = 'green';
+      ros.on('connection', () => {
+        document.getElementById('status').textContent = '✅ Подключено';
+        document.getElementById('status').style.color = 'green';
 
-      publisher = new ROSLIB.Topic({
-        ros: ros,
-        name: '/junior_car/ackermann_cmd',
-        messageType: 'ackermann_msgs/msg/AckermannDriveStamped'
+        publisher = new ROSLIB.Topic({
+          ros: ros,
+          name: '/junior_car/ackermann_cmd',
+          messageType: 'ackermann_msgs/msg/AckermannDriveStamped'
+        });
       });
+
+      ros.on('error', err => {
+        document.getElementById('status').textContent = '❌ Ошибка подключения';
+        document.getElementById('status').style.color = 'red';
+        console.error(err);
+      });
+
+      ros.on('close', () => {
+        document.getElementById('status').textContent = '🔌 Отключено';
+        document.getElementById('status').style.color = 'gray';
+      });
+    }
+
+    const joystick = nipplejs.create({
+      zone: document.getElementById('joystick'),
+      mode: 'static',
+      position: { left: '50%' },
+      color: 'blue',
+      size: 200
     });
 
-    ros.on('error', err => {
-      document.getElementById('status').textContent = '❌ Ошибка подключения';
-      document.getElementById('status').style.color = 'red';
-      console.error(err);
+    joystick.on('move', (evt, data) => {
+      if (!publisher || !ros || !ros.isConnected) return;
+      if (!data.angle || typeof data.angle.radian !== 'number') return;
+
+      const angle = data.angle.radian;
+      const distance = data.distance || 0;
+
+      speed = Math.sin(angle) * distance * 0.04;
+      steering = -Math.cos(angle) * distance * 0.01;
+
+      sendDriveCommand();
     });
 
-    ros.on('close', () => {
-      document.getElementById('status').textContent = '🔌 Отключено';
-      document.getElementById('status').style.color = 'gray';
+    joystick.on('end', () => {
+      speed = 0.0;
+      steering = 0.0;
+      sendDriveCommand();
     });
-  }
 
-  const joystick = nipplejs.create({
-    zone: document.getElementById('joystick'),
-    mode: 'static',
-    position: { left: '50%', top: '50%' },
-    color: 'blue',
-    size: 200
-  });
+    function sendDriveCommand() {
+      if (!publisher || !ros || !ros.isConnected) return;
 
-  joystick.on('move', (evt, data) => {
-    if (!publisher || !ros || !ros.isConnected) return;
-    if (!data.angle || typeof data.angle.radian !== 'number') return;
+      const now = Date.now();
+      const sec = Math.floor(now / 1000);
+      const nanosec = (now % 1000) * 1e6;
 
-    const angle = data.angle.radian;
-    const distance = data.distance || 0;
+      const msg = new ROSLIB.Message({
+        header: {
+          stamp: { sec: sec, nanosec: nanosec },
+          frame_id: "base_link"
+        },
+        drive: {
+          steering_angle: steering,
+          speed: speed
+        }
+      });
 
-    speed = Math.sin(angle) * distance * 0.04;
-    steering = -Math.cos(angle) * distance * 0.01;
+      publisher.publish(msg);
+    }
 
-    sendDriveCommand();
-  });
+    let driveTimer = null;
 
-  joystick.on('end', () => {
-    speed = 0.0;
-    steering = 0.0;
-    sendDriveCommand();
-  });
+    function drive(direction) {
+      clearInterval(driveTimer);
 
-  function sendDriveCommand() {
-    if (!publisher || !ros || !ros.isConnected) return;
-
-    const now = Date.now();
-    const sec = Math.floor(now / 1000);
-    const nanosec = (now % 1000) * 1e6;
-
-    const msg = new ROSLIB.Message({
-      header: {
-        stamp: { sec: sec, nanosec: nanosec },
-        frame_id: "base_link"
-      },
-      drive: {
-        steering_angle: steering,
-        speed: speed
+      switch (direction) {
+        case 'forward':
+          speed = 0.5;
+          steering = 0.0;
+          break;
+        case 'backward':
+          speed = -0.5;
+          steering = 0.0;
+          break;
+        case 'left':
+          speed = 0.3;
+          steering = 0.4;
+          break;
+        case 'right':
+          speed = 0.3;
+          steering = -0.4;
+          break;
+        case 'stop':
+        default:
+          speed = 0.0;
+          steering = 0.0;
+          sendDriveCommand();
+          return;
       }
-    });
 
-    publisher.publish(msg);
-  }
+      sendDriveCommand();
+      driveTimer = setInterval(sendDriveCommand, 150);
+    }
+
+
+    function changeMode() {
+      const mode = document.getElementById('modeSelect').value;
+      document.getElementById('joystick').style.display = (mode === 'joystick') ? 'block' : 'none';
+      document.getElementById('button-controls').style.display = (mode === 'buttons') ? 'block' : 'none';
+    }
+
 </script>
 
 </body>
