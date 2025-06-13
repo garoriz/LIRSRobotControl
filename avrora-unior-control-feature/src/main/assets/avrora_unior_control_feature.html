@@ -106,6 +106,41 @@
         .control-grid button:hover {
           background-color: #000;
         }
+
+        #joystick-dual {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          padding: 0 10 px;
+          box-sizing: border-box;
+        }
+
+        .joystick-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        #joystick-move, #joystick-turn {
+          width: 40vw;
+          max-width: 300px;
+          height: 40vw;
+          max-height: 300px;
+          background-color: #fff;
+          border-radius: 16px;
+          box-shadow: 0 0 8px rgba(0,0,0,0.1);
+          position: relative;
+          touch-action: none;
+          margin: 5px;
+        }
+
+        .joystick-label {
+          margin-top: 8px;
+          font-size: 16px;
+          font-weight: bold;
+          color: #333;
+          text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -124,6 +159,7 @@
     <select id="modeSelect" onchange="changeMode()" style="font-size: 18px; padding: 6px;">
         <option value="joystick">Джойстик</option>
         <option value="buttons">Кнопки</option>
+        <option value="dual">Два джойстика</option>
     </select>
 </div>
 
@@ -142,6 +178,17 @@
         <div class="row center">
             <button onclick="drive('backward')">⬇ Назад</button>
         </div>
+    </div>
+</div>
+
+<div id="joystick-dual" style="display: none;">
+    <div class="joystick-wrapper">
+        <div id="joystick-move"></div>
+        <div>Скорость</div>
+    </div>
+    <div class="joystick-wrapper">
+        <div id="joystick-turn"></div>
+        <div>Поворот</div>
     </div>
 </div>
 
@@ -268,8 +315,56 @@
       const mode = document.getElementById('modeSelect').value;
       document.getElementById('joystick').style.display = (mode === 'joystick') ? 'block' : 'none';
       document.getElementById('button-controls').style.display = (mode === 'buttons') ? 'block' : 'none';
+      document.getElementById('joystick-dual').style.display = (mode === 'dual') ? 'flex' : 'none';
+
+      if (mode === 'dual') initDualJoysticks();
     }
 
+    let dualMoveJoystick = null;
+    let dualTurnJoystick = null;
+
+    function initDualJoysticks() {
+      if (dualMoveJoystick) dualMoveJoystick.destroy();
+      if (dualTurnJoystick) dualTurnJoystick.destroy();
+
+      dualMoveJoystick = nipplejs.create({
+        zone: document.getElementById('joystick-move'),
+        mode: 'static',
+        position: { left: '50%', top: '50%' },
+        color: 'blue',
+        size: 125
+      });
+
+      dualTurnJoystick = nipplejs.create({
+        zone: document.getElementById('joystick-turn'),
+        mode: 'static',
+        position: { left: '50%', top: '50%' },
+        color: 'green',
+        size: 125
+      });
+
+      dualMoveJoystick.on('move', (evt, data) => {
+        const angle = data?.angle?.radian;
+        const dist = data?.distance || 0;
+        if (angle != null) speed = Math.sin(angle) * dist * 0.04;
+      });
+
+      dualMoveJoystick.on('end', () => {
+        speed = 0.0;
+        sendDriveCommand();
+      });
+
+      dualTurnJoystick.on('move', (evt, data) => {
+        const angle = data?.angle?.radian;
+        const dist = data?.distance || 0;
+        if (angle != null) steering = -Math.cos(angle) * dist * 0.02;
+      });
+
+      dualTurnJoystick.on('end', () => {
+        steering = 0.0;
+        sendDriveCommand();
+      });
+    }
 </script>
 
 </body>
