@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аврора Юниор</title>
+    <title>Avrora Unior</title>
     <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.8.0/dist/nipplejs.min.js"></script>
     <style>
@@ -54,10 +54,14 @@
         }
 
         #joystick {
-          width: 300px;
-          height: 300px;
-          margin: 200px auto 40px auto;
+          width: 200px;
+          height: 200px;
+          background-color: #fff;
+          border-radius: 16px;
+          box-shadow: 0 0 8px rgba(0,0,0,0.1);
+          margin: auto auto 20px auto;
           touch-action: none;
+          position: relative;
         }
 
         #button-controls button {
@@ -119,6 +123,7 @@
           display: flex;
           flex-direction: column;
           align-items: center;
+          margin-bottom: 20px;
         }
 
         #joystick-move, #joystick-turn {
@@ -141,42 +146,57 @@
           color: #333;
           text-align: center;
         }
+
+        #cameraStream {
+          width: 100%;
+          max-width: 640px;
+          border-radius: 10px;
+          margin-top: 20px;
+          margin-bottom: 60px;
+        }
     </style>
 </head>
 <body>
 
-<h1>🚗 Управление Avrora Unior</h1>
+<h1>Control of Avrora Unior</h1>
 
 <div id="connect-block">
-    <input type="text" id="ipInput" placeholder="IP машины">
+    <input type="text" id="ipInput" placeholder="Machine IP">
     <br>
-    <button onclick="connect()">🔌 Подключиться</button>
-    <div id="status">⛔ Отключено</div>
+    <button onclick="connect()">Connect</button>
+    <div id="status">Disconnected</div>
 </div>
 
 <div style="margin: 16px;">
-    <label for="modeSelect"><b>Режим управления:</b></label>
+    <label for="modeSelect"><b>Control mode:</b></label>
     <select id="modeSelect" onchange="changeMode()" style="font-size: 18px; padding: 6px;">
-        <option value="joystick">Джойстик</option>
-        <option value="buttons">Кнопки</option>
-        <option value="dual">Два джойстика</option>
+        <option value="joystick">Joystick</option>
+        <option value="buttons">Buttons</option>
+        <option value="dual">Two joysticks</option>
     </select>
 </div>
 
-<div id="joystick"></div>
+<img id="cameraStream" alt="Camera video"/>
+
+<div id="joystick-container">
+    <div class="joystick-wrapper">
+        <div id="joystick"></div>
+        <div>Control</div>
+    </div>
+</div>
 
 <div id="button-controls" style="display: none; margin-top: 20px;">
     <div class="control-grid">
         <div class="row center">
-            <button onclick="drive('forward')">⬆ Вперёд</button>
+            <button onclick="drive('forward')">⬆ Forward</button>
         </div>
         <div class="row">
-            <button onclick="drive('left')">⬅ Влево</button>
-            <button onclick="drive('stop')">⏹ Стоп</button>
-            <button onclick="drive('right')">➡ Вправо</button>
+            <button onclick="drive('left')">⬅ To the left</button>
+            <button onclick="drive('stop')">⏹ Stop</button>
+            <button onclick="drive('right')">➡ To the right</button>
         </div>
         <div class="row center">
-            <button onclick="drive('backward')">⬇ Назад</button>
+            <button onclick="drive('backward')">⬇ Back</button>
         </div>
     </div>
 </div>
@@ -184,11 +204,11 @@
 <div id="joystick-dual" style="display: none;">
     <div class="joystick-wrapper">
         <div id="joystick-move"></div>
-        <div>Скорость</div>
+        <div>Speed</div>
     </div>
     <div class="joystick-wrapper">
         <div id="joystick-turn"></div>
-        <div>Поворот</div>
+        <div>Turning</div>
     </div>
 </div>
 
@@ -201,12 +221,12 @@
 
     function connect() {
       const ip = document.getElementById("ipInput").value.trim();
-      if (!ip) return alert("Введите IP ROS-машины");
+      if (!ip) return alert("Enter the IP of the ROS machine");
 
       ros = new ROSLIB.Ros({ url: `ws://${ip}:9090` });
 
       ros.on('connection', () => {
-        document.getElementById('status').textContent = '✅ Подключено';
+        document.getElementById('status').textContent = 'Connected';
         document.getElementById('status').style.color = 'green';
 
         publisher = new ROSLIB.Topic({
@@ -214,24 +234,26 @@
           name: '/junior_car/ackermann_cmd',
           messageType: 'ackermann_msgs/msg/AckermannDriveStamped'
         });
+
+        subscribeToCompressedImage();
       });
 
       ros.on('error', err => {
-        document.getElementById('status').textContent = '❌ Ошибка подключения';
+        document.getElementById('status').textContent = 'Connection error';
         document.getElementById('status').style.color = 'red';
         console.error(err);
       });
 
       ros.on('close', () => {
-        document.getElementById('status').textContent = '🔌 Отключено';
+        document.getElementById('status').textContent = 'Disconnected';
         document.getElementById('status').style.color = 'gray';
       });
     }
 
     const joystick = nipplejs.create({
       zone: document.getElementById('joystick'),
-      mode: 'static',
-      position: { left: '50%' },
+      mode: 'dynamic',
+      position: { left: '50%'},
       color: 'blue',
       size: 200
     });
@@ -313,7 +335,7 @@
 
     function changeMode() {
       const mode = document.getElementById('modeSelect').value;
-      document.getElementById('joystick').style.display = (mode === 'joystick') ? 'block' : 'none';
+      document.getElementById('joystick-container').style.display = (mode === 'joystick') ? 'block' : 'none';
       document.getElementById('button-controls').style.display = (mode === 'buttons') ? 'block' : 'none';
       document.getElementById('joystick-dual').style.display = (mode === 'dual') ? 'flex' : 'none';
 
@@ -329,7 +351,7 @@
 
       dualMoveJoystick = nipplejs.create({
         zone: document.getElementById('joystick-move'),
-        mode: 'static',
+        mode: 'dynamic',
         position: { left: '50%', top: '50%' },
         color: 'blue',
         size: 125
@@ -337,7 +359,7 @@
 
       dualTurnJoystick = nipplejs.create({
         zone: document.getElementById('joystick-turn'),
-        mode: 'static',
+        mode: 'dynamic',
         position: { left: '50%', top: '50%' },
         color: 'green',
         size: 125
@@ -371,6 +393,21 @@
       dualTurnJoystick.on('end', () => {
         steering = 0.0;
         sendDriveCommand();
+      });
+    }
+
+    function subscribeToCompressedImage() {
+      const imgTopic = new ROSLIB.Topic({
+        ros: ros,
+        name: '/camera/depth/image_raw/compressed',
+        messageType: 'sensor_msgs/CompressedImage'
+      });
+
+      imgTopic.subscribe((msg) => {
+        const format = msg.format.toLowerCase();
+        const imgElement = document.getElementById('cameraStream');
+
+        imgElement.src = `data:image/${format};base64,${msg.data}`;
       });
     }
 </script>
