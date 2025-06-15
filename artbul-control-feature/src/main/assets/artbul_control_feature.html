@@ -134,7 +134,9 @@
 <h1>ArtBul</h1>
 
 <div id="connect-section">
-    <input type="text" id="ipInput" placeholder="Введите IP робота (например, 192.168.1.42)"/>
+    <input type="text" id="ipInput" placeholder="Введите IP робота (например, 192.168.1.42)"
+           required
+           oninput="filterIP(this)" maxlength="15" inputmode="decimal"/>
     <button onclick="connectToRos()">Подключиться</button>
     <div id="status">❌ Не подключено</div>
 </div>
@@ -202,6 +204,10 @@
       }
 
       ctx.restore();
+    }
+
+    function filterIP(input) {
+      input.value = input.value.replace(/[^0-9.]/g, '');
     }
 
     function connectToRos() {
