@@ -181,6 +181,26 @@
 
     function drawLidar(scan) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+
+      const robotRadius = 8;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, robotRadius, 0, 2 * Math.PI);
+      ctx.fillStyle = '#007bff';
+      ctx.fill();
+      ctx.closePath();
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx, cy - 20);
+      ctx.strokeStyle = 'blue';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.closePath();
+
       ctx.save();
       ctx.translate(canvas.width / 2, canvas.height / 2);
 
@@ -192,8 +212,8 @@
 
         if (r < scan.range_min || r > scan.range_max || !isFinite(r)) continue;
 
-        const x = r * Math.cos(angle) * scale;
-        const y = r * Math.sin(angle) * scale;
+        const x = r * Math.cos(angle + Math.PI / 2) * scale;
+        const y = r * Math.sin(angle + Math.PI / 2) * scale;
 
         ctx.fillStyle = '#00ff00';
         ctx.beginPath();
