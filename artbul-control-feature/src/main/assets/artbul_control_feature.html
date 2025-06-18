@@ -146,6 +146,7 @@
     <select id="modeSelect">
         <option value="single">One joystick</option>
         <option value="dual">Two joysticks</option>
+        <option value="buttons">Buttons</option>
     </select>
 </div>
 
@@ -362,8 +363,10 @@
     document.getElementById("modeSelect").addEventListener("change", (e) => {
       if (e.target.value === "single") {
         activateSingleJoystick();
-      } else {
+      } else if (e.target.value === "dual") {
         activateDualJoystick();
+      } else {
+
       }
     });
 
