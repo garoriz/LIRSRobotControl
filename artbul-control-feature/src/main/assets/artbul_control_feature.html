@@ -127,6 +127,53 @@
           color: #333;
           text-align: center;
         }
+
+        #button-controls button {
+          font-size: 20px;
+          padding: 12px 20px;
+          margin: 5px;
+          border: none;
+          border-radius: 10px;
+          background-color: #444;
+          color: white;
+          cursor: pointer;
+          min-width: 100px;
+        }
+        #button-controls button:hover {
+          background-color: #000;
+        }
+
+        .control-grid {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .control-grid .row {
+          display: flex;
+          gap: 12px;
+        }
+
+        .control-grid .row.center {
+          justify-content: center;
+        }
+
+        .control-grid button {
+          font-size: 20px;
+          padding: 14px 20px;
+          min-width: 110px;
+          border: none;
+          border-radius: 10px;
+          background-color: #444;
+          color: white;
+          cursor: pointer;
+          text-align: center;
+        }
+
+        .control-grid button:hover {
+          background-color: #000;
+        }
     </style>
 </head>
 <body>
@@ -143,7 +190,7 @@
 
 <div id="mode-control">
     <label for="modeSelect"><b>Control mode:</b></label>
-    <select id="modeSelect">
+    <select id="modeSelect" onchange="changeMode()">
         <option value="single">One joystick</option>
         <option value="dual">Two joysticks</option>
         <option value="buttons">Buttons</option>
@@ -163,6 +210,22 @@
     <div class="joystick-wrapper">
         <div id="joystick-rotate"></div>
         <div class="joystick-label">Turning</div>
+    </div>
+</div>
+
+<div id="button-controls" style="display: none; margin-top: 20px;">
+    <div class="control-grid">
+        <div class="row center">
+            <button onclick="drive('forward')">⬆ Forward</button>
+        </div>
+        <div class="row">
+            <button onclick="drive('left')">⬅ To the left</button>
+            <button onclick="drive('stop')">⏹ Stop</button>
+            <button onclick="drive('right')">➡ To the right</button>
+        </div>
+        <div class="row center">
+            <button onclick="drive('backward')">⬇ Back</button>
+        </div>
     </div>
 </div>
 
@@ -369,6 +432,19 @@
 
       }
     });
+
+    function changeMode() {
+      const mode = document.getElementById('modeSelect').value;
+      document.getElementById('joystick-single').style.display = (mode === 'single') ? 'block' : 'none';
+      document.getElementById('button-controls').style.display = (mode === 'buttons') ? 'block' : 'none';
+      document.getElementById('joystick-dual').style.display = (mode === 'dual') ? 'flex' : 'none';
+
+      if (mode === 'dual') {
+        initDualJoysticks()
+      } else if (mode === 'single') {
+        activateSingleJoystick();
+      }
+    }
 
     setInterval(() => {
       if (!cmdVelPub || !ros || !ros.isConnected) return;
