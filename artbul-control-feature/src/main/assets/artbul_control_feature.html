@@ -471,29 +471,24 @@
     function drive(direction) {
       switch (direction) {
         case 'forward':
-          linearX = 0.3;
-          linearY = 0.0;
+          linearX = 1.0;
           angularZ = 0.0;
           break;
         case 'backward':
-          linearX = -0.3;
-          linearY = 0.0;
+          linearX = -1.0;
           angularZ = 0.0;
           break;
         case 'left':
           linearX = 0.0;
-          linearY = 0.3;
-          angularZ = 0.0;
+          angularZ = 1.2;
           break;
         case 'right':
           linearX = 0.0;
-          linearY = -0.3;
-          angularZ = 0.0;
+          angularZ = -1.2;
           break;
         case 'stop':
         default:
           linearX = 0.0;
-          linearY = 0.0;
           angularZ = 0.0;
           return;
       }
