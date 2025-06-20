@@ -373,8 +373,6 @@
         singleJoystickInstance.destroy();
         singleJoystickInstance = null;
       }
-      document.getElementById('joystick-single').style.display = 'none';
-      document.getElementById('joystick-dual').style.display = 'flex';
 
       if (moveJoystickInstance) moveJoystickInstance.destroy();
       if (rotateJoystickInstance) rotateJoystickInstance.destroy();
@@ -428,8 +426,6 @@
         activateSingleJoystick();
       } else if (e.target.value === "dual") {
         activateDualJoystick();
-      } else {
-
       }
     });
 
@@ -438,12 +434,6 @@
       document.getElementById('joystick-single').style.display = (mode === 'single') ? 'block' : 'none';
       document.getElementById('button-controls').style.display = (mode === 'buttons') ? 'block' : 'none';
       document.getElementById('joystick-dual').style.display = (mode === 'dual') ? 'flex' : 'none';
-
-      if (mode === 'dual') {
-        initDualJoysticks()
-      } else if (mode === 'single') {
-        activateSingleJoystick();
-      }
     }
 
     setInterval(() => {
@@ -454,18 +444,17 @@
       const nanosec = (now % 1000) * 1e6;
 
       const msg = new ROSLIB.Message({
-      header: {
-        stamp: { sec: sec, nanosec: nanosec },
-        frame_id: 'base_link'
-      },
-      twist: {
-        linear: { x: linearX, y: linearY || 0.0, z: 0.0 },
-        angular: { x: 0.0, y: 0.0, z: angularZ }
-      }
-    });
+        header: {
+          stamp: { sec: sec, nanosec: nanosec },
+          frame_id: 'base_link'
+        },
+        twist: {
+          linear: { x: linearX, y: linearY || 0.0, z: 0.0 },
+          angular: { x: 0.0, y: 0.0, z: angularZ }
+        }
+      });
 
-    cmdVelPub.publish(msg);
-
+      cmdVelPub.publish(msg);
     }, 100);
     activateSingleJoystick();
 
@@ -477,6 +466,58 @@
       });
 
       lidarSub.subscribe(drawLidar);
+    }
+
+    function drive(direction) {
+      switch (direction) {
+        case 'forward':
+          linearX = 0.3;
+          linearY = 0.0;
+          angularZ = 0.0;
+          break;
+        case 'backward':
+          linearX = -0.3;
+          linearY = 0.0;
+          angularZ = 0.0;
+          break;
+        case 'left':
+          linearX = 0.0;
+          linearY = 0.3;
+          angularZ = 0.0;
+          break;
+        case 'right':
+          linearX = 0.0;
+          linearY = -0.3;
+          angularZ = 0.0;
+          break;
+        case 'stop':
+        default:
+          linearX = 0.0;
+          linearY = 0.0;
+          angularZ = 0.0;
+          return;
+      }
+    }
+
+    function sendDriveCommand() {
+      if (!publisher || !ros || !ros.isConnected) return;
+
+      const now = Date.now();
+      const sec = Math.floor(now / 1000);
+      const nanosec = (now % 1000) * 1e6;
+
+      const msg = new ROSLIB.Message({
+        header: {
+          stamp: { sec: sec, nanosec: nanosec },
+          frame_id: "base_link"
+        },
+        drive: {
+          steering_angle: steering,
+          speed: speed
+        }
+      });
+
+      publisher.publish(msg);
     }
 </script>
 </body>
