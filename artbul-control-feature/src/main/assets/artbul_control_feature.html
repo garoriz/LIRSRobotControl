@@ -245,6 +245,8 @@
     const canvas = document.getElementById('lidarCanvas');
     const ctx = canvas.getContext('2d');
 
+    let mapSub = null;
+
     function drawLidar(scan) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -308,6 +310,7 @@
         document.getElementById('status').innerText = `Connected to ${url}`;
         setupPublisher();
         subscribeToLidar();
+        subscribeToMap();
       });
 
       ros.on('error', (error) => {
@@ -466,6 +469,14 @@
       });
 
       lidarSub.subscribe(drawLidar);
+    }
+
+    function subscribeToMap() {
+      mapSub = new ROSLIB.Topic({
+        ros: ros,
+        name: '/map',
+        messageType: 'nav_msgs/OccupancyGrid'
+      });
     }
 
     function drive(direction) {
