@@ -57,14 +57,14 @@
           text-align: center;
           min-height: 24px;
         }
-        #mode-control {
+        #mode-control, #mode-environment {
           margin: 16px 0;
           font-size: 16px;
           max-width: 420px;
           width: 100%;
           text-align: center;
         }
-        #modeSelect {
+        #modeSelect, #modeEnvironment {
           font-size: 16px;
           padding: 6px 10px;
           border-radius: 6px;
@@ -106,12 +106,21 @@
           box-sizing: border-box;
         }
 
-        #lidarCanvas {
+        #lidarCanvas, #mapCanvas {
           width: 300px;
           height: 300px;
           background: #000;
           border-radius: 10px;
           margin-top: 20px;
+        }
+
+        #mapCanvas {
+          width: 300px;
+          height: 300px;
+          background: #000;
+          border-radius: 10px;
+          margin-top: 20px;
+          display: none;
         }
 
         .joystick-wrapper {
@@ -190,14 +199,25 @@
 
 <div id="mode-control">
     <label for="modeSelect"><b>Control mode:</b></label>
-    <select id="modeSelect" onchange="changeMode()">
+    <select id="modeSelect" onchange="changeModeControl()">
         <option value="single">One joystick</option>
         <option value="dual">Two joysticks</option>
         <option value="buttons">Buttons</option>
     </select>
 </div>
 
+<div id="mode-environment">
+    <label for="modeEnvironment"><b>Environment mode:</b></label>
+    <select id="modeEnvironment" onchange="changeModeEnvironment()">
+        <option value="lidar">Lidar</option>
+        <option value="map">Map</option>
+    </select>
+</div>
+
 <canvas id="lidarCanvas" width="300" height="300"
+        style="background: #000; border-radius: 10px; margin-top: 20px;"></canvas>
+
+<canvas id="mapCanvas" width="300" height="300"
         style="background: #000; border-radius: 10px; margin-top: 20px;"></canvas>
 
 <div id="joystick-single"></div>
@@ -432,11 +452,17 @@
       }
     });
 
-    function changeMode() {
+    function changeModeControl() {
       const mode = document.getElementById('modeSelect').value;
       document.getElementById('joystick-single').style.display = (mode === 'single') ? 'block' : 'none';
       document.getElementById('button-controls').style.display = (mode === 'buttons') ? 'block' : 'none';
       document.getElementById('joystick-dual').style.display = (mode === 'dual') ? 'flex' : 'none';
+    }
+
+    function changeModeEnvironment() {
+      const mode = document.getElementById('modeEnvironment').value;
+      document.getElementById('lidarCanvas').style.display = (mode === 'lidar') ? 'block' : 'none';
+      document.getElementById('mapCanvas').style.display = (mode === 'map') ? 'block' : 'none';
     }
 
     setInterval(() => {
