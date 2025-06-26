@@ -250,6 +250,9 @@
     let rotateJoystickInstance = null;
 
     let lidarSub = null;
+    let mapSub = null;
+    let tfSub = null;
+    let robotPose = null;
     const canvas = document.getElementById('сanvas');
     const ctx = canvas.getContext('2d');
 
@@ -296,6 +299,59 @@
       }
 
       ctx.restore();
+    }
+
+    function drawMap(map) {
+        const { width, height, resolution } = map.info;
+        const data = map.data;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const scaleX = canvas.width / width;
+        const scaleY = canvas.height / height;
+        const scale = Math.min(scaleX, scaleY);
+
+        const offsetX = (canvas.width - width * scale) / 2;
+        const offsetY = (canvas.height - height * scale) / 2;
+
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const i = x + (height - y - 1) * width;
+                const value = data[i];
+
+                let color;
+                if (value === 100) color = '#000000';
+                else if (value === 0) color = '#ffffff';
+                else color = '#cccccc';
+
+                ctx.fillStyle = color;
+                ctx.fillRect(offsetX + x * scale, offsetY + y * scale, scale, scale);
+            }
+        }
+
+        if (robotPose) {
+            const res = map.info.resolution;
+            const origin = map.info.origin.position;
+
+            const scaleX = canvas.width / map.info.width;
+            const scaleY = canvas.height / map.info.height;
+            const scale = Math.min(scaleX, scaleY);
+
+            const offsetX = (canvas.width - map.info.width * scale) / 2;
+            const offsetY = (canvas.height - map.info.height * scale) / 2;
+
+            const robotX = (robotPose.x - origin.x) / res;
+            const robotY = (robotPose.y - origin.y) / res;
+
+            const px = offsetX + robotX * scale;
+            const py = offsetY + (map.info.height - robotY) * scale;
+
+            ctx.beginPath();
+            ctx.arc(px, py, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = '#007bff';
+            ctx.fill();
+
+        }
     }
 
     function filterIP(input) {
@@ -447,9 +503,11 @@
     function changeModeEnvironment() {
       const mode = document.getElementById('modeEnvironment').value;
       if (mode === 'lidar') {
+        unsubscribeFromMap();
         subscribeToLidar();
       } else {
-        lidarSub.unsubscribe();
+        unsubscribeFromLidar();
+        subscribeToMap();
       }
     }
 
@@ -491,6 +549,37 @@
         name: '/map',
         messageType: 'nav_msgs/OccupancyGrid'
       });
+
+      tfSub = new ROSLIB.Topic({
+        ros: ros,
+        name: '/tf',
+        messageType: 'tf2_msgs/TFMessage'
+      });
+
+      tfSub.subscribe((msg) => {
+        for (const transform of msg.transforms) {
+            if (
+                transform.header.frame_id === 'map' &&
+                transform.child_frame_id === 'base_link'
+            ) {
+                robotPose = transform.transform.translation;
+            }
+        }
+      });
+
+      mapSub.subscribe(drawMap);
+    }
+
+    function unsubscribeFromLidar() {
+      lidarSub.unsubscribe();
+      lidarSub = null;
+    }
+
+    function unsubscribeFromMap() {
+      mapSub.unsubscribe();
+      mapSub = null;
+      tfSub.unsubscribe();
+      tfSub = null;
     }
 
     function drive(direction) {
