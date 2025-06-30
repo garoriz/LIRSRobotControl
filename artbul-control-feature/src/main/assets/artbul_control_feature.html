@@ -95,6 +95,11 @@
     let lastDist = null;
     let mapData = null;
     let goal = null;
+    const goalPublisher = new ROSLIB.Topic({
+        ros: ros,
+        name: '/move_base_simple/goal',
+        messageType: 'geometry_msgs/PoseStamped'
+    });
 
     function getDistance(touches) {
         const dx = touches[0].clientX - touches[1].clientX;
@@ -158,6 +163,34 @@
         const mapY = (clickY - offsetY) / scale;
 
         goal = { x: mapX, y: mapY };
+
+        const resolution = mapData.info.resolution;
+        const origin = mapData.info.origin; // geometry_msgs/Pose
+
+        const goalWorldX = mapX * resolution + origin.position.x;
+        const goalWorldY = mapY * resolution + origin.position.y;
+
+        const goalMsg = new ROSLIB.Message({
+            header: {
+                frame_id: 'map',
+                stamp: { secs: 0, nsecs: 0 } // можно не задавать
+            },
+            pose: {
+                position: {
+                    x: goalWorldX,
+                    y: goalWorldY,
+                    z: 0
+                },
+                orientation: {
+                    x: 0,
+                    y: 0,
+                    z: 0,
+                    w: 1
+                }
+            }
+        });
+
+        goalPublisher.publish(goalMsg);
     });
 
 
