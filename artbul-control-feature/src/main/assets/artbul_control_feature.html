@@ -96,6 +96,13 @@
     let mapData = null;
     let goal = null;
     let goalPublisher = null;
+    const tfClient = new ROSLIB.TFClient({
+        ros: ros,
+        fixedFrame: 'map',
+        angularThres: 0.01,
+        transThres: 0.01,
+        rate: 10.0
+    });
 
     function getDistance(touches) {
         const dx = touches[0].clientX - touches[1].clientX;
@@ -166,8 +173,6 @@
 
         const goalWorldX = mapX * resolution + origin.position.x;
         const goalWorldY = invY * resolution + origin.position.y;
-        console.log('goalWorldX: ', goalWorldX)
-        console.log('goalWorldY: ', goalWorldY)
 
         const goalMsg = new ROSLIB.Message({
             header: {
@@ -249,7 +254,7 @@
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        const cellSize = scale; // масштабируем один пиксель на клетку
+        const cellSize = scale;
 
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
@@ -484,21 +489,12 @@
         messageType: 'nav_msgs/OccupancyGrid'
       });
 
-      tfSub = new ROSLIB.Topic({
-        ros: ros,
-        name: '/tf',
-        messageType: 'tf2_msgs/TFMessage'
-      });
+      tfClient.subscribe('base_link', (transform) => {
+          const { x, y, z } = transform.translation;
+          const q = transform.rotation;
 
-      tfSub.subscribe((msg) => {
-        for (const transform of msg.transforms) {
-            if (
-                transform.header.frame_id === 'map' &&
-                transform.child_frame_id === 'base_link'
-            ) {
-                robotPose = transform.transform.translation;
-            }
-        }
+          robotPose = { x, y, q };
+          console.log("TF Robot pose:", x.toFixed(2), y.toFixed(2));
       });
 
       mapSub.subscribe((msg) => {
