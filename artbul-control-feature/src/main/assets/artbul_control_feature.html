@@ -83,7 +83,6 @@
 
     let lidarSub = null;
     let mapSub = null;
-    let tfSub = null;
     let robotPose = null;
     const canvas = document.getElementById('сanvas');
     const ctx = canvas.getContext('2d');
@@ -95,14 +94,8 @@
     let lastDist = null;
     let mapData = null;
     let goal = null;
-    let goalPublisher = null;
-    const tfClient = new ROSLIB.TFClient({
-        ros: ros,
-        fixedFrame: 'map',
-        angularThres: 0.01,
-        transThres: 0.01,
-        rate: 10.0
-    });
+    let goalActionClient = null;
+    let amclSub = null;
 
     function getDistance(touches) {
         const dx = touches[0].clientX - touches[1].clientX;
@@ -174,27 +167,49 @@
         const goalWorldX = mapX * resolution + origin.position.x;
         const goalWorldY = invY * resolution + origin.position.y;
 
-        const goalMsg = new ROSLIB.Message({
-            header: {
-                frame_id: 'map',
-                stamp: { secs: 0, nsecs: 0 }
-            },
-            pose: {
-                position: {
-                    x: goalWorldX,
-                    y: goalWorldY,
-                    z: 0
-                },
-                orientation: {
-                    x: 0,
-                    y: 0,
-                    z: 0,
-                    w: 1
+        let rosGoal = new ROSLIB.Goal({
+            actionClient: goalActionClient,
+            goalMessage: {
+                target_pose: {
+                    header: {
+                        frame_id: 'map'
+                    },
+                    pose: {
+                        position: { x: goalWorldX, y: goalWorldY, z: 0 },
+                        orientation: { x: 0, y: 0, z: 0, w: 1 }
+                    }
                 }
             }
         });
 
-        goalPublisher.publish(goalMsg);
+        rosGoal.on('result', function(result) {
+            rosGoal = null;
+            goal = null;
+        });
+
+        rosGoal.send();
+    });
+
+    canvas.addEventListener("wheel", (e) => {
+        e.preventDefault();
+
+        const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
+
+        const rect = canvas.getBoundingClientRect();
+        const centerX = e.clientX - rect.left;
+        const centerY = e.clientY - rect.top;
+
+        // точка зума в координатах мира
+        const worldX = (centerX - offsetX) / scale;
+        const worldY = (centerY - offsetY) / scale;
+
+        // применяем масштаб
+        targetScale *= zoomFactor;
+        scale = targetScale;
+
+        // пересчитываем смещения — зум вокруг курсора
+        offsetX = centerX - worldX * scale;
+        offsetY = centerY - worldY * scale;
     });
 
 
@@ -283,6 +298,33 @@
 
             ctx.strokeStyle = 'black';
             ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        if (robotPose) {
+            const resolution = mapData.info.resolution;
+            const origin = mapData.info.origin;
+
+            const mapX = (robotPose.x - origin.position.x) / resolution;
+            const mapY = mapData.info.height - (robotPose.y - origin.position.y) / resolution;
+
+            const rX = mapX * scale + offsetX;
+            const rY = mapY * scale + offsetY;
+
+            const radius = 5;
+            ctx.fillStyle = '#008000 ';
+            ctx.beginPath();
+            ctx.arc(rX, rY, radius, 0, 2 * Math.PI);
+            ctx.fill();
+
+            const dirLen = 20;
+            ctx.strokeStyle = '#008000 ';
+            ctx.beginPath();
+            ctx.moveTo(rX, rY);
+            ctx.lineTo(
+                rX + dirLen * Math.cos(-robotPose.theta),
+                rY + dirLen * Math.sin(-robotPose.theta)
+            );
             ctx.stroke();
         }
 
@@ -489,23 +531,32 @@
         messageType: 'nav_msgs/OccupancyGrid'
       });
 
-      tfClient.subscribe('base_link', (transform) => {
-          const { x, y, z } = transform.translation;
-          const q = transform.rotation;
-
-          robotPose = { x, y, q };
-          console.log("TF Robot pose:", x.toFixed(2), y.toFixed(2));
-      });
-
       mapSub.subscribe((msg) => {
         mapData = msg;
         drawMap(msg);
       });
 
-      goalPublisher = new ROSLIB.Topic({
-        ros: ros,
-        name: '/move_base_simple/goal',
-        messageType: 'geometry_msgs/PoseStamped'
+      amclSub = new ROSLIB.Topic({
+          ros: ros,
+          name: '/amcl_pose',
+          messageType: 'geometry_msgs/PoseWithCovarianceStamped'
+      });
+
+      amclSub.subscribe((msg) => {
+          const pos = msg.pose.pose.position;
+          const ori = msg.pose.pose.orientation;
+
+          robotPose = {
+              x: pos.x,
+              y: pos.y,
+              theta: 2 * Math.atan2(ori.z, ori.w)
+          };
+      });
+
+      goalActionClient = new ROSLIB.ActionClient({
+          ros: ros,
+          serverName: '/move_base',
+          actionName: 'move_base_msgs/MoveBaseAction'
       });
     }
 
@@ -516,10 +567,10 @@
 
     function unsubscribeFromMap() {
       mapSub.unsubscribe();
+      amclSub.unsubscribe();
       mapSub = null;
-      tfSub.unsubscribe();
-      tfSub = null;
-      goalPublisher = null;
+      goalActionClient = null;
+      amclSub = null;
     }
 
     function drive(direction) {
