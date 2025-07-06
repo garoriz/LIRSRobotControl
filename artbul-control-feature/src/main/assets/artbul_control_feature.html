@@ -558,6 +558,23 @@
           serverName: '/move_base',
           actionName: 'move_base_msgs/MoveBaseAction'
       });
+
+      const topicsClient = new ROSLIB.Service({
+          ros: ros,
+          name: '/rosapi/topics',
+          serviceType: 'rosapi/Topics'
+      });
+
+      topicsClient.callService(new ROSLIB.ServiceRequest({}), function (result) {
+          const pathTopics = result.topics.filter(topic =>
+              topic.match(/^\/move_base\/.*\/plan$/)
+          );
+
+          if (pathTopics.length > 0) {
+              const selectedPathTopic = pathTopics[0];
+              console.log(selectedPathTopic);
+          }
+      });
     }
 
     function unsubscribeFromLidar() {
