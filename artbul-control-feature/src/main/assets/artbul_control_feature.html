@@ -97,6 +97,8 @@
     let goalActionClient = null;
     let amclSub = null;
 
+    let globalPlan = [];
+
     function getDistance(touches) {
         const dx = touches[0].clientX - touches[1].clientX;
         const dy = touches[0].clientY - touches[1].clientY;
@@ -572,8 +574,24 @@
 
           if (pathTopics.length > 0) {
               const selectedPathTopic = pathTopics[0];
-              console.log(selectedPathTopic);
+              subscribeToPath(selectedPathTopic);
           }
+      });
+    }
+
+    function subscribeToPath(topicName) {
+      const pathSub = new ROSLIB.Topic({
+        ros: ros,
+        name: topicName,
+        messageType: 'nav_msgs/Path'
+      });
+
+      pathSub.subscribe((msg) => {
+        globalPlan = msg.poses.map(p => ({
+          x: p.pose.position.x,
+          y: p.pose.position.y
+        }));
+        console.log(globalPlan);
       });
     }
 
