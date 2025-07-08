@@ -330,8 +330,38 @@
             ctx.stroke();
         }
 
+        drawGlobalPath(ctx);
+
         requestAnimationFrame(() => drawMap(mapData));
     }
+
+    function drawGlobalPath(ctx) {
+        if (!mapData || globalPlan.length < 2) return;
+
+        const resolution = mapData.info.resolution;
+        const origin = mapData.info.origin;
+
+        ctx.strokeStyle = '#0000ff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+
+        globalPlan.forEach((point, i) => {
+            const mapX = (point.x - origin.position.x) / resolution;
+            const mapY = mapData.info.height - (point.y - origin.position.y) / resolution;
+
+            const canvasX = mapX * scale + offsetX;
+            const canvasY = mapY * scale + offsetY;
+
+            if (i === 0) {
+                ctx.moveTo(canvasX, canvasY);
+            } else {
+                ctx.lineTo(canvasX, canvasY);
+            }
+        });
+
+        ctx.stroke();
+    }
+
 
     function filterIP(input) {
       input.value = input.value.replace(/[^0-9.]/g, '');
@@ -591,7 +621,6 @@
           x: p.pose.position.x,
           y: p.pose.position.y
         }));
-        console.log(globalPlan);
       });
     }
 
