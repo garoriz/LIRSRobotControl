@@ -96,6 +96,9 @@
     let goal = null;
     let goalActionClient = null;
     let amclSub = null;
+    let goalQueue = [];
+    let isSendingGoal = false;
+
 
     let globalPlan = [];
 
@@ -168,6 +171,16 @@
 
         const goalWorldX = mapX * resolution + origin.position.x;
         const goalWorldY = invY * resolution + origin.position.y;
+
+        goalQueue.push({
+          x: goalWorldX,
+          y: goalWorldY,
+          status: 'pending'
+        });
+
+        if (!isSendingGoal) {
+          console.log("!!!!")
+        }
 
         let rosGoal = new ROSLIB.Goal({
             actionClient: goalActionClient,
