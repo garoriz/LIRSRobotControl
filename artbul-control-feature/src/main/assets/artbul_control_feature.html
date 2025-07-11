@@ -83,6 +83,7 @@
 
     let lidarSub = null;
     let mapSub = null;
+    let statusSub = null;
     let robotPose = null;
     const canvas = document.getElementById('сanvas');
     const ctx = canvas.getContext('2d');
@@ -179,7 +180,7 @@
         });
 
         if (!isSendingGoal) {
-          console.log("!!!!")
+          sendNextGoal();
         }
 
         let rosGoal = new ROSLIB.Goal({
@@ -204,6 +205,35 @@
 
         rosGoal.send();
     });
+
+    function sendNextGoal() {
+      if (goalQueue.length === 0) {
+        isSendingGoal = false;
+        return;
+      }
+
+      isSendingGoal = true;
+
+      const currentGoal = goalQueue[0];
+
+      const goalMsg = new ROSLIB.Message({
+        header: {
+          frame_id: 'map',
+          stamp: { secs: 0, nsecs: 0 }
+        },
+        pose: {
+          position: {
+            x: currentGoal.x,
+            y: currentGoal.y,
+            z: 0
+          },
+          orientation: { x: 0, y: 0, z: 0, w: 1 }
+        }
+      });
+
+      goalPublisher.publish(goalMsg);
+      currentGoal.status = 'sent';
+    }
 
     canvas.addEventListener("wheel", (e) => {
         e.preventDefault();
@@ -619,6 +649,23 @@
               const selectedPathTopic = pathTopics[0];
               subscribeToPath(selectedPathTopic);
           }
+      });
+
+      statusSub = new ROSLIB.Topic({
+          ros: ros,
+          name: '/move_base/status',
+          messageType: 'actionlib_msgs/GoalStatusArray'
+      });
+
+      statusSub.subscribe((msg) => {
+        if (goalQueue.length === 0) return;
+
+        msg.status_list.forEach((status) => {
+          if (status.status === 3) {
+            goalQueue.shift();
+            sendNextGoal();
+          }
+        });
       });
     }
 
