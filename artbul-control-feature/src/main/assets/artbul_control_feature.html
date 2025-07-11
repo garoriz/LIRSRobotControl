@@ -182,28 +182,6 @@
         if (!isSendingGoal) {
           sendNextGoal();
         }
-
-        let rosGoal = new ROSLIB.Goal({
-            actionClient: goalActionClient,
-            goalMessage: {
-                target_pose: {
-                    header: {
-                        frame_id: 'map'
-                    },
-                    pose: {
-                        position: { x: goalWorldX, y: goalWorldY, z: 0 },
-                        orientation: { x: 0, y: 0, z: 0, w: 1 }
-                    }
-                }
-            }
-        });
-
-        rosGoal.on('result', function(result) {
-            rosGoal = null;
-            goal = null;
-        });
-
-        rosGoal.send();
     });
 
     function sendNextGoal() {
@@ -216,22 +194,27 @@
 
       const currentGoal = goalQueue[0];
 
-      const goalMsg = new ROSLIB.Message({
-        header: {
-          frame_id: 'map',
-          stamp: { secs: 0, nsecs: 0 }
-        },
-        pose: {
-          position: {
-            x: currentGoal.x,
-            y: currentGoal.y,
-            z: 0
-          },
-          orientation: { x: 0, y: 0, z: 0, w: 1 }
-        }
+      let rosGoal = new ROSLIB.Goal({
+            actionClient: goalActionClient,
+            goalMessage: {
+                target_pose: {
+                    header: {
+                        frame_id: 'map'
+                    },
+                    pose: {
+                        position: { x: currentGoal.x, y: currentGoal.y, z: 0 },
+                        orientation: { x: 0, y: 0, z: 0, w: 1 }
+                    }
+                }
+            }
       });
 
-      goalPublisher.publish(goalMsg);
+      rosGoal.on('result', function(result) {
+          rosGoal = null;
+          goal = null;
+      });
+
+      rosGoal.send();
       currentGoal.status = 'sent';
     }
 
