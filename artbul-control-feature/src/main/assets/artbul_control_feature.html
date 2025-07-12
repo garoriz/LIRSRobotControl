@@ -83,7 +83,6 @@
 
     let lidarSub = null;
     let mapSub = null;
-    let statusSub = null;
     let robotPose = null;
     const canvas = document.getElementById('сanvas');
     const ctx = canvas.getContext('2d');
@@ -94,11 +93,11 @@
     let lastTouch = null;
     let lastDist = null;
     let mapData = null;
-    let goal = null;
     let goalActionClient = null;
     let amclSub = null;
     let goalQueue = [];
     let isSendingGoal = false;
+    let topicsClient = null;
 
 
     let globalPlan = [];
@@ -165,8 +164,6 @@
         const mapY = (clickY - offsetY) / scale;
         const invY = mapData.info.height - mapY;
 
-        goal = { x: mapX, y: mapY };
-
         const resolution = mapData.info.resolution;
         const origin = mapData.info.origin;
 
@@ -211,7 +208,8 @@
 
       rosGoal.on('result', function(result) {
           rosGoal = null;
-          goal = null;
+          goalQueue.shift();
+          sendNextGoal();
       });
 
       rosGoal.send();
@@ -605,7 +603,7 @@
           actionName: 'move_base_msgs/MoveBaseAction'
       });
 
-      const topicsClient = new ROSLIB.Service({
+      topicsClient = new ROSLIB.Service({
           ros: ros,
           name: '/rosapi/topics',
           serviceType: 'rosapi/Topics'
@@ -616,27 +614,11 @@
               topic.match(/^\/move_base\/.*\/plan$/)
           );
 
+          console.log(pathTopics.length);
           if (pathTopics.length > 0) {
               const selectedPathTopic = pathTopics[0];
               subscribeToPath(selectedPathTopic);
           }
-      });
-
-      statusSub = new ROSLIB.Topic({
-          ros: ros,
-          name: '/move_base/status',
-          messageType: 'actionlib_msgs/GoalStatusArray'
-      });
-
-      statusSub.subscribe((msg) => {
-        if (goalQueue.length === 0) return;
-
-        msg.status_list.forEach((status) => {
-          if (status.status === 3) {
-            goalQueue.shift();
-            sendNextGoal();
-          }
-        });
       });
     }
 
@@ -666,6 +648,7 @@
       mapSub = null;
       goalActionClient = null;
       amclSub = null;
+      topicsClient = null;
     }
 
     function drive(direction) {
