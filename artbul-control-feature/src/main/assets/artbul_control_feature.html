@@ -315,19 +315,7 @@
             }
         }
 
-        if (goal) {
-            const gx = offsetX + goal.x * scale;
-            const gy = offsetY + goal.y * scale;
-
-            ctx.beginPath();
-            ctx.arc(gx, gy, 10, 0, 2 * Math.PI);
-            ctx.fillStyle = 'red';
-            ctx.fill();
-
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        }
+        drawGoals(ctx);
 
         if (robotPose) {
             const resolution = mapData.info.resolution;
@@ -725,6 +713,28 @@
       });
 
       publisher.publish(msg);
+    }
+
+    function drawGoals(ctx) {
+      if (!mapData || goalQueue.length === 0) return;
+
+      const resolution = mapData.info.resolution;
+      const origin = mapData.info.origin;
+
+      goalQueue.forEach(goal => {
+        const mapX = (goal.x - origin.position.x) / resolution;
+        const mapY = mapData.info.height - (goal.y - origin.position.y) / resolution;
+
+        const canvasX = mapX * scale + offsetX;
+        const canvasY = mapY * scale + offsetY;
+
+        ctx.beginPath();
+        ctx.arc(canvasX, canvasY, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = goal.status === 'sent' ? '#ffa500' : '#00cc00';
+        ctx.fill();
+        ctx.strokeStyle = '#003300';
+        ctx.stroke();
+      });
     }
 </script>
 </body>
