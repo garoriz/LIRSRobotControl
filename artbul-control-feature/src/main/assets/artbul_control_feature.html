@@ -37,6 +37,8 @@
     </select>
 </div>
 
+<button id="stopBtn">⏹ Стоп</button>
+
 <canvas id="сanvas" width="300" height="300"
         style="background: #000; border-radius: 10px; margin-top: 20px;"></canvas>
 
@@ -60,7 +62,6 @@
         </div>
         <div class="row">
             <button onclick="drive('left')">⬅ To the left</button>
-            <button onclick="drive('stop')">⏹ Stop</button>
             <button onclick="drive('right')">➡ To the right</button>
         </div>
         <div class="row center">
@@ -99,28 +100,7 @@
     let isSendingGoal = false;
     let topicsClient = null;
 
-
     let globalPlan = [];
-
-    function getDistance(touches) {
-        const dx = touches[0].clientX - touches[1].clientX;
-        const dy = touches[0].clientY - touches[1].clientY;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    function applyZoomToCanvasCenter(zoomFactor) {
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-
-        const worldX = (centerX - offsetX) / scale;
-        const worldY = (centerY - offsetY) / scale;
-
-        targetScale *= zoomFactor;
-        scale = targetScale;
-
-        offsetX = centerX - worldX * scale;
-        offsetY = centerY - worldY * scale;
-    }
 
     canvas.addEventListener("touchstart", (e) => {
         if (e.touches.length === 1) {
@@ -129,6 +109,12 @@
             lastDist = getDistance(e.touches);
         }
     });
+
+    function getDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 
     canvas.addEventListener("touchmove", (e) => {
         e.preventDefault();
@@ -149,6 +135,20 @@
             lastDist = newDist;
         }
     });
+
+    function applyZoomToCanvasCenter(zoomFactor) {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        const worldX = (centerX - offsetX) / scale;
+        const worldY = (centerY - offsetY) / scale;
+
+        targetScale *= zoomFactor;
+        scale = targetScale;
+
+        offsetX = centerX - worldX * scale;
+        offsetY = centerY - worldY * scale;
+    }
 
     canvas.addEventListener("touchend", () => {
         lastTouch = null;
@@ -239,142 +239,6 @@
     });
 
 
-    function drawLidar(scan) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
-
-      const robotRadius = 8;
-
-      ctx.beginPath();
-      ctx.arc(cx, cy, robotRadius, 0, 2 * Math.PI);
-      ctx.fillStyle = '#007bff';
-      ctx.fill();
-      ctx.closePath();
-
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx, cy - 20);
-      ctx.strokeStyle = 'blue';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.closePath();
-
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-
-      const lidarScale = 100;
-
-      for (let i = 0; i < scan.ranges.length; i++) {
-        const angle = scan.angle_min + i * scan.angle_increment;
-        const r = scan.ranges[i];
-
-        if (r < scan.range_min || r > scan.range_max || !isFinite(r)) continue;
-
-        const x = r * Math.cos(angle + Math.PI / 2) * lidarScale;
-        const y = r * Math.sin(angle + Math.PI / 2) * lidarScale;
-
-        ctx.fillStyle = '#00ff00';
-        ctx.beginPath();
-        ctx.arc(x, -y, 2, 0, 2 * Math.PI);
-        ctx.fill();
-      }
-
-      ctx.restore();
-    }
-
-    function drawMap(map) {
-        if (!map) return;
-        mapData = map;
-
-        const { width, height, resolution } = map.info;
-        const data = map.data;
-
-        scale += (targetScale - scale) * 0.1;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        const cellSize = scale;
-
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const i = x + (height - y - 1) * width;
-                const val = data[i];
-                if (val < 0) continue;
-
-                const color = val === 100 ? '#000000' : '#ffffff';
-                ctx.fillStyle = color;
-
-                const drawX = offsetX + x * cellSize;
-                const drawY = offsetY + y * cellSize;
-
-                ctx.fillRect(drawX, drawY, cellSize, cellSize);
-            }
-        }
-
-        drawGoals(ctx);
-
-        if (robotPose) {
-            const resolution = mapData.info.resolution;
-            const origin = mapData.info.origin;
-
-            const mapX = (robotPose.x - origin.position.x) / resolution;
-            const mapY = mapData.info.height - (robotPose.y - origin.position.y) / resolution;
-
-            const rX = mapX * scale + offsetX;
-            const rY = mapY * scale + offsetY;
-
-            const radius = 5;
-            ctx.fillStyle = '#008000 ';
-            ctx.beginPath();
-            ctx.arc(rX, rY, radius, 0, 2 * Math.PI);
-            ctx.fill();
-
-            const dirLen = 20;
-            ctx.strokeStyle = '#008000 ';
-            ctx.beginPath();
-            ctx.moveTo(rX, rY);
-            ctx.lineTo(
-                rX + dirLen * Math.cos(-robotPose.theta),
-                rY + dirLen * Math.sin(-robotPose.theta)
-            );
-            ctx.stroke();
-        }
-
-        drawGlobalPath(ctx);
-
-        requestAnimationFrame(() => drawMap(mapData));
-    }
-
-    function drawGlobalPath(ctx) {
-        if (!mapData || globalPlan.length < 2) return;
-
-        const resolution = mapData.info.resolution;
-        const origin = mapData.info.origin;
-
-        ctx.strokeStyle = '#0000ff';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-
-        globalPlan.forEach((point, i) => {
-            const mapX = (point.x - origin.position.x) / resolution;
-            const mapY = mapData.info.height - (point.y - origin.position.y) / resolution;
-
-            const canvasX = mapX * scale + offsetX;
-            const canvasY = mapY * scale + offsetY;
-
-            if (i === 0) {
-                ctx.moveTo(canvasX, canvasY);
-            } else {
-                ctx.lineTo(canvasX, canvasY);
-            }
-        });
-
-        ctx.stroke();
-    }
-
-
     function filterIP(input) {
       input.value = input.value.replace(/[^0-9.]/g, '');
     }
@@ -416,6 +280,14 @@
         messageType: 'geometry_msgs/msg/TwistStamped'
       });
     }
+
+    document.getElementById("modeSelect").addEventListener("change", (e) => {
+      if (e.target.value === "single") {
+        activateSingleJoystick();
+      } else if (e.target.value === "dual") {
+        activateDualJoystick();
+      }
+    });
 
     function activateSingleJoystick() {
       if (moveJoystickInstance) {
@@ -510,14 +382,6 @@
       });
     }
 
-    document.getElementById("modeSelect").addEventListener("change", (e) => {
-      if (e.target.value === "single") {
-        activateSingleJoystick();
-      } else if (e.target.value === "dual") {
-        activateDualJoystick();
-      }
-    });
-
     function changeModeControl() {
       const mode = document.getElementById('modeSelect').value;
       document.getElementById('joystick-single').style.display = (mode === 'single') ? 'block' : 'none';
@@ -566,6 +430,51 @@
       });
 
       lidarSub.subscribe(drawLidar);
+    }
+
+    function drawLidar(scan) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+
+      const robotRadius = 8;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, robotRadius, 0, 2 * Math.PI);
+      ctx.fillStyle = '#007bff';
+      ctx.fill();
+      ctx.closePath();
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx, cy - 20);
+      ctx.strokeStyle = 'blue';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.closePath();
+
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+
+      const lidarScale = 100;
+
+      for (let i = 0; i < scan.ranges.length; i++) {
+        const angle = scan.angle_min + i * scan.angle_increment;
+        const r = scan.ranges[i];
+
+        if (r < scan.range_min || r > scan.range_max || !isFinite(r)) continue;
+
+        const x = r * Math.cos(angle + Math.PI / 2) * lidarScale;
+        const y = r * Math.sin(angle + Math.PI / 2) * lidarScale;
+
+        ctx.fillStyle = '#00ff00';
+        ctx.beginPath();
+        ctx.arc(x, -y, 2, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      ctx.restore();
     }
 
     function subscribeToMap() {
@@ -622,6 +531,96 @@
       });
     }
 
+    function drawMap(map) {
+        if (!map) return;
+        mapData = map;
+
+        const { width, height, resolution } = map.info;
+        const data = map.data;
+
+        scale += (targetScale - scale) * 0.1;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const cellSize = scale;
+
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const i = x + (height - y - 1) * width;
+                const val = data[i];
+                if (val < 0) continue;
+
+                const color = val === 100 ? '#000000' : '#ffffff';
+                ctx.fillStyle = color;
+
+                const drawX = offsetX + x * cellSize;
+                const drawY = offsetY + y * cellSize;
+
+                ctx.fillRect(drawX, drawY, cellSize, cellSize);
+            }
+        }
+
+        drawGoals(ctx);
+
+        if (robotPose) {
+            const resolution = mapData.info.resolution;
+            const origin = mapData.info.origin;
+
+            const mapX = (robotPose.x - origin.position.x) / resolution;
+            const mapY = mapData.info.height - (robotPose.y - origin.position.y) / resolution;
+
+            const rX = mapX * scale + offsetX;
+            const rY = mapY * scale + offsetY;
+
+            const radius = 5;
+            ctx.fillStyle = '#008000 ';
+            ctx.beginPath();
+            ctx.arc(rX, rY, radius, 0, 2 * Math.PI);
+            ctx.fill();
+
+            const dirLen = 20;
+            ctx.strokeStyle = '#008000 ';
+            ctx.beginPath();
+            ctx.moveTo(rX, rY);
+            ctx.lineTo(
+                rX + dirLen * Math.cos(-robotPose.theta),
+                rY + dirLen * Math.sin(-robotPose.theta)
+            );
+            ctx.stroke();
+        }
+
+        drawGlobalPath(ctx);
+
+        requestAnimationFrame(() => drawMap(mapData));
+    }
+
+    function drawGlobalPath(ctx) {
+        if (!mapData || globalPlan.length < 2) return;
+
+        const resolution = mapData.info.resolution;
+        const origin = mapData.info.origin;
+
+        ctx.strokeStyle = '#0000ff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+
+        globalPlan.forEach((point, i) => {
+            const mapX = (point.x - origin.position.x) / resolution;
+            const mapY = mapData.info.height - (point.y - origin.position.y) / resolution;
+
+            const canvasX = mapX * scale + offsetX;
+            const canvasY = mapY * scale + offsetY;
+
+            if (i === 0) {
+                ctx.moveTo(canvasX, canvasY);
+            } else {
+                ctx.lineTo(canvasX, canvasY);
+            }
+        });
+
+        ctx.stroke();
+    }
+
     function subscribeToPath(topicName) {
       const pathSub = new ROSLIB.Topic({
         ros: ros,
@@ -669,33 +668,7 @@
           linearX = 0.0;
           angularZ = -1.2;
           break;
-        case 'stop':
-        default:
-          linearX = 0.0;
-          angularZ = 0.0;
-          return;
       }
-    }
-
-    function sendDriveCommand() {
-      if (!publisher || !ros || !ros.isConnected) return;
-
-      const now = Date.now();
-      const sec = Math.floor(now / 1000);
-      const nanosec = (now % 1000) * 1e6;
-
-      const msg = new ROSLIB.Message({
-        header: {
-          stamp: { sec: sec, nanosec: nanosec },
-          frame_id: "base_link"
-        },
-        drive: {
-          steering_angle: steering,
-          speed: speed
-        }
-      });
-
-      publisher.publish(msg);
     }
 
     function drawGoals(ctx) {
@@ -718,6 +691,22 @@
         ctx.strokeStyle = '#003300';
         ctx.stroke();
       });
+    }
+
+    document.getElementById('stopBtn').addEventListener('click', stopRobot);
+
+    function stopRobot() {
+      goalActionClient.cancel();
+
+      goalQueue = [];
+      isSendingGoal = false;
+
+      const stopMsg = new ROSLIB.Message({
+        linear: { x: 0, y: 0, z: 0 },
+        angular: { x: 0, y: 0, z: 0 }
+      });
+
+      cmdVelPub.publish(stopMsg);
     }
 </script>
 </body>
