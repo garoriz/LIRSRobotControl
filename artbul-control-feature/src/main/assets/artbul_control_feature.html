@@ -701,12 +701,8 @@
       goalQueue = [];
       isSendingGoal = false;
 
-      const stopMsg = new ROSLIB.Message({
-        linear: { x: 0, y: 0, z: 0 },
-        angular: { x: 0, y: 0, z: 0 }
-      });
-
-      cmdVelPub.publish(stopMsg);
+      linearX = 0.0;
+      angularZ = -1.2;
     }
 </script>
 </body>
