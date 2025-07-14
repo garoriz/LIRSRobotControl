@@ -176,7 +176,11 @@
             return Math.sqrt(dx * dx + dy * dy) < 10;
         });
 
-        if (clickedGoalIndex !== -1) {
+        if (clickedGoalIndex !== -1 && goalQueue[clickedGoalIndex].status === 'sent') {
+            goalActionClient.cancel();
+            globalPlan = [];
+            return;
+        } else if (clickedGoalIndex !== -1) {
             const removed = goalQueue.splice(clickedGoalIndex, 1)[0];
             return;
         }
@@ -721,7 +725,7 @@
       isSendingGoal = false;
 
       linearX = 0.0;
-      angularZ = -1.2;
+      angularZ = 0.0;
     }
 </script>
 </body>
