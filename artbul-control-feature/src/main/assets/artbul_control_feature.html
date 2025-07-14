@@ -160,12 +160,30 @@
         const clickX = e.clientX - rect.left;
         const clickY = e.clientY - rect.top;
 
+        const resolution = mapData.info.resolution;
+        const origin = mapData.info.origin;
+
+        const clickedGoalIndex = goalQueue.findIndex((goal) => {
+            const mapX = (goal.x - origin.position.x) / resolution;
+            const mapY = mapData.info.height - (goal.y - origin.position.y) / resolution;
+
+            const canvasX = mapX * scale + offsetX;
+            const canvasY = mapY * scale + offsetY;
+
+            const dx = clickX - canvasX;
+            const dy = clickY - canvasY;
+
+            return Math.sqrt(dx * dx + dy * dy) < 10;
+        });
+
+        if (clickedGoalIndex !== -1) {
+            const removed = goalQueue.splice(clickedGoalIndex, 1)[0];
+            return;
+        }
+
         const mapX = (clickX - offsetX) / scale;
         const mapY = (clickY - offsetY) / scale;
         const invY = mapData.info.height - mapY;
-
-        const resolution = mapData.info.resolution;
-        const origin = mapData.info.origin;
 
         const goalWorldX = mapX * resolution + origin.position.x;
         const goalWorldY = invY * resolution + origin.position.y;
@@ -685,7 +703,7 @@
         const canvasY = mapY * scale + offsetY;
 
         ctx.beginPath();
-        ctx.arc(canvasX, canvasY, 6, 0, 2 * Math.PI);
+        ctx.arc(canvasX, canvasY, 8, 0, 2 * Math.PI);
         ctx.fillStyle = goal.status === 'sent' ? '#ffa500' : '#00cc00';
         ctx.fill();
         ctx.strokeStyle = '#003300';
