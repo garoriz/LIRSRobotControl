@@ -39,8 +39,6 @@
 
 <button id="stopBtn">⏹ Стоп</button>
 
-<button id="pauseToggleBtn">Пауза</button>
-
 <canvas id="сanvas" width="300" height="300"
         style="background: #000; border-radius: 10px; margin-top: 20px;"></canvas>
 
@@ -101,30 +99,8 @@
     let goalQueue = [];
     let isSendingGoal = false;
     let topicsClient = null;
-    let isPaused = false;
 
     let globalPlan = [];
-
-    const pauseToggleBtn = document.getElementById('pauseToggleBtn');
-
-    pauseToggleBtn.addEventListener('click', () => {
-      if (!isPaused) {
-        isPaused = true;
-        pauseToggleBtn.textContent = 'Продолжить';
-
-        const stopMsg = new ROSLIB.Message({
-          linear: { x: 0, y: 0, z: 0 },
-          angular: { x: 0, y: 0, z: 0 }
-        });
-
-        cmdVelPub.publish(stopMsg);
-      } else {
-        isPaused = false;
-        pauseToggleBtn.textContent = 'Пауза';
-
-        sendNextGoal();
-      }
-    });
 
     canvas.addEventListener("touchstart", (e) => {
         if (e.touches.length === 1) {
@@ -228,7 +204,7 @@
     });
 
     function sendNextGoal() {
-      if (goalQueue.length === 0 || isPaused) {
+      if (goalQueue.length === 0) {
         isSendingGoal = false;
         return;
       }
