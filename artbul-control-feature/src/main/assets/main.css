@@ -178,3 +178,16 @@ button:hover {
   width: 100%;
   max-width: 420px;
 }
+
+#pauseToggleBtn {
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 10px;
+}
