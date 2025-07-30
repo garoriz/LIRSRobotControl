@@ -58,14 +58,19 @@
 <div id="button-controls" style="display: none; margin-top: 20px;">
     <div class="control-grid">
         <div class="row center">
-            <button onclick="drive('forward')">Forward</button>
+            <button class="grid-item" onclick="drive('forward-left')">Forward-left</button>
+            <button class="grid-item" onclick="drive('forward')">Forward</button>
+            <button class="grid-item" onclick="drive('forward-right')">Forward-right</button>
         </div>
         <div class="row">
-            <button onclick="drive('left')">To the left</button>
-            <button onclick="drive('right')">To the right</button>
+            <button class="grid-item" onclick="drive('left')">To the left</button>
+            <div class="grid-item"></div>
+            <button class="grid-item" onclick="drive('right')">To the right</button>
         </div>
         <div class="row center">
-            <button onclick="drive('backward')">Back</button>
+            <button class="grid-item" onclick="drive('backward-left')">Back-left</button>
+            <button class="grid-item" onclick="drive('backward')">Back</button>
+            <button class="grid-item" onclick="drive('backward-right')">Back-right</button>
         </div>
     </div>
 </div>
@@ -690,6 +695,22 @@
           linearX = 0.0;
           angularZ = -1.2;
           break;
+        case 'forward-left':
+            linearX = 1.0;
+            angularZ = 1.2;
+            break;
+        case 'forward-right':
+            linearX = 1.0;
+            angularZ = -1.2;
+            break;
+        case 'backward-left':
+            linearX = -1.0;
+            angularZ = 1.2;
+            break;
+        case 'backward-right':
+            linearX = -1.0;
+            angularZ = -1.2;
+            break;
       }
     }
 

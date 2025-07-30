@@ -135,7 +135,7 @@ button:hover {
 }
 
 .control-grid {
-  display: flex;
+  display: grid;
   flex-direction: column;
   align-items: center;
   gap: 12px;
@@ -149,11 +149,13 @@ button:hover {
 .control-grid .row.center {
   justify-content: center;
 }
+.grid-item {
+  padding: 14px 20px;
+  min-width: 110px;
+}
 
 .control-grid button {
   font-size: 20px;
-  padding: 14px 20px;
-  min-width: 110px;
   border: none;
   border-radius: 10px;
   background-color: #444;
