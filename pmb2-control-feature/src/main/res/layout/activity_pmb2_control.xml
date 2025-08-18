@@ -55,8 +55,13 @@
             android:gravity="end"
             android:orientation="vertical">
 
-            <org.ros.android.view.visualization.VisualizationView
+            <!--<org.ros.android.view.visualization.VisualizationView
                 android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".25" />-->
+            <WebView
+                android:id="@+id/wv"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight=".25" />
@@ -83,9 +88,9 @@
             android:layout_height="50dp"
             android:layout_weight="0.33"
             android:background="@null"
-            android:scaleType="fitCenter"
             android:padding="2dp"
-            android:src="@drawable/selector_joystick_single"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/selector_joystick_single" />
 
         <ImageButton
             android:id="@+id/btn_joystick_double"
@@ -93,9 +98,9 @@
             android:layout_height="50dp"
             android:layout_weight="0.33"
             android:background="@null"
-            android:scaleType="fitCenter"
             android:padding="2dp"
-            android:src="@drawable/selector_joystick_double"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/selector_joystick_double" />
 
     </LinearLayout>
 

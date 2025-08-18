@@ -34,7 +34,7 @@ public class ViewControlLayer extends CameraControlLayer {
     private ScaleGestureDetector zoomGestureDetector;
 
     private RosImageView<CompressedImage> cameraView;
-    private VisualizationView mapView;
+    //private VisualizationView mapView;
     private ViewGroup mainLayout;
     private ViewGroup sideLayout;
     private boolean mapViewGestureAvailable;
@@ -47,7 +47,6 @@ public class ViewControlLayer extends CameraControlLayer {
 
     public ViewControlLayer(final Context context,
                             final RosImageView<sensor_msgs.CompressedImage> cameraView,
-                            final VisualizationView mapView,
                             final ViewGroup mainLayout,
                             final ViewGroup sideLayout,
                             final AppParameters params) {
@@ -55,14 +54,14 @@ public class ViewControlLayer extends CameraControlLayer {
         this.context = context;
 
         this.cameraView = cameraView;
-        this.mapView = mapView;
+        //this.mapView = mapView;
         this.mainLayout = mainLayout;
         this.sideLayout = sideLayout;
 
         viewMode = ViewMode.CAMERA;
         this.cameraView.setOnClickListener(v -> swapViews());
 
-        this.mapView.setClickable(true);
+        //this.mapView.setClickable(true);
         this.cameraView.setClickable(false);
         this.robotFrame = (String) params.get("robot_frame", context.getString(R.string.robot_frame));
         mapViewGestureAvailable = false;
@@ -108,16 +107,16 @@ public class ViewControlLayer extends CameraControlLayer {
             mapViewParent = mainLayout;
             cameraViewParent = sideLayout;
         }
-        int mapViewIndex = mapViewParent.indexOfChild(mapView);
+        //int mapViewIndex = mapViewParent.indexOfChild(mapView);
         int cameraViewIndex = cameraViewParent.indexOfChild(cameraView);
 
         // Remove the views from their old locations...
-        mapViewParent.removeView(mapView);
+        //mapViewParent.removeView(mapView);
         cameraViewParent.removeView(cameraView);
 
         // Add them to their new location...
-        mapViewParent.addView(cameraView, mapViewIndex);
-        cameraViewParent.addView(mapView, cameraViewIndex);
+        //mapViewParent.addView(cameraView, mapViewIndex);
+        //cameraViewParent.addView(mapView, cameraViewIndex);
 
         // Remeber that we are in the other mode now.
         if (viewMode == ViewMode.CAMERA) {
@@ -126,8 +125,8 @@ public class ViewControlLayer extends CameraControlLayer {
         } else {
             viewMode = ViewMode.CAMERA;
         }
-        mapView.getCamera().jumpToFrame(robotFrame);
-        mapView.setClickable(viewMode != ViewMode.MAP);
+        //mapView.getCamera().jumpToFrame(robotFrame);
+        //mapView.setClickable(viewMode != ViewMode.MAP);
         cameraView.setClickable(viewMode != ViewMode.CAMERA);
     }
 

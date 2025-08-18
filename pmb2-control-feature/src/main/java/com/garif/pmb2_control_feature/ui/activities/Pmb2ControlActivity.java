@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.ImageButton;
 
 import com.garif.pmb2_control_feature.R;
@@ -20,13 +22,10 @@ import com.garif.pmb2_control_feature.utils.Constants;
 import com.garif.pmb2_control_feature.utils.MapManager;
 import com.garif.pmb2_control_feature.utils.Movable;
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
-import com.google.common.collect.Lists;
 
 import org.ros.address.InetAddressFactory;
 import org.ros.android.BitmapFromCompressedImage;
 import org.ros.android.view.RosImageView;
-import org.ros.android.view.visualization.VisualizationView;
-import org.ros.android.view.visualization.layer.CameraControlListener;
 import org.ros.android.view.visualization.layer.LaserScanLayer;
 import org.ros.android.view.visualization.layer.OccupancyGridLayer;
 import org.ros.android.view.visualization.layer.PathLayer;
@@ -57,13 +56,14 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
     private ViewControlLayer viewControlLayer;
     private Movable frJoystickSingle, frJoystickDouble;
     private RosImageView<CompressedImage> cameraView;
-    private VisualizationView mapView;
+    //private VisualizationView mapView;
     private MapPosePublisherLayer mapPosePublisherLayer;
     private ProgressDialog waitingDialog;
     private AlertDialog chooseMapDialog;
     private NodeMainExecutor nodeMainExecutor;
     private NodeConfiguration nodeConfiguration;
     private ImageButton disabled, btnJoystickSingle, btnJoystickDouble;
+    private WebView webView;
 
     public Pmb2ControlActivity() {
         super("PMB2Mobile", "PMB2Mobile");
@@ -93,8 +93,9 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         btnJoystickDouble = findViewById(R.id.btn_joystick_double);
         btnJoystickDouble.setOnClickListener(this);
 
-        mapView = findViewById(R.id.map_view);
-        mapView.onCreate(Lists.newArrayList());
+        //mapView = findViewById(R.id.map_view);
+        //mapView.onCreate(Lists.newArrayList());
+        initWebView();
 
         ViewGroup mainLayout = findViewById(R.id.main_layout);
         ViewGroup sideLayout = findViewById(R.id.side_layout);
@@ -103,10 +104,18 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         frJoystickDouble = new JoystickDoubleFragment();
 
         viewControlLayer = new ViewControlLayer(
-                this, cameraView, mapView, mainLayout, sideLayout, params);
+                this, cameraView, mainLayout, sideLayout, params);
 
         nodeTeleop = new NodeTeleop(Constants.TOPIC_JOY_TELEOP);
         setControls(btnJoystickSingle, frJoystickSingle);
+    }
+
+    private void initWebView() {
+        webView = findViewById(R.id.wv);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webView.loadUrl("file:///android_asset/pmb2.html");
     }
 
     @Override
@@ -148,7 +157,7 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         InitialPoseSubscriberLayer initialPoseSubscriberLayer =
                 new InitialPoseSubscriberLayer(appNameSpace.resolve(initTopic).toString(), robotFrame);
 
-        mapView.addLayer(viewControlLayer);
+        /*mapView.addLayer(viewControlLayer);
         mapView.addLayer(mapLayer);
         mapView.addLayer(costMapLayer);
         mapView.addLayer(laserScanLayer);
@@ -156,8 +165,8 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         mapView.addLayer(mapPosePublisherLayer);
         mapView.addLayer(initialPoseSubscriberLayer);
 
-        mapView.init(nodeMainExecutor);
-        viewControlLayer.addListener(new CameraControlListener() {
+        mapView.init(nodeMainExecutor);*/
+        /*viewControlLayer.addListener(new CameraControlListener() {
             @Override
             public void onZoom(float focusX, float focusY, float factor) {
             }
@@ -173,7 +182,7 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
             @Override
             public void onRotate(float focusX, float focusY, double deltaAngle) {
             }
-        });
+        });*/
 
         TimeProvider timeProvider;
         try {
@@ -187,11 +196,11 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
             timeProvider = new WallTimeProvider();
         }
         nodeConfiguration.setTimeProvider(timeProvider);
-        nodeMainExecutor.execute(mapView, nodeConfiguration.setNodeName("android/map_view"));
+        //nodeMainExecutor.execute(mapView, nodeConfiguration.setNodeName("android/map_view"));
     }
 
     private void showMap() {
-        mapView.getCamera().jumpToFrame((String) params.get("map_frame", getString(R.string.map_frame)));
+        //mapView.getCamera().jumpToFrame((String) params.get("map_frame", getString(R.string.map_frame)));
     }
 
     private void onChooseMapButtonPressed() {
