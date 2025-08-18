@@ -705,11 +705,11 @@
             break;
         case 'backward-left':
             linearX = -1.0;
-            angularZ = 1.2;
+            angularZ = -1.2;
             break;
         case 'backward-right':
             linearX = -1.0;
-            angularZ = -1.2;
+            angularZ = 1.2;
             break;
       }
     }
@@ -739,7 +739,9 @@
     document.getElementById('stopBtn').addEventListener('click', stopRobot);
 
     function stopRobot() {
-      goalActionClient.cancel();
+      if (goalActionClient != null) {
+        goalActionClient.cancel();
+      }
 
       goalQueue = [];
       globalPlan = [];
