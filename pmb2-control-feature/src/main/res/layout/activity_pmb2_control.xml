@@ -6,6 +6,7 @@
     android:background="#ddd"
     android:orientation="vertical">
 
+<!--
     <LinearLayout
         android:id="@+id/view_top"
         android:layout_width="match_parent"
@@ -22,15 +23,17 @@
             android:scaleType="center"
             android:src="@drawable/ic_show_map" />
 
-        <LinearLayout
-            android:id="@+id/top_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:gravity="end"
-            android:orientation="horizontal" />
+
 
     </LinearLayout>
+-->
+
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal" />
 
     <LinearLayout
         android:id="@+id/main_layout"
@@ -39,34 +42,10 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
-        <org.ros.android.view.RosImageView
-            android:id="@+id/image"
+        <WebView
+            android:id="@+id/wv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".25"
-            android:scaleType="center"
-            android:src="@drawable/ic_video_camera" />
-
-        <LinearLayout
-            android:id="@+id/side_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".75"
-            android:gravity="end"
-            android:orientation="vertical">
-
-            <!--<org.ros.android.view.visualization.VisualizationView
-                android:id="@+id/map_view"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".25" />-->
-            <WebView
-                android:id="@+id/wv"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".25" />
-
-        </LinearLayout>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

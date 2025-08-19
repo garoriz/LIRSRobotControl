@@ -24,8 +24,6 @@ import com.garif.pmb2_control_feature.utils.Movable;
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
 import org.ros.address.InetAddressFactory;
-import org.ros.android.BitmapFromCompressedImage;
-import org.ros.android.view.RosImageView;
 import org.ros.android.view.visualization.layer.LaserScanLayer;
 import org.ros.android.view.visualization.layer.OccupancyGridLayer;
 import org.ros.android.view.visualization.layer.PathLayer;
@@ -43,7 +41,6 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import sensor_msgs.CompressedImage;
 import world_canvas_msgs.ListMapsResponse;
 import world_canvas_msgs.MapListEntry;
 import world_canvas_msgs.PublishMapResponse;
@@ -55,7 +52,7 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
     private NodeTeleop nodeTeleop;
     private ViewControlLayer viewControlLayer;
     private Movable frJoystickSingle, frJoystickDouble;
-    private RosImageView<CompressedImage> cameraView;
+    //private RosImageView<CompressedImage> cameraView;
     //private VisualizationView mapView;
     private MapPosePublisherLayer mapPosePublisherLayer;
     private ProgressDialog waitingDialog;
@@ -63,7 +60,6 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
     private NodeMainExecutor nodeMainExecutor;
     private NodeConfiguration nodeConfiguration;
     private ImageButton disabled, btnJoystickSingle, btnJoystickDouble;
-    private WebView webView;
 
     public Pmb2ControlActivity() {
         super("PMB2Mobile", "PMB2Mobile");
@@ -80,12 +76,12 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         setMainWindowResource(R.layout.activity_pmb2_control);
         super.onCreate(savedInstanceState);
 
-        cameraView = findViewById(R.id.image);
-        cameraView.setMessageType(sensor_msgs.CompressedImage._TYPE);
-        cameraView.setMessageToBitmapCallable(new BitmapFromCompressedImage());
+        //cameraView = findViewById(R.id.image);
+        //cameraView.setMessageType(sensor_msgs.CompressedImage._TYPE);
+        //cameraView.setMessageToBitmapCallable(new BitmapFromCompressedImage());
 
-        ImageButton btnShowMap = findViewById(R.id.btn_show_map);
-        btnShowMap.setOnClickListener(view -> showMap());
+        /*ImageButton btnShowMap = findViewById(R.id.btn_show_map);
+        btnShowMap.setOnClickListener(view -> showMap());*/
 
         btnJoystickSingle = findViewById(R.id.btn_joystick_single);
         btnJoystickSingle.setOnClickListener(this);
@@ -95,27 +91,27 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
 
         //mapView = findViewById(R.id.map_view);
         //mapView.onCreate(Lists.newArrayList());
-        initWebView();
 
         ViewGroup mainLayout = findViewById(R.id.main_layout);
-        ViewGroup sideLayout = findViewById(R.id.side_layout);
+        //ViewGroup sideLayout = findViewById(R.id.side_layout);
 
         frJoystickSingle = new JoystickSingleFragment();
         frJoystickDouble = new JoystickDoubleFragment();
 
         viewControlLayer = new ViewControlLayer(
-                this, cameraView, mainLayout, sideLayout, params);
+                this, mainLayout, params);
 
         nodeTeleop = new NodeTeleop(Constants.TOPIC_JOY_TELEOP);
         setControls(btnJoystickSingle, frJoystickSingle);
     }
 
     private void initWebView() {
-        webView = findViewById(R.id.wv);
+        WebView webView = findViewById(R.id.wv);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
-        webView.loadUrl("file:///android_asset/pmb2.html");
+        String host = getMasterUri().getHost();
+        webView.loadUrl("file:///android_asset/pmb2.html?host=" + host);
     }
 
     @Override
@@ -126,16 +122,17 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         this.nodeMainExecutor = nodeMainExecutor;
         nodeConfiguration = NodeConfiguration.newPublic(InetAddressFactory
                 .newNonLoopback().getHostAddress(), getMasterUri());
+        runOnUiThread(this::initWebView);
 
         String topicJoy = remaps.get(getString(R.string.joystick_topic));
         String topicCam = remaps.get(getString(R.string.camera_topic));
 
         NameResolver appNameSpace = getMasterNameSpace();
-        cameraView.setTopicName(appNameSpace.resolve(topicCam).toString());
+        //cameraView.setTopicName(appNameSpace.resolve(topicCam).toString());
 //        nodeTeleop = new NodeTeleop(appNameSpace.resolve(topicJoy).toString());
 
-        nodeMainExecutor
-                .execute(cameraView, nodeConfiguration.setNodeName("android/camera_view"));
+        /*nodeMainExecutor
+                .execute(cameraView, nodeConfiguration.setNodeName("android/camera_view"));*/
 
         nodeMainExecutor
                 .execute(nodeTeleop, nodeConfiguration.setNodeName("android/virtual_joystick"));

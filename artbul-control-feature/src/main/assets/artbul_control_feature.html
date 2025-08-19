@@ -550,7 +550,6 @@
               topic.match(/^\/move_base\/.*\/plan$/)
           );
 
-          console.log(pathTopics.length);
           if (pathTopics.length > 0) {
               const selectedPathTopic = pathTopics[0];
               subscribeToPath(selectedPathTopic);
