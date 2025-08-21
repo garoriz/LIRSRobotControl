@@ -92,6 +92,7 @@
     let goalQueue = [];
     let isSendingGoal = false;
     let topicsClient = null;
+    let animationId = 0;
     let imgTopic = null;
 
     let globalPlan = [];
@@ -113,7 +114,7 @@
     function setupPublisher() {
       cmdVelPub = new ROSLIB.Topic({
         ros: ros,
-        name: '/artbul/mobile_base_controller/cmd_vel',
+        name: '/mobile_base_controller/cmd_vel',
         messageType: 'geometry_msgs/msg/TwistStamped'
       });
     }
@@ -296,8 +297,8 @@
     function subscribeToLidar() {
       lidarSub = new ROSLIB.Topic({
         ros: ros,
-        name: '/artbul/scan',
-        messageType: 'sensor_msgs/msg/LaserScan'
+        name: '/scan',
+        messageType: 'sensor_msgs/LaserScan'
       });
 
       lidarSub.subscribe(drawLidar);
@@ -467,7 +468,7 @@
 
         drawGlobalPath(ctx);
 
-        requestAnimationFrame(() => drawMap(mapData));
+        animationId = requestAnimationFrame(() => drawMap(mapData));
     }
 
     function drawGlobalPath(ctx) {
@@ -530,6 +531,7 @@
       goalActionClient = null;
       amclSub = null;
       topicsClient = null;
+      cancelAnimationFrame(animationId);
     }
 
     function drawGoals(ctx) {

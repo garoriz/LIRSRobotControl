@@ -105,15 +105,6 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         setControls(btnJoystickSingle, frJoystickSingle);
     }
 
-    private void initWebView() {
-        WebView webView = findViewById(R.id.wv);
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);
-        String host = getMasterUri().getHost();
-        webView.loadUrl("file:///android_asset/pmb2.html?host=" + host);
-    }
-
     @Override
     protected void init(NodeMainExecutor nodeMainExecutor) {
 
@@ -194,6 +185,15 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         }
         nodeConfiguration.setTimeProvider(timeProvider);
         //nodeMainExecutor.execute(mapView, nodeConfiguration.setNodeName("android/map_view"));
+    }
+
+    private void initWebView() {
+        WebView webView = findViewById(R.id.wv);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        String host = getMasterUri().getHost();
+        webView.loadUrl("file:///android_asset/pmb2.html?host=" + host);
     }
 
     private void showMap() {
