@@ -44,6 +44,22 @@
           margin-bottom: 8px;
         }
 
+        #saveMapBtn {
+          display: block;
+          top: 10px;
+          right: 10px;
+          font-size: 18px;
+          background: blue;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 10px;
+          width: 50%;
+          max-width: 420px;
+          margin: 0 auto;
+          margin-bottom: 8px;
+        }
+
         #cameraStream {
           width: 100%;
           max-width: 640px;
@@ -63,6 +79,8 @@
 </select>
 
 <button id="stopBtn">⏹ Стоп</button>
+
+<button id="saveMapBtn">Сохранить карту</button>
 
 <canvas id="canvas"
         style="background: #000;"></canvas>
@@ -304,6 +322,7 @@
       lidarSub.subscribe(drawLidar);
 
       document.getElementById('canvas').style.display = 'block';
+      document.getElementById('saveMapBtn').style.display = 'none';
       document.getElementById('cameraStream').style.display = 'none';
     }
 
@@ -405,6 +424,7 @@
       });
 
       document.getElementById('canvas').style.display = 'block';
+      document.getElementById('saveMapBtn').style.display = 'block';
       document.getElementById('cameraStream').style.display = 'none';
     }
 
@@ -513,6 +533,15 @@
       });
     }
 
+    document.getElementById("saveMapBtn").addEventListener("click", saveCanvasAsImage);
+
+    function saveCanvasAsImage() {
+        const link = document.createElement('a');
+        link.download = 'map.png';
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    }
+
     function unsubscribeFromLidar() {
       if (lidarSub != null) {
         lidarSub.unsubscribe();
@@ -571,6 +600,7 @@
       });
 
       document.getElementById('canvas').style.display = 'none';
+      document.getElementById('saveMapBtn').style.display = 'none';
       document.getElementById('cameraStream').style.display = 'block';
     }
 
