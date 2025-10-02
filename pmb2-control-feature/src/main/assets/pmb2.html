@@ -536,10 +536,8 @@
     document.getElementById("saveMapBtn").addEventListener("click", saveCanvasAsImage);
 
     function saveCanvasAsImage() {
-        const link = document.createElement('a');
-        link.download = 'map.png';
-        link.href = canvas.toDataURL("image/png");
-        link.click();
+        const base64Data = canvas.toDataURL("image/png");
+        Android.saveImage(base64Data);
     }
 
     function unsubscribeFromLidar() {

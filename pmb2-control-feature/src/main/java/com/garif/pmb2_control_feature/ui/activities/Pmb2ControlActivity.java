@@ -3,13 +3,21 @@ package com.garif.pmb2_control_feature.ui.activities;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.garif.pmb2_control_feature.R;
 import com.garif.pmb2_control_feature.layers.InitialPoseSubscriberLayer;
@@ -36,6 +44,7 @@ import org.ros.time.NtpTimeProvider;
 import org.ros.time.TimeProvider;
 import org.ros.time.WallTimeProvider;
 
+import java.io.OutputStream;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.List;
@@ -103,6 +112,8 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
 
         nodeTeleop = new NodeTeleop(Constants.TOPIC_JOY_TELEOP);
         setControls(btnJoystickSingle, frJoystickSingle);
+
+        initWebView();
     }
 
     @Override
@@ -192,6 +203,7 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
+        webView.addJavascriptInterface(new WebAppInterface(this), "Android");
         String host = getMasterUri().getHost();
         webView.loadUrl("file:///android_asset/pmb2.html?host=" + host);
     }
@@ -364,5 +376,47 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         imageButton.setEnabled(false);
         loadFragment(movable);
         disabled = imageButton;
+    }
+
+    public static class WebAppInterface {
+        private final Context context;
+
+        public WebAppInterface(Context context) {
+            this.context = context;
+        }
+
+        @JavascriptInterface
+        public void saveImage(String base64Data) {
+            try {
+                String base64Image = base64Data.substring(base64Data.indexOf(",") + 1);
+
+                byte[] imageBytes = android.util.Base64.decode(base64Image, android.util.Base64.DEFAULT);
+
+                String fileName = "map_" + System.currentTimeMillis() + ".png";
+
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+                values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Maps");
+
+                ContentResolver resolver = context.getContentResolver();
+                Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+                if (uri != null) {
+                    OutputStream outputStream = resolver.openOutputStream(uri);
+                    assert outputStream != null;
+                    outputStream.write(imageBytes);
+                    outputStream.close();
+
+                    Toast.makeText(context, "Изображение сохранено: " + fileName, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Ошибка: не удалось сохранить файл", Toast.LENGTH_LONG).show();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(context, "Ошибка сохранения: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
