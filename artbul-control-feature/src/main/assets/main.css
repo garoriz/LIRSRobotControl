@@ -178,10 +178,11 @@ button:hover {
   border-radius: 10px;
   width: 100%;
   max-width: 420px;
+  margin-bottom: 8px;
 }
 
 #saveMapBtn {
-  display: block;
+  display: none;
   top: 10px;
   right: 10px;
   font-size: 18px;
@@ -190,7 +191,7 @@ button:hover {
   padding: 10px 20px;
   border: none;
   border-radius: 10px;
-  width: 50%;
+  width: 100%;
   max-width: 420px;
   margin: 0 auto;
   margin-bottom: 8px;

@@ -421,13 +421,13 @@
     function changeModeEnvironment() {
       const mode = document.getElementById('modeEnvironment').value;
       if (mode === 'lidar') {
+        document.getElementById('saveMapBtn').style.display = 'none';
         unsubscribeFromMap();
         subscribeToLidar();
-        document.getElementById('saveMapBtn').style.display = 'none';
       } else {
+        document.getElementById('saveMapBtn').style.display = 'block';
         unsubscribeFromLidar();
         subscribeToMap();
-        document.getElementById('saveMapBtn').style.display = 'block';
       }
     }
 
