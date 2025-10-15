@@ -179,3 +179,19 @@ button:hover {
   width: 100%;
   max-width: 420px;
 }
+
+#saveMapBtn {
+  display: block;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  background: blue;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  width: 50%;
+  max-width: 420px;
+  margin: 0 auto;
+  margin-bottom: 8px;
+}

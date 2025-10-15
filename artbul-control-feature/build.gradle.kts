@@ -41,6 +41,8 @@ dependencies {
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidJunit)
     androidTestImplementation(Dependencies.espressoCore)
+
+    implementation(project(":core"))
 }
 
 configurations.all {

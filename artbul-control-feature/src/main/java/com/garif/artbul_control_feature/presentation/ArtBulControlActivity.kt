@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.garif.artbul_control_feature.R
+import com.garif.core.WebAppInterface
 
 class ArtBulControlActivity : AppCompatActivity() {
     private var webView: WebView? = null
@@ -27,6 +28,7 @@ class ArtBulControlActivity : AppCompatActivity() {
         val webSettings: WebSettings? = webView?.settings
         webSettings?.javaScriptEnabled = true
         webSettings?.domStorageEnabled = true
+        webView?.addJavascriptInterface(WebAppInterface(this), "Android")
 
         webView?.loadUrl("file:///android_asset/artbul_control_feature.html")
     }

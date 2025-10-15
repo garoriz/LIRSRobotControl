@@ -39,6 +39,8 @@
 
 <button id="stopBtn">⏹ Стоп</button>
 
+<button id="saveMapBtn">Сохранить карту</button>
+
 <canvas id="сanvas" width="300" height="300"
         style="background: #000; border-radius: 10px; margin-top: 20px;"></canvas>
 
@@ -421,9 +423,11 @@
       if (mode === 'lidar') {
         unsubscribeFromMap();
         subscribeToLidar();
+        document.getElementById('saveMapBtn').style.display = 'none';
       } else {
         unsubscribeFromLidar();
         subscribeToMap();
+        document.getElementById('saveMapBtn').style.display = 'block';
       }
     }
 
@@ -748,6 +752,13 @@
 
       linearX = 0.0;
       angularZ = 0.0;
+    }
+
+    document.getElementById("saveMapBtn").addEventListener("click", saveCanvasAsImage);
+
+    function saveCanvasAsImage() {
+        const base64Data = canvas.toDataURL("image/png");
+        Android.saveImage(base64Data);
     }
 </script>
 </body>
