@@ -175,6 +175,19 @@
           color: #333;
           text-align: center;
         }
+
+        #saveMapBtn {
+          display: none;
+          font-size: 18px;
+          background: blue;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 10px;
+          width: 100%;
+          max-width: 420px;
+          margin: 0 auto 20px auto;
+        }
     </style>
 </head>
 <body>
@@ -200,7 +213,9 @@
 
 <div id="mode-environment" style="margin: 16px;">
     <label for="modeEnvironment"><b>Environment mode:</b></label>
-    <select id="modeEnvironment" onchange="changeModeEnvironment()" style="font-size: 18px; padding: 6px;">
+    <select id="modeEnvironment" onchange="changeModeEnvironment()"
+            style="font-size: 18px; padding: 6px;">
+        <option value="camera">Camera</option>
         <option value="map">Map</option>
     </select>
 </div>
@@ -208,6 +223,8 @@
 <div style="padding: 0 16px;">
     <button id="stopBtn">⏹ Стоп</button>
 </div>
+
+<button id="saveMapBtn">Сохранить карту</button>
 
 <img id="cameraStream" alt="Camera video"/>
 
@@ -475,11 +492,13 @@
     function changeModeEnvironment() {
       const mode = document.getElementById('modeEnvironment').value;
       if (mode === 'camera') {
+        document.getElementById('saveMapBtn').style.display = 'none';
         document.getElementById('сanvas').style.display = 'none';
         document.getElementById('cameraStream').style.display = 'block';
         unsubscribeFromMap();
         subscribeToCompressedImage();
       } else {
+      document.getElementById('saveMapBtn').style.display = 'block';
         document.getElementById('сanvas').style.display = 'block';
         document.getElementById('cameraStream').style.display = 'none';
         unsubscribeFromCompressedImage();
@@ -856,6 +875,13 @@
       imgTopic.unsubscribe();
 
       imgTopic = null;
+    }
+
+    document.getElementById("saveMapBtn").addEventListener("click", saveCanvasAsImage);
+
+    function saveCanvasAsImage() {
+        const base64Data = canvas.toDataURL("image/png");
+        Android.saveImage(base64Data);
     }
 </script>
 
