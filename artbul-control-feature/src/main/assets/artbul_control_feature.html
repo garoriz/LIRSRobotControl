@@ -305,8 +305,8 @@
     function setupPublisher() {
       cmdVelPub = new ROSLIB.Topic({
         ros: ros,
-        name: '/artbul/mobile_base_controller/cmd_vel',
-        messageType: 'geometry_msgs/msg/TwistStamped'
+        name: '/artbul_base_controller/cmd_vel_unstamped',
+        messageType: 'geometry_msgs/msg/Twist'
       });
     }
 
@@ -439,14 +439,8 @@
       const nanosec = (now % 1000) * 1e6;
 
       const msg = new ROSLIB.Message({
-        header: {
-          stamp: { sec: sec, nanosec: nanosec },
-          frame_id: 'base_link'
-        },
-        twist: {
-          linear: { x: linearX, y: linearY || 0.0, z: 0.0 },
-          angular: { x: 0.0, y: 0.0, z: angularZ }
-        }
+        linear: { x: linearX, y: linearY || 0.0, z: 0.0 },
+        angular: { x: 0.0, y: 0.0, z: angularZ }
       });
 
       cmdVelPub.publish(msg);
@@ -456,7 +450,7 @@
     function subscribeToLidar() {
       lidarSub = new ROSLIB.Topic({
         ros: ros,
-        name: '/artbul/scan',
+        name: '/scan_multi',
         messageType: 'sensor_msgs/msg/LaserScan'
       });
 
