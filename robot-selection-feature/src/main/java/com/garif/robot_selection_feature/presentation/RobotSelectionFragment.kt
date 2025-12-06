@@ -40,7 +40,7 @@ class RobotSelectionFragment : Fragment(R.layout.fragment_robot_selection) {
             ),
             RobotSelection(
                 "ArtBul",
-                R.drawable.question,
+                R.drawable.img_config_artbul,
                 R.id.action_robotSelectionFragment_to_artBulControlActivity
             ),
             RobotSelection(
