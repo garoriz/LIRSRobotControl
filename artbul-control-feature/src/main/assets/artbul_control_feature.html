@@ -109,6 +109,8 @@
 
     let globalPlan = [];
 
+    let drawingMap = false;
+
     canvas.addEventListener("touchstart", (e) => {
         if (e.touches.length === 1) {
             lastTouch = e.touches[0];
@@ -421,10 +423,12 @@
     function changeModeEnvironment() {
       const mode = document.getElementById('modeEnvironment').value;
       if (mode === 'lidar') {
+        drawingMap = false;
         document.getElementById('saveMapBtn').style.display = 'none';
         unsubscribeFromMap();
         subscribeToLidar();
       } else {
+        drawingMap = true;
         document.getElementById('saveMapBtn').style.display = 'block';
         unsubscribeFromLidar();
         subscribeToMap();
@@ -557,6 +561,7 @@
 
     function drawMap(map) {
         if (!map) return;
+        if (!drawingMap) return;
         mapData = map;
 
         const { width, height, resolution } = map.info;
@@ -615,7 +620,9 @@
 
         drawGlobalPath(ctx);
 
-        requestAnimationFrame(() => drawMap(mapData));
+        if (drawingMap) {
+            requestAnimationFrame(() => drawMap(mapData));
+        }
     }
 
     function drawGlobalPath(ctx) {
