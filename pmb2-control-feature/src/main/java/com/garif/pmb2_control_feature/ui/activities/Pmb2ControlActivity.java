@@ -17,11 +17,11 @@ import com.garif.pmb2_control_feature.layers.InitialPoseSubscriberLayer;
 import com.garif.pmb2_control_feature.layers.MapPosePublisherLayer;
 import com.garif.pmb2_control_feature.layers.ViewControlLayer;
 import com.garif.pmb2_control_feature.nodes.NodeTeleop;
-import com.garif.pmb2_control_feature.ui.fragments.JoystickSingleFragment;
-import com.garif.pmb2_control_feature.ui.fragments.JoystickDoubleFragment;
+import com.garif.core.fragments.JoystickSingleFragment;
+import com.garif.core.fragments.JoystickDoubleFragment;
 import com.garif.pmb2_control_feature.utils.Constants;
 import com.garif.pmb2_control_feature.utils.MapManager;
-import com.garif.pmb2_control_feature.utils.Movable;
+import com.garif.core.Movable;
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
 import org.ros.address.InetAddressFactory;
@@ -102,7 +102,7 @@ public class Pmb2ControlActivity extends RosAppActivity implements View.OnClickL
         viewControlLayer = new ViewControlLayer(
                 this, mainLayout, params);
 
-        nodeTeleop = new NodeTeleop(Constants.TOPIC_JOY_TELEOP);
+        nodeTeleop = new NodeTeleop(Constants.TOPIC_JOY_TELEOP, this);
         setControls(btnJoystickSingle, frJoystickSingle);
     }
 

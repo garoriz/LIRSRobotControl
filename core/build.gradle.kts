@@ -30,11 +30,47 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    repositories {
+        maven(url = ConfigData.JITPACK_IO_URL)
+    }
 }
 
 dependencies {
     implementation(Dependencies.coreKtx)
+    implementation(Dependencies.geometryMsgs)
+    implementation(Dependencies.androidRemoconsCommonTools)
+    implementation(Dependencies.virtualJoystickAndroid)
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidJunit)
     androidTestImplementation(Dependencies.espressoCore)
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == Dependencies.apacheCommonsGroup) {
+            if (requested.name.contains(Dependencies.apacheCommonsLogging)) {
+                useTarget(Dependencies.commonsLogging)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsNet)) {
+                useTarget(Dependencies.commonsNet)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsCodec)) {
+                useTarget(Dependencies.commonsCodec)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsIO)) {
+                useTarget(Dependencies.commonsIO)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsLang)) {
+                useTarget(Dependencies.commonsLang)
+            }
+
+            if (requested.name.contains(Dependencies.apacheCommonsHttpClient)) {
+                useTarget(Dependencies.commonsHttpclient)
+            }
+        }
+    }
 }

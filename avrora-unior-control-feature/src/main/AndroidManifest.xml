@@ -4,7 +4,7 @@
 
     <application>
         <activity
-            android:name="com.garif.aurora_unior_control_feature.presentation.AvroraUniorControlActivity"
+            android:name="com.garif.aurora_unior_control_feature.ui.activities.AvroraUniorControlActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
     </application>

@@ -1,4 +1,4 @@
-package com.garif.pmb2_control_feature.ui.fragments;
+package com.garif.core.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,17 +9,20 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import com.garif.pmb2_control_feature.R;
-import com.garif.pmb2_control_feature.utils.Constants;
-import com.garif.pmb2_control_feature.utils.Movable;
+import com.garif.core.Constants;
+import com.garif.core.Movable;
+import com.garif.core.R;
 
 import geometry_msgs.Twist;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 public class JoystickSingleFragment extends Fragment implements Movable {
 
-    private double signMovement, signRotation, strength, angle, valSin, valCos,
-            reverseDegree, movementSpeed, rotationSpeed;
+    private double signRotation;
+    private double strength;
+    private double angle;
+    private double movementSpeed;
+    private double rotationSpeed;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,8 +52,8 @@ public class JoystickSingleFragment extends Fragment implements Movable {
      */
 
     private void defineValuesHardMode(Twist twist) {
-        twist.getLinear().setX(defineMovementValue(Constants.toRadians(angle)));
-        twist.getAngular().setZ(defineRotationValue(angle));
+        //twist.getLinear().setX(defineMovementValue(Constants.Companion.toRadians(angle)));
+        //twist.getAngular().setZ(defineRotationValue(angle));
     }
 
     private double defineMovementValue(double angleRadians) {
@@ -65,8 +68,9 @@ public class JoystickSingleFragment extends Fragment implements Movable {
 
     private double defineRotationValue(double angle) {
         if (strength == 0) return 0;
-        if (Math.cos(Constants.toRadians(angle)) > 0) signRotation = -1.0d;
+        if (Math.cos(Constants.Companion.toRadians(angle)) > 0) signRotation = -1.0d;
         else signRotation = 1.0d;
+        double reverseDegree;
         if ((angle >= 0.0d && angle < 180.0d)) reverseDegree = 90.0d;
         else reverseDegree = 270.0d;
         rotationSpeed = Math.abs(angle - reverseDegree) / 90.0d * Constants.ROTATION_MAX * signRotation;
@@ -84,18 +88,20 @@ public class JoystickSingleFragment extends Fragment implements Movable {
             movementSpeed = 0.0d;
             rotationSpeed = 0.0d;
         } else {
-            valCos = Math.cos(Constants.toRadians(angle));
-            valSin = Math.sin(Constants.toRadians(angle));
+            double valCos = Math.cos(Constants.Companion.toRadians(angle));
+            double valSin = Math.sin(Constants.Companion.toRadians(angle));
+            double signMovement;
             if (valSin > 0) signMovement = 1.0d;
             else signMovement = -1.0d;
             if (valCos > 0) signRotation = -1.0d;
             else signRotation = 1.0d;
-            if (valCos >= Constants.COS30 || valCos <= -1.0d * Constants.COS30) {
+            if (valCos >= Constants.Companion.getCOS30() || valCos <= -1.0d * Constants.Companion.getCOS30()) {
                 movementSpeed = 0.0d;
                 rotationSpeed = signRotation * strength * Constants.ROTATION_RATIO;
-            } else if (valCos >= Constants.COS60 || valCos <= -1.0d * Constants.COS60) {
+            } else if (valCos >= Constants.Companion.getCOS60() || valCos <= -1.0d * Constants.Companion.getCOS60()) {
                 movementSpeed = signMovement * strength / Constants.PERCENTAGE;
-                if(signMovement > 0) rotationSpeed = signRotation * strength * Constants.ROTATION_RATIO;
+                if (signMovement > 0)
+                    rotationSpeed = signRotation * strength * Constants.ROTATION_RATIO;
                 else rotationSpeed = -1.0d * signRotation * strength * Constants.ROTATION_RATIO;
             } else {
                 movementSpeed = signMovement * strength / Constants.PERCENTAGE;

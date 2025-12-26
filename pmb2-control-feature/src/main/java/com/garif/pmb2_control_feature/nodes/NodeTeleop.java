@@ -1,6 +1,8 @@
 package com.garif.pmb2_control_feature.nodes;
 
-import com.garif.pmb2_control_feature.utils.Movable;
+import android.content.Context;
+
+import com.garif.core.Movable;
 
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
@@ -18,15 +20,17 @@ public class NodeTeleop extends AbstractNodeMain  {
     private Movable movable;
     private final Timer publisherTimer;
     private final String topic;
+    private final Context context;
 
-    public NodeTeleop(String topic) {
+    public NodeTeleop(String topic, Context context) {
         this.topic = topic;
         publisherTimer = new Timer();
+        this.context = context;
     }
 
     @Override
     public GraphName getDefaultNodeName() {
-        return GraphName.of("joy_teleop");
+        return GraphName.of(context.getString(com.garif.core.R.string.joy_teleop));
     }
 
     @Override

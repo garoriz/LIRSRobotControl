@@ -1,4 +1,4 @@
-package com.garif.pmb2_control_feature.ui.fragments;
+package com.garif.core.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import com.garif.pmb2_control_feature.R;
-import com.garif.pmb2_control_feature.utils.Constants;
-import com.garif.pmb2_control_feature.utils.Movable;
+import com.garif.core.Movable;
+import com.garif.core.R;
 
 import geometry_msgs.Twist;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
@@ -34,14 +33,14 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
         JoystickView rtJoystick = view.findViewById(R.id.layout_joystick_left);
         JoystickView mvJoystick = view.findViewById(R.id.layout_joystick_right);
         mvJoystick.setOnMoveListener((mvAngle, mvStrength) -> {
-            Log.d(Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's strength is: " + mvStrength);
-            Log.d(Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's angle is: " + mvAngle);
+            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's strength is: " + mvStrength);
+            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's angle is: " + mvAngle);
             this.mvStrength = mvStrength;
             this.mvAngle = mvAngle;
         });
         rtJoystick.setOnMoveListener((rtAngle, rtStrength) -> {
-            Log.d(Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's strength is: " + rtStrength);
-            Log.d(Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's angle is: " + rtAngle);
+            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's strength is: " + rtStrength);
+            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's angle is: " + rtAngle);
             this.rtStrength = rtStrength;
             this.rtAngle = rtAngle;
         });
@@ -59,24 +58,24 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
 
     private double defineMovementValue() {
         if (mvStrength == 0) return 0;
-        double movementSpeed = mvStrength / Constants.PERCENTAGE;
+        double movementSpeed = mvStrength / com.garif.core.Constants.PERCENTAGE;
         double mvSign;
-        if (Math.sin(Constants.toRadians(mvAngle)) < 0) mvSign = -1;
+        if (Math.sin(com.garif.core.Constants.Companion.toRadians(mvAngle)) < 0) mvSign = -1;
         else mvSign = 1;
         movementSpeed = mvSign * movementSpeed;
-        Log.d(Constants.Tags.EVENTS.getValue(),
+        Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(),
                 "Movement speed is: " + movementSpeed);
         return movementSpeed;
     }
 
     private double defineRotationValue() {
         if (rtStrength == 0) return 0;
-        double rotationSpeed = rtStrength * Constants.ROTATION_RATIO;
+        double rotationSpeed = rtStrength * com.garif.core.Constants.ROTATION_RATIO;
         double rtSign;
-        if (Math.cos(Constants.toRadians(rtAngle)) > 0) rtSign = -1;
+        if (Math.cos(com.garif.core.Constants.Companion.toRadians(rtAngle)) > 0) rtSign = -1;
         else rtSign = 1;
         rotationSpeed = rtSign * rotationSpeed;
-        Log.d(Constants.Tags.EVENTS.getValue(),
+        Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(),
                 "Rotation speed is: " + rotationSpeed);
         return rotationSpeed;
     }

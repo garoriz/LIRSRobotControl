@@ -1,1 +1,8 @@
-<resources />
+<resources>
+    <!--Default Values-->
+    <string name="default_robot">Avrora Unior</string>
+    <string name="default_app">avrora_unior_mobile</string>
+
+    <!--Topics-->
+    <string name="joystick_topic">/junior_car/ackermann_cmd</string>
+</resources>

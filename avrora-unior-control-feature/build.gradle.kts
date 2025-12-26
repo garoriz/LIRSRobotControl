@@ -38,6 +38,8 @@ dependencies {
     implementation(Dependencies.appcompat)
     implementation(Dependencies.material)
     implementation(Dependencies.activity)
+    implementation(Dependencies.androidRemoconsCommonTools)
+    implementation(Dependencies.geometryMsgs)
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidJunit)
     androidTestImplementation(Dependencies.espressoCore)

@@ -35,6 +35,6 @@
         android:label="ArtBulControlActivity" />
     <activity
         android:id="@+id/avroraUniorControlActivity"
-        android:name="com.garif.aurora_unior_control_feature.presentation.AvroraUniorControlActivity"
+        android:name="com.garif.aurora_unior_control_feature.ui.activities.AvroraUniorControlActivity"
         android:label="AvroraUniorControlActivity" />
 </navigation>
