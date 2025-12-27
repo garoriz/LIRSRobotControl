@@ -49,6 +49,7 @@ object Dependencies {
     }
     val geometryMsgs by lazy { "org.ros.rosjava_messages:geometry_msgs:${Versions.GEOMETRY_MSGS}" }
     val stdMsgs by lazy { "org.ros.rosjava_messages:std_msgs:${Versions.STD_MSGS}" }
+    val ackermannMsgs by lazy { "org.ros.rosjava_messages:ackermann_msgs:${Versions.ACKERMANN_MSGS}" }
     val mapStore by lazy { "org.ros.rosjava_messages:map_store:${Versions.MAP_STORE}" }
     val moveBaseMsgs by lazy {
         "org.ros.rosjava_messages:move_base_msgs:${Versions.MOVE_BASE_MSGS}"

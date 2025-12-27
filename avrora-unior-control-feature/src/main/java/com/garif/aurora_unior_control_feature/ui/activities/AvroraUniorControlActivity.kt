@@ -8,11 +8,11 @@ import android.view.View
 import android.webkit.WebView
 import android.widget.ImageButton
 import com.garif.aurora_unior_control_feature.Constants
+import com.garif.aurora_unior_control_feature.Movable
 import com.garif.aurora_unior_control_feature.R
 import com.garif.aurora_unior_control_feature.nodes.NodeTeleop
-import com.garif.core.Movable
-import com.garif.core.fragments.JoystickDoubleFragment
-import com.garif.core.fragments.JoystickSingleFragment
+import com.garif.aurora_unior_control_feature.ui.fragments.JoystickDoubleFragment
+import com.garif.aurora_unior_control_feature.ui.fragments.JoystickSingleFragment
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity
 import org.ros.address.InetAddressFactory
 import org.ros.node.NodeConfiguration
@@ -54,8 +54,10 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         btnJoystickDouble?.setOnClickListener(this)
 
         //ViewGroup sideLayout = findViewById(R.id.side_layout);
-        frJoystickSingle = JoystickSingleFragment()
-        frJoystickDouble = JoystickDoubleFragment()
+        frJoystickSingle =
+            JoystickSingleFragment()
+        frJoystickDouble =
+            JoystickDoubleFragment()
 
         nodeTeleop = NodeTeleop(Constants.TOPIC_JOY_TELEOP, this)
         setControls(btnJoystickSingle, frJoystickSingle)

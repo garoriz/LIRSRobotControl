@@ -1,0 +1,82 @@
+package com.garif.aurora_unior_control_feature.ui.fragments;
+
+import android.app.Fragment;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+
+import com.garif.aurora_unior_control_feature.Movable;
+import com.garif.core.R;
+
+import ackermann_msgs.AckermannDriveStamped;
+import io.github.controlwear.virtual.joystick.android.JoystickView;
+
+public class JoystickDoubleFragment extends Fragment implements Movable {
+
+    private double mvStrength;
+    private double mvAngle;
+    private double rtStrength;
+    private double rtAngle;
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_joystick_double, null);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        JoystickView rtJoystick = view.findViewById(R.id.layout_joystick_left);
+        JoystickView mvJoystick = view.findViewById(R.id.layout_joystick_right);
+        mvJoystick.setOnMoveListener((mvAngle, mvStrength) -> {
+            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's strength is: " + mvStrength);
+            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's angle is: " + mvAngle);
+            this.mvStrength = mvStrength;
+            this.mvAngle = mvAngle;
+        });
+        rtJoystick.setOnMoveListener((rtAngle, rtStrength) -> {
+            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's strength is: " + rtStrength);
+            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's angle is: " + rtAngle);
+            this.rtStrength = rtStrength;
+            this.rtAngle = rtAngle;
+        });
+    }
+
+    @Override
+    public void setMovement(AckermannDriveStamped ackermannDriveStamped) {
+        defineValuesEasyMode(ackermannDriveStamped);
+    }
+
+    private void defineValuesEasyMode(AckermannDriveStamped ackermannDriveStamped) {
+        ackermannDriveStamped.getDrive().setSpeed((float) defineMovementValue());
+        ackermannDriveStamped.getDrive().setSteeringAngle((float) defineRotationValue());
+    }
+
+    private double defineMovementValue() {
+        if (mvStrength == 0) return 0;
+        double movementSpeed = mvStrength / com.garif.core.Constants.PERCENTAGE;
+        double mvSign;
+        if (Math.sin(com.garif.core.Constants.Companion.toRadians(mvAngle)) < 0) mvSign = -1;
+        else mvSign = 1;
+        movementSpeed = mvSign * movementSpeed;
+        Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(),
+                "Movement speed is: " + movementSpeed);
+        return movementSpeed;
+    }
+
+    private double defineRotationValue() {
+        if (rtStrength == 0) return 0;
+        double rotationSpeed = rtStrength * com.garif.core.Constants.ROTATION_RATIO;
+        double rtSign;
+        if (Math.cos(com.garif.core.Constants.Companion.toRadians(rtAngle)) > 0) rtSign = -1;
+        else rtSign = 1;
+        rotationSpeed = rtSign * rotationSpeed;
+        Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(),
+                "Rotation speed is: " + rotationSpeed);
+        return rotationSpeed;
+    }
+}

@@ -40,6 +40,8 @@ dependencies {
     implementation(Dependencies.activity)
     implementation(Dependencies.androidRemoconsCommonTools)
     implementation(Dependencies.geometryMsgs)
+    implementation(Dependencies.ackermannMsgs)
+    implementation(Dependencies.virtualJoystickAndroid)
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidJunit)
     androidTestImplementation(Dependencies.espressoCore)

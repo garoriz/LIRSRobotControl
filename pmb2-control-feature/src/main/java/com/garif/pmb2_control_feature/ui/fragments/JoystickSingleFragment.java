@@ -1,4 +1,4 @@
-package com.garif.core.fragments;
+package com.garif.pmb2_control_feature.ui.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.garif.core.Constants;
-import com.garif.core.Movable;
 import com.garif.core.R;
+import com.garif.pmb2_control_feature.Movable;
 
 import geometry_msgs.Twist;
 import io.github.controlwear.virtual.joystick.android.JoystickView;

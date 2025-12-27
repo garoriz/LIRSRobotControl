@@ -17,11 +17,11 @@ import com.garif.pmb2_control_feature.layers.InitialPoseSubscriberLayer;
 import com.garif.pmb2_control_feature.layers.MapPosePublisherLayer;
 import com.garif.pmb2_control_feature.layers.ViewControlLayer;
 import com.garif.pmb2_control_feature.nodes.NodeTeleop;
-import com.garif.core.fragments.JoystickSingleFragment;
-import com.garif.core.fragments.JoystickDoubleFragment;
+import com.garif.pmb2_control_feature.ui.fragments.JoystickSingleFragment;
+import com.garif.pmb2_control_feature.ui.fragments.JoystickDoubleFragment;
 import com.garif.pmb2_control_feature.utils.Constants;
 import com.garif.pmb2_control_feature.utils.MapManager;
-import com.garif.core.Movable;
+import com.garif.pmb2_control_feature.Movable;
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
 import org.ros.address.InetAddressFactory;

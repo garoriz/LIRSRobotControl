@@ -1,4 +1,4 @@
-package com.garif.core;
+package com.garif.pmb2_control_feature;
 
 import geometry_msgs.Twist;
 

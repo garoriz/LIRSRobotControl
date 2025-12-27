@@ -2,7 +2,7 @@ package com.garif.pmb2_control_feature.nodes;
 
 import android.content.Context;
 
-import com.garif.core.Movable;
+import com.garif.pmb2_control_feature.Movable;
 
 import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;

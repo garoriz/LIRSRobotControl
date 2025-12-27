@@ -1,8 +1,8 @@
 package com.garif.aurora_unior_control_feature.nodes
 
+import ackermann_msgs.AckermannDriveStamped
 import android.content.Context
-import com.garif.core.Movable
-import geometry_msgs.Twist
+import com.garif.aurora_unior_control_feature.Movable
 import org.ros.namespace.GraphName
 import org.ros.node.AbstractNodeMain
 import org.ros.node.ConnectedNode
@@ -21,13 +21,13 @@ class NodeTeleop(private val topic: String, private val context: Context): Abstr
     }
 
     override fun onStart(connectedNode: ConnectedNode?) {
-        val publisher: Publisher<Twist>? =
-            connectedNode?.newPublisher(topic, Twist._TYPE)
-        val twist: Twist? = publisher?.newMessage()
+        val publisher: Publisher<AckermannDriveStamped>? =
+            connectedNode?.newPublisher(topic, AckermannDriveStamped._TYPE)
+        val ackermannDriveStamped: AckermannDriveStamped? = publisher?.newMessage()
         publisherTimer.schedule(object : TimerTask() {
             override fun run() {
-                publisher?.publish(twist)
-                movable?.setMovement(twist)
+                publisher?.publish(ackermannDriveStamped)
+                movable?.setMovement(ackermannDriveStamped)
             }
         }, 0L, 80L)
     }

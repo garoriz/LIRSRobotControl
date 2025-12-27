@@ -24,6 +24,7 @@ object Versions {
     const val ACTIONLIB_MSGS = "1.12.7"
     const val GEOMETRY_MSGS = "1.12.7"
     const val STD_MSGS = "0.5.11"
+    const val ACKERMANN_MSGS = "1.0.1"
     const val MAP_STORE = "0.3.1"
     const val MOVE_BASE_MSGS = "[1.12,1.13)"
     const val WORLD_CANVAS_MSGS = "0.2.0"
