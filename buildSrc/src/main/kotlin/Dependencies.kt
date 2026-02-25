@@ -60,6 +60,7 @@ object Dependencies {
     val virtualJoystickAndroid by lazy {
         "com.github.controlwear:virtual-joystick-android:${Versions.VIRTUAL_JOYSTICK_ANDROID}"
     }
+    val tf2Msgs by lazy { "org.ros.rosjava_messages:tf2_msgs:${Versions.TF2_MSGS}" }
     val guava by lazy { "com.google.guava:guava:${Versions.GUAVA}" }
     val coil by lazy { "io.coil-kt:coil:${Versions.COIL}" }
 

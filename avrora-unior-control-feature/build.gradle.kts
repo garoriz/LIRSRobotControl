@@ -42,6 +42,8 @@ dependencies {
     implementation(Dependencies.geometryMsgs)
     implementation(Dependencies.ackermannMsgs)
     implementation(Dependencies.virtualJoystickAndroid)
+    implementation(Dependencies.tf2Msgs)
+    implementation(Dependencies.stdMsgs)
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidJunit)
     androidTestImplementation(Dependencies.espressoCore)

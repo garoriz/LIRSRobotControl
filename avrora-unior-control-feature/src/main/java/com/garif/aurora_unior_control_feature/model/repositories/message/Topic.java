@@ -1,4 +1,4 @@
-package com.garif.aurora_unior_control_feature.model.repositories;
+package com.garif.aurora_unior_control_feature.model.repositories.message;
 
 public class Topic {
 

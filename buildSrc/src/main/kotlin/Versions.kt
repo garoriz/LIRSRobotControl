@@ -29,6 +29,7 @@ object Versions {
     const val MOVE_BASE_MSGS = "[1.12,1.13)"
     const val WORLD_CANVAS_MSGS = "0.2.0"
     const val VIRTUAL_JOYSTICK_ANDROID = "master"
+    const val TF2_MSGS = "0.5.20"
     const val GUAVA = "31.1-jre"
     const val COIL = "1.4.0"
 }

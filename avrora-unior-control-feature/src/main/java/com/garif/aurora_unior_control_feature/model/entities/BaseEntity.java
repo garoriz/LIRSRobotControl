@@ -1,6 +1,6 @@
 package com.garif.aurora_unior_control_feature.model.entities;
 
-import com.garif.aurora_unior_control_feature.model.repositories.Topic;
+import com.garif.aurora_unior_control_feature.model.repositories.message.Topic;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
