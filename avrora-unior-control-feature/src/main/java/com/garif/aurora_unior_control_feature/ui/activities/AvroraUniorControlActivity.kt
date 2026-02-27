@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.webkit.WebView
 import android.widget.ImageButton
-import androidx.lifecycle.MutableLiveData
 import com.garif.aurora_unior_control_feature.Constants
 import com.garif.aurora_unior_control_feature.Movable
 import com.garif.aurora_unior_control_feature.R
@@ -18,6 +17,7 @@ import com.garif.aurora_unior_control_feature.nodes.SubNode
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickDoubleFragment
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickSingleFragment
 import com.garif.aurora_unior_control_feature.ui.widgets.CameraEntity
+import com.garif.aurora_unior_control_feature.ui.widgets.CameraView
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity
 import org.ros.address.InetAddressFactory
 import org.ros.node.NodeConfiguration
@@ -39,11 +39,11 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
     private var frJoystickSingle: Movable? = null
     private var frJoystickDouble: Movable? = null
     private var disabled: ImageButton? = null
+    private var cameraView: CameraView? = null
     private var nodeTeleop: NodeTeleop? = null
     private var subNode: SubNode? = null
     private var nodeConfiguration: NodeConfiguration? = null
     private var frameTransformTree = TransformProvider.getInstance().tree
-    private val receivedData: MutableLiveData<RosData> = MutableLiveData()
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +61,8 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
 
         btnJoystickDouble = findViewById(R.id.btn_joystick_double)
         btnJoystickDouble?.setOnClickListener(this)
+
+        cameraView = findViewById(R.id.camera_view)
 
         //ViewGroup sideLayout = findViewById(R.id.side_layout);
         frJoystickSingle =
@@ -157,16 +159,24 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
             }
         }
 
-        this.receivedData.postValue(message)
+        if (message != null) {
+            onNewData(message)
+        }
     }
 
     private fun sanitizeFrameName(name: String?): String? {
-        if (name == null || name.isEmpty()) return name
+        if (name.isNullOrEmpty()) return name
 
         if (Character.isDigit(name[0])) {
             return "f_$name"
         }
 
         return name
+    }
+
+    private fun onNewData(data: RosData) {
+        val message = data.message
+
+        cameraView?.onNewMessage(message)
     }
 }
