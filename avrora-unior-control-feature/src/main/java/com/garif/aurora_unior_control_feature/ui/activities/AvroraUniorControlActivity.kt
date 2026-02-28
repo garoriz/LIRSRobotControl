@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.WebView
+import android.widget.Button
 import android.widget.ImageButton
+import android.widget.PopupMenu
 import com.garif.aurora_unior_control_feature.Constants
 import com.garif.aurora_unior_control_feature.Movable
 import com.garif.aurora_unior_control_feature.R
@@ -27,6 +29,7 @@ import org.ros.time.TimeProvider
 import org.ros.time.WallTimeProvider
 import tf2_msgs.TFMessage
 import java.util.concurrent.TimeUnit
+
 
 private const val TAG: String = "MapNav"
 
@@ -69,6 +72,25 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
             JoystickSingleFragment()
         frJoystickDouble =
             JoystickDoubleFragment()
+
+        val buttonViewMode = findViewById<Button>(R.id.btn_view_mode)
+
+        buttonViewMode.setOnClickListener { v: View? ->
+            val popup = PopupMenu(this, v)
+            popup.menuInflater.inflate(R.menu.menu, popup.menu)
+
+            popup.setOnMenuItemClickListener { item ->
+                if (item.itemId == R.id.mode_camera) {
+                    cameraView?.visibility = View.VISIBLE
+                    buttonViewMode.text = getString(R.string.camera)
+                } else if (item.itemId == R.id.mode_map) {
+                    cameraView?.visibility = View.GONE
+                    buttonViewMode.text = getString(R.string.map)
+                }
+                true
+            }
+            popup.show()
+        }
 
         nodeTeleop = NodeTeleop(Constants.TOPIC_JOY_TELEOP, this)
         subNode = SubNode(this)

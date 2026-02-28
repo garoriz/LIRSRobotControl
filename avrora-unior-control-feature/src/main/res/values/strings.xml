@@ -5,4 +5,8 @@
 
     <!--Topics-->
     <string name="joystick_topic">/junior_car/ackermann_cmd</string>
+
+    <!--Button texts-->
+    <string name="camera">Камера</string>
+    <string name="map">Карта</string>
 </resources>

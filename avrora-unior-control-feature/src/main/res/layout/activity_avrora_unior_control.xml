@@ -13,6 +13,15 @@
         android:layout_marginEnd="0dp"
         android:orientation="horizontal" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_view_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:backgroundTint="@android:color/darker_gray"
+        android:text="@string/camera"
+        android:textColor="@color/textColor" />
+
     <com.garif.aurora_unior_control_feature.ui.widgets.CameraView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
