@@ -3,7 +3,9 @@
     <color name="whiteLow">#616161</color>
     <color name="colorPrimary">#81D4FA</color>
     <color name="black">#000000</color>
+    <color name="black00dp">#121212</color>
 
     <color name="borderColor">@color/whiteLow</color>
     <color name="textColor">@color/black</color>
+    <color name="bgColor">@color/black00dp</color>
 </resources>

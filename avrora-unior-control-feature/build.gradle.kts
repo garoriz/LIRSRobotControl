@@ -44,6 +44,7 @@ dependencies {
     implementation(Dependencies.virtualJoystickAndroid)
     implementation(Dependencies.tf2Msgs)
     implementation(Dependencies.stdMsgs)
+    implementation(Dependencies.navMsgs)
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidJunit)
     androidTestImplementation(Dependencies.espressoCore)

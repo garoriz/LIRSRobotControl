@@ -1,6 +1,6 @@
 package com.garif.aurora_unior_control_feature.model.repositories;
 
-import com.garif.aurora_unior_control_feature.model.entities.BaseEntity;
+import com.garif.aurora_unior_control_feature.model.entities.widgets.BaseEntity;
 import com.garif.aurora_unior_control_feature.model.repositories.message.Topic;
 
 import org.ros.internal.message.Message;

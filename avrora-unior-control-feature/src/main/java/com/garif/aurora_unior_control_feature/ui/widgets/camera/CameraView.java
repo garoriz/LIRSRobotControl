@@ -1,4 +1,4 @@
-package com.garif.aurora_unior_control_feature.ui.widgets;
+package com.garif.aurora_unior_control_feature.ui.widgets.camera;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 
 import com.garif.aurora_unior_control_feature.R;
-import com.garif.aurora_unior_control_feature.ui.views.SubscriberWidgetView;
+import com.garif.aurora_unior_control_feature.ui.views.widgets.SubscriberWidgetView;
 
 import org.ros.internal.message.Message;
 

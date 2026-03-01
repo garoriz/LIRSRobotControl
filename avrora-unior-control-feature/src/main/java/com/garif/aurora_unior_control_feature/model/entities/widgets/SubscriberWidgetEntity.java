@@ -1,4 +1,4 @@
-package com.garif.aurora_unior_control_feature.model.entities;
+package com.garif.aurora_unior_control_feature.model.entities.widgets;
 
 import com.garif.aurora_unior_control_feature.ui.Position;
 

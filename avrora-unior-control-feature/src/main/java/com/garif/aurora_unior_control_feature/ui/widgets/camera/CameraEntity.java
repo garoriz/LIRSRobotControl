@@ -1,6 +1,6 @@
-package com.garif.aurora_unior_control_feature.ui.widgets;
+package com.garif.aurora_unior_control_feature.ui.widgets.camera;
 
-import com.garif.aurora_unior_control_feature.model.entities.SubscriberWidgetEntity;
+import com.garif.aurora_unior_control_feature.model.entities.widgets.SubscriberWidgetEntity;
 import com.garif.aurora_unior_control_feature.model.repositories.message.Topic;
 
 import sensor_msgs.CompressedImage;

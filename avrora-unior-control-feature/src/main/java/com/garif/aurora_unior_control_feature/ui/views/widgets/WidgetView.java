@@ -1,4 +1,4 @@
-package com.garif.aurora_unior_control_feature.ui.views;
+package com.garif.aurora_unior_control_feature.ui.views.widgets;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 
 import com.garif.aurora_unior_control_feature.R;
-import com.garif.aurora_unior_control_feature.model.entities.BaseEntity;
-import com.garif.aurora_unior_control_feature.model.entities.IPositionEntity;
+import com.garif.aurora_unior_control_feature.model.entities.widgets.BaseEntity;
+import com.garif.aurora_unior_control_feature.model.entities.widgets.IPositionEntity;
 import com.garif.aurora_unior_control_feature.ui.Position;
 import com.garif.aurora_unior_control_feature.ui.WidgetEditListener;
 

@@ -1,4 +1,4 @@
-package com.garif.aurora_unior_control_feature.ui.views;
+package com.garif.aurora_unior_control_feature.ui.views.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;

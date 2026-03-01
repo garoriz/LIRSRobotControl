@@ -1,4 +1,4 @@
-package com.garif.aurora_unior_control_feature.ui.widgets;
+package com.garif.aurora_unior_control_feature.ui.widgets.camera;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

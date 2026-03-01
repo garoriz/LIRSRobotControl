@@ -18,8 +18,8 @@ import com.garif.aurora_unior_control_feature.nodes.NodeTeleop
 import com.garif.aurora_unior_control_feature.nodes.SubNode
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickDoubleFragment
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickSingleFragment
-import com.garif.aurora_unior_control_feature.ui.widgets.CameraEntity
-import com.garif.aurora_unior_control_feature.ui.widgets.CameraView
+import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraEntity
+import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraView
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity
 import org.ros.address.InetAddressFactory
 import org.ros.node.NodeConfiguration
