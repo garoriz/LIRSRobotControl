@@ -28,6 +28,13 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <com.garif.aurora_unior_control_feature.ui.widgets.viz2d.Viz2DView
+        android:id="@+id/viz2d_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/layout_controls"
         android:layout_width="match_parent"

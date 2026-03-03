@@ -17,6 +17,7 @@ import com.garif.aurora_unior_control_feature.ui.opengl.visualisation.Visualizat
 import com.garif.aurora_unior_control_feature.ui.views.widgets.LayerView;
 import com.garif.aurora_unior_control_feature.ui.views.widgets.PublisherLayerView;
 import com.garif.aurora_unior_control_feature.ui.views.widgets.WidgetGroupView;
+import com.garif.aurora_unior_control_feature.ui.widgets.gridmap.GridMapView;
 
 public class Viz2DView extends WidgetGroupView {
 
@@ -29,12 +30,12 @@ public class Viz2DView extends WidgetGroupView {
 
     public Viz2DView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public Viz2DView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class Viz2DView extends WidgetGroupView {
     }
 
 
-    private void init() {
+    private void init(Context context) {
         // Border color painted as Background
         int borderColor = getContext().getResources().getColor(R.color.borderColor);
         paintBackground = new Paint();
@@ -54,6 +55,8 @@ public class Viz2DView extends WidgetGroupView {
 
         layerView = new VisualizationView(getContext());
         this.addView(layerView);
+
+        addLayer(new GridMapView(context));
     }
 
     @Override

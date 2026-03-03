@@ -20,6 +20,7 @@ import com.garif.aurora_unior_control_feature.ui.fragments.JoystickDoubleFragmen
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickSingleFragment
 import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraView
+import com.garif.aurora_unior_control_feature.ui.widgets.viz2d.Viz2DView
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity
 import org.ros.address.InetAddressFactory
 import org.ros.node.NodeConfiguration
@@ -43,6 +44,7 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
     private var frJoystickDouble: Movable? = null
     private var disabled: ImageButton? = null
     private var cameraView: CameraView? = null
+    private var viz2dView: Viz2DView? = null
     private var nodeTeleop: NodeTeleop? = null
     private var subNode: SubNode? = null
     private var nodeConfiguration: NodeConfiguration? = null
@@ -66,6 +68,7 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         btnJoystickDouble?.setOnClickListener(this)
 
         cameraView = findViewById(R.id.camera_view)
+        viz2dView = findViewById(R.id.viz2d_view)
 
         //ViewGroup sideLayout = findViewById(R.id.side_layout);
         frJoystickSingle =
@@ -82,9 +85,11 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
             popup.setOnMenuItemClickListener { item ->
                 if (item.itemId == R.id.mode_camera) {
                     cameraView?.visibility = View.VISIBLE
+                    viz2dView?.visibility = View.GONE
                     buttonViewMode.text = getString(R.string.camera)
                 } else if (item.itemId == R.id.mode_map) {
                     cameraView?.visibility = View.GONE
+                    cameraView?.visibility = View.VISIBLE
                     buttonViewMode.text = getString(R.string.map)
                 }
                 true
