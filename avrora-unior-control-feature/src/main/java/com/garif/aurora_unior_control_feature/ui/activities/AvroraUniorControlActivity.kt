@@ -20,6 +20,9 @@ import com.garif.aurora_unior_control_feature.ui.fragments.JoystickDoubleFragmen
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickSingleFragment
 import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraView
+import com.garif.aurora_unior_control_feature.ui.widgets.gridmap.GridMapEntity
+import com.garif.aurora_unior_control_feature.ui.widgets.gridmap.GridMapView
+import com.garif.aurora_unior_control_feature.ui.widgets.viz2d.Viz2DEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.viz2d.Viz2DView
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity
 import org.ros.address.InetAddressFactory
@@ -43,10 +46,12 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
     private var frJoystickSingle: Movable? = null
     private var frJoystickDouble: Movable? = null
     private var disabled: ImageButton? = null
+    private var buttonViewMode: Button? = null
     private var cameraView: CameraView? = null
     private var viz2dView: Viz2DView? = null
     private var nodeTeleop: NodeTeleop? = null
-    private var subNode: SubNode? = null
+    private var cameraNode: SubNode? = null
+    private var viz2dNode: SubNode? = null
     private var nodeConfiguration: NodeConfiguration? = null
     private var frameTransformTree = TransformProvider.getInstance().tree
 
@@ -76,31 +81,18 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         frJoystickDouble =
             JoystickDoubleFragment()
 
-        val buttonViewMode = findViewById<Button>(R.id.btn_view_mode)
-
-        buttonViewMode.setOnClickListener { v: View? ->
-            val popup = PopupMenu(this, v)
-            popup.menuInflater.inflate(R.menu.menu, popup.menu)
-
-            popup.setOnMenuItemClickListener { item ->
-                if (item.itemId == R.id.mode_camera) {
-                    cameraView?.visibility = View.VISIBLE
-                    viz2dView?.visibility = View.GONE
-                    buttonViewMode.text = getString(R.string.camera)
-                } else if (item.itemId == R.id.mode_map) {
-                    cameraView?.visibility = View.GONE
-                    cameraView?.visibility = View.VISIBLE
-                    buttonViewMode.text = getString(R.string.map)
-                }
-                true
-            }
-            popup.show()
-        }
+        buttonViewMode = findViewById<Button>(R.id.btn_view_mode)
 
         nodeTeleop = NodeTeleop(Constants.TOPIC_JOY_TELEOP, this)
-        subNode = SubNode(this)
-        // Set node topic, add to node list and register it
-        subNode?.setWidget(CameraEntity())
+        cameraNode = SubNode(this)
+        viz2dNode = SubNode(this)
+        cameraNode?.setWidget(CameraEntity())
+        viz2dView?.widgetEntity = Viz2DEntity()
+        val gridMapView = GridMapView(this)
+        val gridMapEntity = GridMapEntity()
+        gridMapView.widgetEntity = gridMapEntity
+        viz2dView?.addLayer(gridMapView)
+        viz2dNode?.setWidget(gridMapEntity)
         setControls(btnJoystickSingle, frJoystickSingle)
 
         /*webView = findViewById(R.id.webView)
@@ -122,7 +114,30 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
 
         nodeMainExecutor
             ?.execute(nodeTeleop, nodeConfiguration?.setNodeName("android/virtual_joystick"))
-        nodeMainExecutorService.execute(subNode, nodeConfiguration)
+        nodeMainExecutorService.execute(cameraNode, nodeConfiguration)
+
+        buttonViewMode?.setOnClickListener { v: View? ->
+            val popup = PopupMenu(this, v)
+            popup.menuInflater.inflate(R.menu.menu, popup.menu)
+
+            popup.setOnMenuItemClickListener { item ->
+                if (item.itemId == R.id.mode_camera) {
+                    nodeMainExecutorService.shutdownNodeMain(viz2dNode)
+                    nodeMainExecutorService.execute(cameraNode, nodeConfiguration)
+                    cameraView?.visibility = View.VISIBLE
+                    viz2dView?.visibility = View.GONE
+                    buttonViewMode?.text = getString(R.string.camera)
+                } else if (item.itemId == R.id.mode_map) {
+                    nodeMainExecutorService.shutdownNodeMain(cameraNode)
+                    nodeMainExecutorService.execute(viz2dNode, nodeConfiguration)
+                    cameraView?.visibility = View.GONE
+                    viz2dView?.visibility = View.VISIBLE
+                    buttonViewMode?.text = getString(R.string.map)
+                }
+                true
+            }
+            popup.show()
+        }
 
         var timeProvider: TimeProvider?
         try {
@@ -205,5 +220,6 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         val message = data.message
 
         cameraView?.onNewMessage(message)
+        viz2dView?.onNewData(data)
     }
 }

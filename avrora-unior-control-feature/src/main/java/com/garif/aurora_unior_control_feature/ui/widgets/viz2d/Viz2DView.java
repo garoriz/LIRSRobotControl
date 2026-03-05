@@ -17,7 +17,6 @@ import com.garif.aurora_unior_control_feature.ui.opengl.visualisation.Visualizat
 import com.garif.aurora_unior_control_feature.ui.views.widgets.LayerView;
 import com.garif.aurora_unior_control_feature.ui.views.widgets.PublisherLayerView;
 import com.garif.aurora_unior_control_feature.ui.views.widgets.WidgetGroupView;
-import com.garif.aurora_unior_control_feature.ui.widgets.gridmap.GridMapView;
 
 public class Viz2DView extends WidgetGroupView {
 
@@ -55,8 +54,6 @@ public class Viz2DView extends WidgetGroupView {
 
         layerView = new VisualizationView(getContext());
         this.addView(layerView);
-
-        addLayer(new GridMapView(context));
     }
 
     @Override
