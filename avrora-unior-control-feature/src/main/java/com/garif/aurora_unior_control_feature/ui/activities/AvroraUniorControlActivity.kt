@@ -22,6 +22,8 @@ import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraView
 import com.garif.aurora_unior_control_feature.ui.widgets.gridmap.GridMapEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.gridmap.GridMapView
+import com.garif.aurora_unior_control_feature.ui.widgets.pose.PoseEntity
+import com.garif.aurora_unior_control_feature.ui.widgets.pose.PoseView
 import com.garif.aurora_unior_control_feature.ui.widgets.viz2d.Viz2DEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.viz2d.Viz2DView
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity
@@ -81,7 +83,7 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         frJoystickDouble =
             JoystickDoubleFragment()
 
-        buttonViewMode = findViewById<Button>(R.id.btn_view_mode)
+        buttonViewMode = findViewById(R.id.btn_view_mode)
 
         nodeTeleop = NodeTeleop(Constants.TOPIC_JOY_TELEOP, this)
         cameraNode = SubNode(this)
@@ -89,10 +91,15 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         cameraNode?.setWidget(CameraEntity())
         viz2dView?.widgetEntity = Viz2DEntity()
         val gridMapView = GridMapView(this)
+        val poseView = PoseView(this)
         val gridMapEntity = GridMapEntity()
+        val poseEntity = PoseEntity()
         gridMapView.widgetEntity = gridMapEntity
+        poseView.widgetEntity = poseEntity
+        viz2dView?.addLayer(gridMapView)
         viz2dView?.addLayer(gridMapView)
         viz2dNode?.setWidget(gridMapEntity)
+        viz2dNode?.setWidget(poseEntity)
         setControls(btnJoystickSingle, frJoystickSingle)
 
         /*webView = findViewById(R.id.webView)
