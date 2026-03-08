@@ -95,11 +95,11 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         val gridMapEntity = GridMapEntity()
         val poseEntity = PoseEntity()
         gridMapView.widgetEntity = gridMapEntity
-        poseView.widgetEntity = poseEntity
+        //poseView.widgetEntity = poseEntity
         viz2dView?.addLayer(gridMapView)
-        viz2dView?.addLayer(gridMapView)
+        //viz2dView?.addLayer(poseView)
         viz2dNode?.setWidget(gridMapEntity)
-        viz2dNode?.setWidget(poseEntity)
+        //viz2dNode?.setWidget(poseEntity)
         setControls(btnJoystickSingle, frJoystickSingle)
 
         /*webView = findViewById(R.id.webView)
