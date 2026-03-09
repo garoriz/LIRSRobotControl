@@ -53,7 +53,8 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
     private var viz2dView: Viz2DView? = null
     private var nodeTeleop: NodeTeleop? = null
     private var cameraNode: SubNode? = null
-    private var viz2dNode: SubNode? = null
+    private var gridMapNode: SubNode? = null
+    private var poseNode: SubNode? = null
     private var nodeConfiguration: NodeConfiguration? = null
     private var frameTransformTree = TransformProvider.getInstance().tree
 
@@ -87,7 +88,8 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
 
         nodeTeleop = NodeTeleop(Constants.TOPIC_JOY_TELEOP, this)
         cameraNode = SubNode(this)
-        viz2dNode = SubNode(this)
+        gridMapNode = SubNode(this)
+        poseNode = SubNode(this)
         cameraNode?.setWidget(CameraEntity())
         viz2dView?.widgetEntity = Viz2DEntity()
         val gridMapView = GridMapView(this)
@@ -95,11 +97,11 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         val gridMapEntity = GridMapEntity()
         val poseEntity = PoseEntity()
         gridMapView.widgetEntity = gridMapEntity
-        //poseView.widgetEntity = poseEntity
+        poseView.widgetEntity = poseEntity
         viz2dView?.addLayer(gridMapView)
-        //viz2dView?.addLayer(poseView)
-        viz2dNode?.setWidget(gridMapEntity)
-        //viz2dNode?.setWidget(poseEntity)
+        viz2dView?.addLayer(poseView)
+        gridMapNode?.setWidget(gridMapEntity)
+        poseNode?.setWidget(poseEntity)
         setControls(btnJoystickSingle, frJoystickSingle)
 
         /*webView = findViewById(R.id.webView)
@@ -129,14 +131,16 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
 
             popup.setOnMenuItemClickListener { item ->
                 if (item.itemId == R.id.mode_camera) {
-                    nodeMainExecutorService.shutdownNodeMain(viz2dNode)
+                    nodeMainExecutorService.shutdownNodeMain(gridMapNode)
+                    nodeMainExecutorService.shutdownNodeMain(poseNode)
                     nodeMainExecutorService.execute(cameraNode, nodeConfiguration)
                     cameraView?.visibility = View.VISIBLE
                     viz2dView?.visibility = View.GONE
                     buttonViewMode?.text = getString(R.string.camera)
                 } else if (item.itemId == R.id.mode_map) {
                     nodeMainExecutorService.shutdownNodeMain(cameraNode)
-                    nodeMainExecutorService.execute(viz2dNode, nodeConfiguration)
+                    nodeMainExecutorService.execute(gridMapNode, nodeConfiguration)
+                    nodeMainExecutorService.execute(poseNode, nodeConfiguration)
                     cameraView?.visibility = View.GONE
                     viz2dView?.visibility = View.VISIBLE
                     buttonViewMode?.text = getString(R.string.map)
