@@ -22,6 +22,8 @@ import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraView
 import com.garif.aurora_unior_control_feature.ui.widgets.gridmap.GridMapEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.gridmap.GridMapView
+import com.garif.aurora_unior_control_feature.ui.widgets.path.PathEntity
+import com.garif.aurora_unior_control_feature.ui.widgets.path.PathView
 import com.garif.aurora_unior_control_feature.ui.widgets.pose.PoseEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.pose.PoseView
 import com.garif.aurora_unior_control_feature.ui.widgets.viz2d.Viz2DEntity
@@ -55,6 +57,7 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
     private var cameraNode: SubNode? = null
     private var gridMapNode: SubNode? = null
     private var poseNode: SubNode? = null
+    private var pathNode: SubNode? = null
     private var nodeConfiguration: NodeConfiguration? = null
     private var frameTransformTree = TransformProvider.getInstance().tree
 
@@ -90,15 +93,20 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         cameraNode = SubNode(this)
         gridMapNode = SubNode(this)
         poseNode = SubNode(this)
+        pathNode = SubNode(this)
         cameraNode?.setWidget(CameraEntity())
         viz2dView?.widgetEntity = Viz2DEntity()
         val gridMapView = GridMapView(this)
         val poseView = PoseView(this)
+        val pathView = PathView(this)
         val gridMapEntity = GridMapEntity()
         val poseEntity = PoseEntity()
+        val pathEntity = PathEntity()
         gridMapView.widgetEntity = gridMapEntity
         poseView.widgetEntity = poseEntity
+        pathView.widgetEntity = pathEntity
         viz2dView?.addLayer(gridMapView)
+        viz2dView?.addLayer(pathView)
         viz2dView?.addLayer(poseView)
         gridMapNode?.setWidget(gridMapEntity)
         poseNode?.setWidget(poseEntity)
