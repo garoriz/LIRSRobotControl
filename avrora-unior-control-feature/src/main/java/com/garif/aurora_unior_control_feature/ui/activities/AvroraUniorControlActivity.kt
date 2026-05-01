@@ -58,7 +58,6 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
     private var gridMapNode: SubNode? = null
     private var poseNode: SubNode? = null
     private var pathNode: SubNode? = null
-    private var nodeConfiguration: NodeConfiguration? = null
     private var frameTransformTree = TransformProvider.getInstance().tree
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -110,6 +109,7 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         viz2dView?.addLayer(poseView)
         gridMapNode?.setWidget(gridMapEntity)
         poseNode?.setWidget(poseEntity)
+        pathNode?.setWidget(pathEntity)
         setControls(btnJoystickSingle, frJoystickSingle)
 
         /*webView = findViewById(R.id.webView)
@@ -124,14 +124,11 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
 
     override fun init(nodeMainExecutor: NodeMainExecutor?) {
         super.init(nodeMainExecutor)
-        nodeConfiguration = NodeConfiguration.newPublic(
-            InetAddressFactory
-                .newNonLoopback().hostAddress, masterUri
-        )
+        val nodeConfiguration = createNodeConfiguration()
 
         nodeMainExecutor
-            ?.execute(nodeTeleop, nodeConfiguration?.setNodeName("android/virtual_joystick"))
-        nodeMainExecutorService.execute(cameraNode, nodeConfiguration)
+            ?.execute(nodeTeleop, nodeConfiguration.setNodeName("android/virtual_joystick"))
+        nodeMainExecutorService.execute(cameraNode, createNodeConfiguration())
 
         buttonViewMode?.setOnClickListener { v: View? ->
             val popup = PopupMenu(this, v)
@@ -141,14 +138,15 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
                 if (item.itemId == R.id.mode_camera) {
                     nodeMainExecutorService.shutdownNodeMain(gridMapNode)
                     nodeMainExecutorService.shutdownNodeMain(poseNode)
-                    nodeMainExecutorService.execute(cameraNode, nodeConfiguration)
+                    nodeMainExecutorService.execute(cameraNode, createNodeConfiguration())
                     cameraView?.visibility = View.VISIBLE
                     viz2dView?.visibility = View.GONE
                     buttonViewMode?.text = getString(R.string.camera)
                 } else if (item.itemId == R.id.mode_map) {
                     nodeMainExecutorService.shutdownNodeMain(cameraNode)
-                    nodeMainExecutorService.execute(gridMapNode, nodeConfiguration)
-                    nodeMainExecutorService.execute(poseNode, nodeConfiguration)
+                    nodeMainExecutorService.execute(gridMapNode, createNodeConfiguration())
+                    nodeMainExecutorService.execute(poseNode, createNodeConfiguration())
+                    nodeMainExecutorService.execute(pathNode, createNodeConfiguration())
                     cameraView?.visibility = View.GONE
                     viz2dView?.visibility = View.VISIBLE
                     buttonViewMode?.text = getString(R.string.map)
@@ -174,8 +172,14 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
             )
             timeProvider = WallTimeProvider()
         }
-        nodeConfiguration?.setTimeProvider(timeProvider)
+        nodeConfiguration.setTimeProvider(timeProvider)
+    }
 
+    private fun createNodeConfiguration(): NodeConfiguration {
+        return NodeConfiguration.newPublic(
+            InetAddressFactory.newNonLoopback().hostAddress,
+            masterUri
+        )
     }
 
     private fun loadFragment(movable: Movable?) {
