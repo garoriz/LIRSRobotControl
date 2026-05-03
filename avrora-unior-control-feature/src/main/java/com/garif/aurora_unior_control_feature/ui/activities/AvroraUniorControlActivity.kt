@@ -12,12 +12,15 @@ import android.widget.PopupMenu
 import com.garif.aurora_unior_control_feature.Constants
 import com.garif.aurora_unior_control_feature.Movable
 import com.garif.aurora_unior_control_feature.R
+import com.garif.aurora_unior_control_feature.model.repositories.BaseData
 import com.garif.aurora_unior_control_feature.model.repositories.TransformProvider
 import com.garif.aurora_unior_control_feature.model.repositories.message.RosData
 import com.garif.aurora_unior_control_feature.nodes.NodeTeleop
+import com.garif.aurora_unior_control_feature.nodes.PubNode
 import com.garif.aurora_unior_control_feature.nodes.SubNode
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickDoubleFragment
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickSingleFragment
+import com.garif.aurora_unior_control_feature.ui.general.DataListener
 import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.camera.CameraView
 import com.garif.aurora_unior_control_feature.ui.widgets.gridmap.GridMapEntity
@@ -26,6 +29,8 @@ import com.garif.aurora_unior_control_feature.ui.widgets.path.PathEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.path.PathView
 import com.garif.aurora_unior_control_feature.ui.widgets.pose.PoseEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.pose.PoseView
+import com.garif.aurora_unior_control_feature.ui.widgets.touchgoal.TouchGoalEntity
+import com.garif.aurora_unior_control_feature.ui.widgets.touchgoal.TouchGoalView
 import com.garif.aurora_unior_control_feature.ui.widgets.viz2d.Viz2DEntity
 import com.garif.aurora_unior_control_feature.ui.widgets.viz2d.Viz2DView
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity
@@ -42,7 +47,7 @@ import java.util.concurrent.TimeUnit
 private const val TAG: String = "MapNav"
 
 class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUniorMobile"),
-    View.OnClickListener, SubNode.NodeListener {
+    View.OnClickListener, SubNode.NodeListener, DataListener {
 
     private var webView: WebView? = null
     private var btnJoystickSingle: ImageButton? = null
@@ -58,6 +63,7 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
     private var gridMapNode: SubNode? = null
     private var poseNode: SubNode? = null
     private var pathNode: SubNode? = null
+    private var touchGoalNode: PubNode? = null
     private var frameTransformTree = TransformProvider.getInstance().tree
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -93,23 +99,30 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         gridMapNode = SubNode(this)
         poseNode = SubNode(this)
         pathNode = SubNode(this)
+        touchGoalNode = PubNode()
         cameraNode?.setWidget(CameraEntity())
         viz2dView?.widgetEntity = Viz2DEntity()
         val gridMapView = GridMapView(this)
         val poseView = PoseView(this)
         val pathView = PathView(this)
+        val touchGoalView = TouchGoalView(this)
         val gridMapEntity = GridMapEntity()
         val poseEntity = PoseEntity()
         val pathEntity = PathEntity()
+        val touchGoalEntity = TouchGoalEntity()
         gridMapView.widgetEntity = gridMapEntity
         poseView.widgetEntity = poseEntity
         pathView.widgetEntity = pathEntity
+        touchGoalView.widgetEntity = touchGoalEntity
         viz2dView?.addLayer(gridMapView)
         viz2dView?.addLayer(pathView)
         viz2dView?.addLayer(poseView)
+        viz2dView?.addLayer(touchGoalView)
         gridMapNode?.setWidget(gridMapEntity)
         poseNode?.setWidget(poseEntity)
         pathNode?.setWidget(pathEntity)
+        touchGoalNode?.setWidget(touchGoalEntity)
+        viz2dView?.setDataListener(this)
         setControls(btnJoystickSingle, frJoystickSingle)
 
         /*webView = findViewById(R.id.webView)
@@ -138,6 +151,8 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
                 if (item.itemId == R.id.mode_camera) {
                     nodeMainExecutorService.shutdownNodeMain(gridMapNode)
                     nodeMainExecutorService.shutdownNodeMain(poseNode)
+                    nodeMainExecutorService.shutdownNodeMain(pathNode)
+                    nodeMainExecutorService.shutdownNodeMain(touchGoalNode)
                     nodeMainExecutorService.execute(cameraNode, createNodeConfiguration())
                     cameraView?.visibility = View.VISIBLE
                     viz2dView?.visibility = View.GONE
@@ -147,6 +162,7 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
                     nodeMainExecutorService.execute(gridMapNode, createNodeConfiguration())
                     nodeMainExecutorService.execute(poseNode, createNodeConfiguration())
                     nodeMainExecutorService.execute(pathNode, createNodeConfiguration())
+                    nodeMainExecutorService.execute(touchGoalNode, createNodeConfiguration())
                     cameraView?.visibility = View.GONE
                     viz2dView?.visibility = View.VISIBLE
                     buttonViewMode?.text = getString(R.string.map)
@@ -244,5 +260,15 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
 
         cameraView?.onNewMessage(message)
         viz2dView?.onNewData(data)
+    }
+
+    override fun onNewWidgetData(data: BaseData?) {
+        if (data != null) {
+            publishData(data)
+        }
+    }
+
+    private fun publishData(data: BaseData) {
+        touchGoalNode?.setData(data)
     }
 }
