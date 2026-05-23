@@ -2,6 +2,7 @@ package com.garif.aurora_unior_control_feature
 
 class Constants {
     companion object {
-        val TOPIC_JOY_TELEOP: String = "/junior_car/ackermann_cmd"
+        val STEERING: String = "/ur_hardware_driver/steering_controller/command"
+        val VELOCITY: String = "/ur_hardware_driver/velocity_controller/command"
     }
 }

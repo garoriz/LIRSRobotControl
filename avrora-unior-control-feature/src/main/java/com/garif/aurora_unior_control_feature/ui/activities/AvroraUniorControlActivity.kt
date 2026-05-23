@@ -15,9 +15,10 @@ import com.garif.aurora_unior_control_feature.R
 import com.garif.aurora_unior_control_feature.model.repositories.BaseData
 import com.garif.aurora_unior_control_feature.model.repositories.TransformProvider
 import com.garif.aurora_unior_control_feature.model.repositories.message.RosData
-import com.garif.aurora_unior_control_feature.nodes.NodeTeleop
 import com.garif.aurora_unior_control_feature.nodes.PubNode
+import com.garif.aurora_unior_control_feature.nodes.SteeringNodeTeleop
 import com.garif.aurora_unior_control_feature.nodes.SubNode
+import com.garif.aurora_unior_control_feature.nodes.VelocityNodeTeleop
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickDoubleFragment
 import com.garif.aurora_unior_control_feature.ui.fragments.JoystickSingleFragment
 import com.garif.aurora_unior_control_feature.ui.general.DataListener
@@ -58,7 +59,8 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
     private var buttonViewMode: Button? = null
     private var cameraView: CameraView? = null
     private var viz2dView: Viz2DView? = null
-    private var nodeTeleop: NodeTeleop? = null
+    private var steeringNodeTeleop: SteeringNodeTeleop? = null
+    private var velocityNodeTeleop: VelocityNodeTeleop? = null
     private var cameraNode: SubNode? = null
     private var gridMapNode: SubNode? = null
     private var poseNode: SubNode? = null
@@ -94,7 +96,8 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
 
         buttonViewMode = findViewById(R.id.btn_view_mode)
 
-        nodeTeleop = NodeTeleop(Constants.TOPIC_JOY_TELEOP, this)
+        steeringNodeTeleop = SteeringNodeTeleop(Constants.STEERING, this)
+        velocityNodeTeleop = VelocityNodeTeleop(Constants.VELOCITY, this)
         cameraNode = SubNode(this)
         gridMapNode = SubNode(this)
         poseNode = SubNode(this)
@@ -140,7 +143,9 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
         val nodeConfiguration = createNodeConfiguration()
 
         nodeMainExecutor
-            ?.execute(nodeTeleop, nodeConfiguration.setNodeName("android/virtual_joystick"))
+            ?.execute(steeringNodeTeleop, nodeConfiguration.setNodeName("android/virtual_joystick"))
+        nodeMainExecutor
+            ?.execute(velocityNodeTeleop, createNodeConfiguration().setNodeName("android/virtual_joystick_velocity"))
         nodeMainExecutorService.execute(cameraNode, createNodeConfiguration())
 
         buttonViewMode?.setOnClickListener { v: View? ->
@@ -203,7 +208,10 @@ class AvroraUniorControlActivity : RosAppActivity("AvroraUniorMobile", "AvroraUn
             .beginTransaction()
             .replace(R.id.layout_controls, movable as Fragment)
             .commit()
-        nodeTeleop?.setMovable(movable)
+        movable.let {
+            steeringNodeTeleop?.setMovable(it)
+            velocityNodeTeleop?.setMovable(it)
+        }
     }
 
     override fun onClick(view: View) {

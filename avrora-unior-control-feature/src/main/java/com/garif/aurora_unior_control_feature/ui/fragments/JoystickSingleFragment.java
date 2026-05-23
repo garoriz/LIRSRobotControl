@@ -13,9 +13,9 @@ import com.garif.aurora_unior_control_feature.Movable;
 import com.garif.core.Constants;
 import com.garif.core.R;
 
-import ackermann_msgs.AckermannDriveStamped;
 import geometry_msgs.Twist;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
+import std_msgs.Float64;
 
 public class JoystickSingleFragment extends Fragment implements Movable {
 
@@ -43,9 +43,21 @@ public class JoystickSingleFragment extends Fragment implements Movable {
     }
 
     @Override
-    public void setMovement(AckermannDriveStamped ackermannDriveStamped) {
-        defineValuesEasyMode(ackermannDriveStamped);
-//        defineValuesHardMode(twist);
+    public void setSteering(Float64 steering) {
+        if (steering == null) return;
+        defineValuesEasyMode();
+        steering.setData(rotationSpeed);
+        Log.d(Constants.Tags.EVENTS.getValue(),
+                "Rotation speed is: " + rotationSpeed);
+    }
+
+    @Override
+    public void setVelocity(Float64 velocity) {
+        if (velocity == null) return;
+        defineValuesEasyMode();
+        velocity.setData(movementSpeed);
+        Log.d(Constants.Tags.EVENTS.getValue(),
+                "Movement speed is: " + movementSpeed);
     }
 
     /**
@@ -84,7 +96,7 @@ public class JoystickSingleFragment extends Fragment implements Movable {
      * Getting values with segmentation
      */
 
-    private void defineValuesEasyMode(AckermannDriveStamped ackermannDriveStamped) {
+    private void defineValuesEasyMode() {
         if (strength == 0) {
             movementSpeed = 0.0d;
             rotationSpeed = 0.0d;
@@ -109,11 +121,5 @@ public class JoystickSingleFragment extends Fragment implements Movable {
                 rotationSpeed = 0.0d;
             }
         }
-        ackermannDriveStamped.getDrive().setSpeed((float) movementSpeed);
-        Log.d(Constants.Tags.EVENTS.getValue(),
-                "Movement speed is: " + movementSpeed);
-        ackermannDriveStamped.getDrive().setSteeringAngle((float) rotationSpeed);
-        Log.d(Constants.Tags.EVENTS.getValue(),
-                "Rotation speed is: " + rotationSpeed);
     }
 }

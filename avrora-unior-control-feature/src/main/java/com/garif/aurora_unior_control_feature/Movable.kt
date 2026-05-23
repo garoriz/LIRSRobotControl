@@ -1,7 +1,8 @@
 package com.garif.aurora_unior_control_feature
 
-import ackermann_msgs.AckermannDriveStamped
+import std_msgs.Float64
 
 interface Movable {
-    fun setMovement(ackermannDriveStamped: AckermannDriveStamped?)
+    fun setSteering(steering: Float64?)
+    fun setVelocity(velocity: Float64?)
 }

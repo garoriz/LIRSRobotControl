@@ -10,10 +10,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.garif.aurora_unior_control_feature.Movable;
+import com.garif.core.Constants;
 import com.garif.core.R;
 
-import ackermann_msgs.AckermannDriveStamped;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
+import std_msgs.Float64;
 
 public class JoystickDoubleFragment extends Fragment implements Movable {
 
@@ -47,35 +48,37 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
     }
 
     @Override
-    public void setMovement(AckermannDriveStamped ackermannDriveStamped) {
-        defineValuesEasyMode(ackermannDriveStamped);
+    public void setSteering(Float64 steering) {
+        if (steering == null) return;
+        steering.setData(defineRotationValue());
     }
 
-    private void defineValuesEasyMode(AckermannDriveStamped ackermannDriveStamped) {
-        ackermannDriveStamped.getDrive().setSpeed((float) defineMovementValue());
-        ackermannDriveStamped.getDrive().setSteeringAngle((float) defineRotationValue());
+    @Override
+    public void setVelocity(Float64 velocity) {
+        if (velocity == null) return;
+        velocity.setData(defineMovementValue());
     }
 
     private double defineMovementValue() {
         if (mvStrength == 0) return 0;
-        double movementSpeed = mvStrength / com.garif.core.Constants.PERCENTAGE;
+        double movementSpeed = mvStrength / Constants.PERCENTAGE;
         double mvSign;
-        if (Math.sin(com.garif.core.Constants.Companion.toRadians(mvAngle)) < 0) mvSign = -1;
+        if (Math.sin(Constants.Companion.toRadians(mvAngle)) < 0) mvSign = -1;
         else mvSign = 1;
         movementSpeed = mvSign * movementSpeed;
-        Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(),
+        Log.d(Constants.Tags.EVENTS.getValue(),
                 "Movement speed is: " + movementSpeed);
         return movementSpeed;
     }
 
     private double defineRotationValue() {
         if (rtStrength == 0) return 0;
-        double rotationSpeed = rtStrength * com.garif.core.Constants.ROTATION_RATIO;
+        double rotationSpeed = rtStrength * Constants.ROTATION_RATIO;
         double rtSign;
-        if (Math.cos(com.garif.core.Constants.Companion.toRadians(rtAngle)) > 0) rtSign = -1;
+        if (Math.cos(Constants.Companion.toRadians(rtAngle)) > 0) rtSign = -1;
         else rtSign = 1;
         rotationSpeed = rtSign * rotationSpeed;
-        Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(),
+        Log.d(Constants.Tags.EVENTS.getValue(),
                 "Rotation speed is: " + rotationSpeed);
         return rotationSpeed;
     }
