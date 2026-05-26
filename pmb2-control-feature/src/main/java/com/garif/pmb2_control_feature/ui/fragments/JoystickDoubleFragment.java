@@ -24,7 +24,7 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_joystick_double, null);
+        return inflater.inflate(R.layout.fragment_joystick_double, container, false);
     }
 
     @Override
