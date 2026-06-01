@@ -2,6 +2,8 @@ package com.garif.pmb2_control_feature.ui.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,10 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
     private double rtStrength;
     private double rtAngle;
 
+    private final Handler delayHandler = new Handler(Looper.getMainLooper());
+    private boolean isDelayActive = false;
+    private boolean isTouchInProgress = false;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_joystick_double, container, false);
@@ -33,17 +39,47 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
         JoystickView rtJoystick = view.findViewById(R.id.layout_joystick_left);
         JoystickView mvJoystick = view.findViewById(R.id.layout_joystick_right);
         mvJoystick.setOnMoveListener((mvAngle, mvStrength) -> {
-            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's strength is: " + mvStrength);
-            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's angle is: " + mvAngle);
-            this.mvStrength = mvStrength;
-            this.mvAngle = mvAngle;
+            checkFirstTouch(mvStrength);
+            if (mvStrength == 0) {
+                // Если джойстик отпущен, мгновенно сбрасываем значения без задержек
+                this.mvStrength = 0;
+                this.mvAngle = 0;
+            } else if (!isDelayActive) {
+                // Записываем данные только если задержка 0.5с НЕ активна
+                Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's strength is: " + mvStrength);
+                Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Movement\" Joystick's angle is: " + mvAngle);
+                this.mvStrength = mvStrength;
+                this.mvAngle = mvAngle;
+            }
         });
         rtJoystick.setOnMoveListener((rtAngle, rtStrength) -> {
-            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's strength is: " + rtStrength);
-            Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's angle is: " + rtAngle);
-            this.rtStrength = rtStrength;
-            this.rtAngle = rtAngle;
+            checkFirstTouch(rtStrength);
+
+            if (rtStrength == 0) {
+                this.rtStrength = 0;
+                this.rtAngle = 0;
+            } else if (!isDelayActive) {
+                Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's strength is: " + rtStrength);
+                Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(), "\"Rotation\" Joystick's angle is: " + rtAngle);
+                this.rtStrength = rtStrength;
+                this.rtAngle = rtAngle;
+            }
         });
+    }
+
+    private void checkFirstTouch(double strength) {
+        if (strength > 0) {
+            if (!isTouchInProgress) {
+                isTouchInProgress = true;
+                isDelayActive = true;
+
+                delayHandler.postDelayed(() -> isDelayActive = false, 500);
+            }
+        } else {
+            isTouchInProgress = false;
+            isDelayActive = false;
+            delayHandler.removeCallbacksAndMessages(null); // Сбрасываем таймер
+        }
     }
 
     @Override
@@ -78,5 +114,11 @@ public class JoystickDoubleFragment extends Fragment implements Movable {
         Log.d(com.garif.core.Constants.Tags.EVENTS.getValue(),
                 "Rotation speed is: " + rotationSpeed);
         return rotationSpeed;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        delayHandler.removeCallbacksAndMessages(null);
     }
 }

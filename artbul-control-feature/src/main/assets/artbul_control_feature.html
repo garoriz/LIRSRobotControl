@@ -307,8 +307,8 @@
     function setupPublisher() {
       cmdVelPub = new ROSLIB.Topic({
         ros: ros,
-        name: '/artbul_base_controller/cmd_vel_unstamped',
-        messageType: 'geometry_msgs/msg/Twist'
+        name: '/artbul/mobile_artbul/cmd_vel',
+        messageType: 'geometry_msgs/Twist'
       });
     }
 

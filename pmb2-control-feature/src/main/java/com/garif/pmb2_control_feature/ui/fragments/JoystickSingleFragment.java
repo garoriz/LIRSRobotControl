@@ -2,6 +2,8 @@ package com.garif.pmb2_control_feature.ui.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,10 @@ public class JoystickSingleFragment extends Fragment implements Movable {
     private double movementSpeed;
     private double rotationSpeed;
 
+    private final Handler delayHandler = new Handler(Looper.getMainLooper());
+    private boolean isDelayActive = false;
+    private boolean isTouchInProgress = false;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_joystick_single, container, false);
@@ -34,10 +40,17 @@ public class JoystickSingleFragment extends Fragment implements Movable {
         super.onViewCreated(view, savedInstanceState);
         JoystickView joystick = view.findViewById(R.id.virtual_joystick_layout);
         joystick.setOnMoveListener((angle, strength) -> {
-            Log.d(Constants.Tags.EVENTS.getValue(), "Strength is: " + strength);
-            Log.d(Constants.Tags.EVENTS.getValue(), "Angle is: " + angle);
-            this.strength = strength;
-            this.angle = angle;
+            checkFirstTouch(strength);
+
+            if (strength == 0) {
+                this.strength = 0;
+                this.angle = 0;
+            } else if (!isDelayActive) {
+                Log.d(Constants.Tags.EVENTS.getValue(), "Strength is: " + strength);
+                Log.d(Constants.Tags.EVENTS.getValue(), "Angle is: " + angle);
+                this.strength = strength;
+                this.angle = angle;
+            }
         });
     }
 
@@ -45,6 +58,21 @@ public class JoystickSingleFragment extends Fragment implements Movable {
     public void setMovement(Twist twist) {
         defineValuesEasyMode(twist);
 //        defineValuesHardMode(twist);
+    }
+
+    private void checkFirstTouch(double strength) {
+        if (strength > 0) {
+            if (!isTouchInProgress) {
+                isTouchInProgress = true;
+                isDelayActive = true;
+
+                delayHandler.postDelayed(() -> isDelayActive = false, 500);
+            }
+        } else {
+            isTouchInProgress = false;
+            isDelayActive = false;
+            delayHandler.removeCallbacksAndMessages(null); // Сбрасываем таймер
+        }
     }
 
     /**
@@ -114,5 +142,11 @@ public class JoystickSingleFragment extends Fragment implements Movable {
         twist.getAngular().setZ(rotationSpeed);
         Log.d(Constants.Tags.EVENTS.getValue(),
                 "Rotation speed is: " + rotationSpeed);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        delayHandler.removeCallbacksAndMessages(null);
     }
 }
