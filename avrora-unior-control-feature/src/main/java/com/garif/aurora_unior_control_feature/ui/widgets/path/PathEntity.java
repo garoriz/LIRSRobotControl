@@ -10,7 +10,7 @@ public class PathEntity extends SubscriberLayerEntity {
 
 
     public PathEntity() {
-        this.topic = new Topic("/fake_path", nav_msgs.Path._TYPE);
+        this.topic = new Topic("/move_base/GlobalPlanner/plan", nav_msgs.Path._TYPE);
         this.lineWidth = 4;
         this.lineColor = "ff0000ff";
     }
